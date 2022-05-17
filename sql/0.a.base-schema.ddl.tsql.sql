@@ -147,6 +147,7 @@ BEGIN
 CREATE TABLE [dbo].[client](
 	[id] [uniqueidentifier] NOT NULL,
 	[id_shard] [uniqueidentifier] NOT NULL,
+	[id_client_owner] [uniqueidentifier] NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[id_timezone] [uniqueidentifier] NULL,
 	[domain_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
@@ -203,6 +204,11 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_shard]') AND parent_object_id = OBJECT_ID(N'[dbo].[shard]'))
 ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_shard] FOREIGN KEY([id_shard])
 REFERENCES [dbo].[shard] ([ID])
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_client_owner]') AND parent_object_id = OBJECT_ID(N'[dbo].[client]'))
+ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_client_owner] FOREIGN KEY([id_client_owner])
+REFERENCES [dbo].[client] ([ID])
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_timezone]') AND parent_object_id = OBJECT_ID(N'[dbo].[timezone]'))

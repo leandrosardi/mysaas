@@ -59,20 +59,30 @@ Finally, open a new browser, go to `http://127.0.0.1:80/login` and access with d
 
 ### 8.1. Setup Notification
 
-### 8.2. Deliver Email Notificaiton
+### 8.2. Delivering Email Notificaiton
 
 ### 8.3. Tracking Opens
 
 ### 8.4. Tracking Clicks
 
-## 9. User Storage
+## 9. Client Storage
 
-## 10. TimeZones and Time Offsets
+## 10. Client TimeZones and Time Offsets
 
-## 11. Removing User Data
+## 11. Removing Client Data
 
-## 12. DB Stored Parameters
+## 12. Client Email & Domains Aliasing
 
-## 13. Writing Modules
+### 12.1. Email Aliasing
+
+### 12.2. Domain Aliasing
+
+### 12.3. Other Clients Ownership
+
+## 13. Client API-Key
+
+## 14. DB Stored Parameters
+
+## 15. Writing Modules
 
 
