@@ -1,8 +1,8 @@
 # my-membership-site
 
-My-Membership-Site is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
+**My-Membership-Site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
 
-![login screen](./thumbnails/login.png)
+![dashboard example](./thumbnails/dashboard.png)
 
 Software Requirements:
 - Ruby 2.2.4
@@ -23,19 +23,69 @@ git clone https://github.com/leandrosardi/my-membership-site
 
 ```bash
 cd ~/my-membership-site
-ruby install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
 ```
 
 **Step 3:** Running Web Servers
 
 ```bash
 cd ~/my-membership-site
-ruby run.rb db=kepler 
+ruby ./run.rb db=kepler 
 ```
 
-Finally, open a new browser, go to `http://127.0.0.1:80/login` and access with default user `demo` and password `demo`.
+Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
+
+![login screen](./thumbnails/login.png)
 
 ## 2. Installing Modules
+
+**My-Membership-Site** is extensible. That means, you can install 3th parties modules to add features like payments processing; or regarding the kind of product that you want to develop like e-commerce, online stores, software-as-a-service, education, social networks, etc.
+
+Installing a module is as simple as run a Ruby script:
+
+```bash
+cd ~/my-membership-site
+ruby ./add.rb name=<module name>
+```
+
+## 2.1. Installing [Processing Threads](https://github.com/leandrosardi/pampa) Module
+
+The [Processing Threads](https://github.com/leandrosardi/pampa) is not a kind of commercial product, but a software for managing back-end processing easily.
+
+[Processing Threads](https://github.com/leandrosardi/pampa) is a Ruby library for distributing computing providing the following features:
+
+- cluster-management with dynamic reconfiguration (joining and leaving nodes);
+- distribution of the computation jobs to the (active) nodes;
+- error handling, job-retry and fault tolerance;
+- fast (non-direct) communication to ensure realtime capabilities.
+
+For technical details, refer to [Processing Threads on GitHub](https://github.com/leandrosardi/pampa).
+
+To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
+
+```bash
+cd ~/my-membership-site
+ruby ./add.rb name=threads
+```
+
+## 2.2. Installing [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) Module
+
+[Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) (a.k.a. **I2P**) is a library for 
+
+1. configuring products, prices, offers, and subscriptions; 
+2. show invoices and PayPal subscriptions; 
+3. processing PayPal notifications; 
+and
+4. track the finanical history of your customers. 
+
+For technical details, refer to [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing).
+
+To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
+
+```bash
+cd ~/my-membership-site
+ruby ./add.rb name=i2p
+```
 
 ## 3. User Roles
 
