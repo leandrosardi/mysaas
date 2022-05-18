@@ -1,12 +1,54 @@
-# my-membership-site
+# my-free-membership-site
 
-**My-Membership-Site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
+**my-free-membership-site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
 
 ![dashboard example](./thumbnails/dashboard.png)
 
-Software Requirements:
-- Ruby 2.2.4
+Use **my-free-membership-site** to develop any kind of:
+- softwares as a service;
+- educational site;
+- e-commerce store;
+- forum;
+- social network;
+- etc.
+
+Some features of **my-free-membership-site** include:
+
+1. **user security**: 
+	- user signup,
+	- email confirmation, 
+	- user login, 
+	- password reset, 
+	- timezone configuration and 
+	- user preferences;
+
+2. **invoicing** and payments processing;
+
+3. **email notifications** with easy setup of automation rules;
+
+4. **affiliates tracking** for managing resellers and pay commission;
+
+5. **domain aliasing** for licencing your site to other companies;
+
+6. **abuse preventing** by tracking user's network and browser fingertings;
+
+7. **shadow profiling** [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
+
+8. **horizontal scalability** of both: database and webservers;
+
+9. **access points publishing** to connect your site with any other products;
+
+10. **background processesing** for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
+
+11. **extensiblilty**, writing your own modules or installing the modules of thirth parties.
+
+## Software Requirements
+
+**my-free-membership-site** has been tested on:
+
+- Ubuntu 18.04
 - PostgreSQL 14
+- Ruby 2.2.4
 
 If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
 
@@ -16,20 +58,20 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 ```bash
 cd ~
-git clone https://github.com/leandrosardi/my-membership-site
+git clone https://github.com/leandrosardi/my-free-membership-site
 ```
 
 **Step 2:** Run the ruby script for installing required gems and database.
 
 ```bash
-cd ~/my-membership-site
+cd ~/my-free-membership-site
 ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
 ```
 
-**Step 3:** Running Web Servers
+**Step 3:** Running the Web Server
 
 ```bash
-cd ~/my-membership-site
+cd ~/my-free-membership-site
 ruby ./run.rb db=kepler 
 ```
 
@@ -39,18 +81,20 @@ Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:
 
 ## 2. Installing Modules
 
-**My-Membership-Site** is extensible. That means, you can install 3th parties modules to add features like payments processing; or regarding the kind of product that you want to develop like e-commerce, online stores, software-as-a-service, education, social networks, etc.
+**my-free-membership-site** is extensible. That means, you can install 3th parties modules to add features like payments processing; or any other module regarding the kind of product that you want to develop like e-commerce, online stores, software-as-a-service, education, social networks, etc.
 
-Installing a module is as simple as run a Ruby script:
+If the module you need doesn't exists, you can create your own modules too.
+
+Installing a module is as simple as running a Ruby script:
 
 ```bash
-cd ~/my-membership-site
+cd ~/my-free-membership-site
 ruby ./add.rb name=<module name>
 ```
 
 ## 2.1. Installing [Processing Threads](https://github.com/leandrosardi/pampa) Module
 
-The [Processing Threads](https://github.com/leandrosardi/pampa) is not a kind of commercial product, but a software for managing back-end processing easily.
+The [Processing Threads](https://github.com/leandrosardi/pampa) is not a kind of commercial product, but a software for managing back-end processing of offline tasks easily.
 
 [Processing Threads](https://github.com/leandrosardi/pampa) is a Ruby library for distributing computing providing the following features:
 
@@ -64,7 +108,7 @@ For technical details, refer to [Processing Threads on GitHub](https://github.co
 To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
 
 ```bash
-cd ~/my-membership-site
+cd ~/my-free-membership-site
 ruby ./add.rb name=threads
 ```
 
@@ -83,7 +127,7 @@ For technical details, refer to [Invoicing & Payments Processing](https://github
 To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
 
 ```bash
-cd ~/my-membership-site
+cd ~/my-free-membership-site
 ruby ./add.rb name=i2p
 ```
 
