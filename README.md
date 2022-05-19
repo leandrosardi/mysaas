@@ -1,4 +1,7 @@
-# my-free-membership-site
+# free-membership-sites
+
+> ## This project is under construction.
+> ## The first version will be released on 1-Jun-2022.
 
 **my-free-membership-site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
 
