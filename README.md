@@ -14,12 +14,14 @@ Use **my-free-membership-site** to develop any kind of:
 
 Some features of **my-free-membership-site** include:
 
-1. **user security**: 
+1. **account management**: 
 	- user signup,
-	- email confirmation, 
+	- email confirmation,
+    - adding team memebers, 
 	- user login, 
 	- password reset, 
-	- timezone configuration and 
+	- timezone configuration,
+    - account files storage, and 
 	- user preferences;
 
 2. **invoicing** and payments processing;
@@ -34,25 +36,27 @@ Some features of **my-free-membership-site** include:
 
 7. **shadow profiling** [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
 
-8. **horizontal scalability** of both: database and webservers;
+8. **SSL certificates** support;
 
-9. **access points publishing** to connect your site with any other products;
+9. **horizontal scalability** of both: database and webservers;
 
-10. **background processesing** for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
+10. **access points publishing** to connect your site with any other products;
 
-11. **extensiblilty**, writing your own modules or installing the modules of thirth parties.
+11. **background processesing** for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
+
+12. **extensiblilty**, writing your own modules or installing the modules of thirth parties.
 
 ## Software Requirements
 
 **my-free-membership-site** has been tested on:
 
-- Ubuntu 18.04
-- PostgreSQL 14
+- Ubuntu 18.04;
+- PostgreSQL 14; and
 - Ruby 2.2.4
 
 If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
 
-## 1. Getting Started
+## Getting Started
 
 **Step 1:** Clone the project:
 
@@ -79,6 +83,8 @@ Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:
 
 ![login screen](./thumbnails/login.png)
 
+## Documentation
+
 ## 2. Installing Modules
 
 **my-free-membership-site** is extensible. That means, you can install 3th parties modules to add features like payments processing; or any other module regarding the kind of product that you want to develop like e-commerce, online stores, software-as-a-service, education, social networks, etc.
@@ -92,7 +98,7 @@ cd ~/my-free-membership-site
 ruby ./add.rb name=<module name>
 ```
 
-## 2.1. Installing [Processing Threads](https://github.com/leandrosardi/pampa) Module
+### 2.1. Installing [Processing Threads](https://github.com/leandrosardi/pampa) Module
 
 The [Processing Threads](https://github.com/leandrosardi/pampa) is not a kind of commercial product, but a software for managing back-end processing of offline tasks easily.
 
@@ -112,7 +118,7 @@ cd ~/my-free-membership-site
 ruby ./add.rb name=threads
 ```
 
-## 2.2. Installing [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) Module
+### 2.2. Installing [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) Module
 
 [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) (a.k.a. **I2P**) is a library for 
 
