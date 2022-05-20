@@ -49,7 +49,9 @@ Some features of **my-free-membership-site** include:
 
 14. appendix 1: writing modules;
 
-15. appendix 2: archiving inactive account.
+15. appendix 2: managing transcactional and historical data;
+
+16. appendix 3: archiving inactive account.
 
 ## Getting Started
 
