@@ -17,17 +17,7 @@ Use **my-free-membership-site** to develop any kind of:
 - social network;
 - etc.
 
-## Software Requirements
-
-**my-free-membership-site** has been tested on:
-
-- Ubuntu 18.04;
-- PostgreSQL 14; and
-- Ruby 2.2.4
-
-If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
-
-## Features
+## Features & Documentation
 
 Some features of **my-free-membership-site** include:
 
@@ -62,6 +52,18 @@ Some features of **my-free-membership-site** include:
 15. Removing Client Data
 
 ## Getting Started
+
+### Software Requirements
+
+**my-free-membership-site** has been tested on:
+
+- Ubuntu 18.04;
+- PostgreSQL 14; and
+- Ruby 2.2.4
+
+If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
+
+### Installation
 
 **Step 1:** Clone the project:
 
