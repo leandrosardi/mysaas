@@ -142,12 +142,12 @@ END
 GO
 
 
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[client]') AND type in (N'U'))
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[account]') AND type in (N'U'))
 BEGIN
-CREATE TABLE [dbo].[client](
+CREATE TABLE [dbo].[account](
 	[id] [uniqueidentifier] NOT NULL,
 	[id_shard] [uniqueidentifier] NOT NULL,
-	[id_client_owner] [uniqueidentifier] NOT NULL,
+	[id_account_owner] [uniqueidentifier] NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[id_timezone] [uniqueidentifier] NULL,
 	[domain_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
@@ -169,7 +169,7 @@ CREATE TABLE [dbo].[client](
 	[remove_data_end_time] [datetime] NULL,
 	[remove_data_result] [bit] NULL,
 	[remove_data_error_description] [text] COLLATE Traditional_Spanish_CI_AS NULL,
- CONSTRAINT [PK_client] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_account] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -180,7 +180,7 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[us
 BEGIN
 CREATE TABLE [dbo].[user](
 	[id] [uniqueidentifier] NOT NULL,
-	[id_client] [uniqueidentifier] NOT NULL REFERENCES [client]([id]),
+	[id_account] [uniqueidentifier] NOT NULL REFERENCES [account]([id]),
 	[email] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[password] [varchar](5000) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
@@ -201,29 +201,29 @@ CREATE TABLE [dbo].[user](
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_shard]') AND parent_object_id = OBJECT_ID(N'[dbo].[shard]'))
-ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_shard] FOREIGN KEY([id_shard])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_shard]') AND parent_object_id = OBJECT_ID(N'[dbo].[shard]'))
+ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_shard] FOREIGN KEY([id_shard])
 REFERENCES [dbo].[shard] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_client_owner]') AND parent_object_id = OBJECT_ID(N'[dbo].[client]'))
-ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_client_owner] FOREIGN KEY([id_client_owner])
-REFERENCES [dbo].[client] ([ID])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_account_owner]') AND parent_object_id = OBJECT_ID(N'[dbo].[account]'))
+ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_account_owner] FOREIGN KEY([id_account_owner])
+REFERENCES [dbo].[account] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_timezone]') AND parent_object_id = OBJECT_ID(N'[dbo].[timezone]'))
-ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_timezone] FOREIGN KEY([id_shard])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_timezone]') AND parent_object_id = OBJECT_ID(N'[dbo].[timezone]'))
+ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_timezone] FOREIGN KEY([id_shard])
 REFERENCES [dbo].[shard] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__client__id_user_to_contact]') AND parent_object_id = OBJECT_ID(N'[dbo].[client]'))
-ALTER TABLE [dbo].[client]  WITH CHECK ADD  CONSTRAINT [FK__client__id_user_to_contact] FOREIGN KEY([id_user_to_contact])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_user_to_contact]') AND parent_object_id = OBJECT_ID(N'[dbo].[account]'))
+ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_user_to_contact] FOREIGN KEY([id_user_to_contact])
 REFERENCES [dbo].[user] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__user__id_client]') AND parent_object_id = OBJECT_ID(N'[dbo].[user]'))
-ALTER TABLE [dbo].[user]  WITH CHECK ADD  CONSTRAINT [FK__user__id_client] FOREIGN KEY([id_user])
-REFERENCES [dbo].[client] ([ID])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__user__id_account]') AND parent_object_id = OBJECT_ID(N'[dbo].[user]'))
+ALTER TABLE [dbo].[user]  WITH CHECK ADD  CONSTRAINT [FK__user__id_account] FOREIGN KEY([id_user])
+REFERENCES [dbo].[account] ([ID])
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[user_config]') AND type in (N'U'))

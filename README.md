@@ -1,8 +1,9 @@
 # free-membership-sites
 
-## IMPORTANT:
-## This project is under construction.
-## The first version will be released on 1-Jun-2022.
+**IMPORTANT:**
+This project is under construction.
+The first version will be released on 1-Jun-2022.
+Check out [our roadmap here](https://github.com/users/leandrosardi/projects/5).
 
 **my-free-membership-site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
 
@@ -15,40 +16,6 @@ Use **my-free-membership-site** to develop any kind of:
 - forum;
 - social network;
 - etc.
-
-Some features of **my-free-membership-site** include:
-
-1. **account management**: 
-	- user signup,
-	- email confirmation,
-    - adding team memebers, 
-	- user login, 
-	- password reset, 
-	- timezone configuration,
-    - account files storage, and 
-	- user preferences;
-
-2. **invoicing** and payments processing;
-
-3. **email notifications** with easy setup of automation rules;
-
-4. **affiliates tracking** for managing resellers and pay commission;
-
-5. **domain aliasing** for licencing your site to other companies;
-
-6. **abuse preventing** by tracking user's network and browser fingertings;
-
-7. **shadow profiling** [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
-
-8. **SSL certificates** support;
-
-9. **horizontal scalability** of both: database and webservers;
-
-10. **access points publishing** to connect your site with any other products;
-
-11. **background processesing** for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
-
-12. **extensiblilty**, writing your own modules or installing the modules of thirth parties.
 
 ## Software Requirements
 
@@ -87,106 +54,41 @@ Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:
 
 ![login screen](./thumbnails/login.png)
 
+
 ## Documentation
 
-## 2. Installing Modules
+Some features of **my-free-membership-site** include:
 
-**my-free-membership-site** is extensible. That means, you can install 3th parties modules to add features like payments processing; or any other module regarding the kind of product that you want to develop like e-commerce, online stores, software-as-a-service, education, social networks, etc.
+1. [account management](./docu/1.accounts-management.md);
 
-If the module you need doesn't exists, you can create your own modules too.
+2. [invoicing and payments processing](./docu/2.invoicing-and-payments-processing);
 
-Installing a module is as simple as running a Ruby script:
+3. [email notifications](./docu/3.email-notifications) with easy setup of automation rules;
 
-```bash
-cd ~/my-free-membership-site
-ruby ./add.rb name=<module name>
-```
+4. [affiliates tracking](./docu/4.affiliates-tracking) for managing resellers and pay commission;
 
-### 2.1. Installing [Processing Threads](https://github.com/leandrosardi/pampa) Module
+5. [domain aliasing](./docu/5.domain-aliasing) for licencing your site to other companies;
 
-The [Processing Threads](https://github.com/leandrosardi/pampa) is not a kind of commercial product, but a software for managing back-end processing of offline tasks easily.
+6. [abuse preventing](./docu/6.abuse-preventing) by tracking user's network and browser fingertings;
 
-[Processing Threads](https://github.com/leandrosardi/pampa) is a Ruby library for distributing computing providing the following features:
+7. [shadow profiling](./docu/7.shadow-profiling) [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
 
-- cluster-management with dynamic reconfiguration (joining and leaving nodes);
-- distribution of the computation jobs to the (active) nodes;
-- error handling, job-retry and fault tolerance;
-- fast (non-direct) communication to ensure realtime capabilities.
+8. [SSL certificates](./docu/8.ssl-certificates) support;
 
-For technical details, refer to [Processing Threads on GitHub](https://github.com/leandrosardi/pampa).
+9. [horizontal scalability](./docu/9.horizontal-scalability) of both: database and webservers;
 
-To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
+10. [access points publishing](./docu/10.access-points-publishing) to connect your site with any other products;
 
-```bash
-cd ~/my-free-membership-site
-ruby ./add.rb name=threads
-```
+11. [background processesing](./docu/11.background-processesing) for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
-### 2.2. Installing [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) Module
+12. [extensiblilty](./docu/12.extensiblilty), writing your own modules or installing the modules of thirth parties.
 
-[Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing) (a.k.a. **I2P**) is a library for 
+13. DB Stored Parameters
 
-1. configuring products, prices, offers, and subscriptions; 
-2. show invoices and PayPal subscriptions; 
-3. processing PayPal notifications; 
-and
-4. track the finanical history of your customers. 
+14. Writing Modules
 
-For technical details, refer to [Invoicing & Payments Processing](https://github.com/leandrosardi/invoicing_payments_processing).
+15. Removing Client Data
 
-To install [Processing Threads](https://github.com/leandrosardi/pampa), run this Ruby script:
 
-```bash
-cd ~/my-free-membership-site
-ruby ./add.rb name=i2p
-```
-
-## 3. User Roles
-
-## 4. Installing SSL Certificates
-
-## 5. Scaling Out Database
-
-### 5.1. Scaling Out with Native Databases Sharding
-
-### 5.2. Scaling Out with [CockroachDB](https://www.cockroachlabs.com/docs/cockroachcloud/quickstart.html)
-
-## 6. Scaling Out WebServer
-
-### 6.1. Scaling Out with Native NGINX extension
-
-### 6.2. Scaling Out with Cloud Hosting Load Balancers
-
-## 7. User Preferences
-
-## 8. Email Notifications
-
-### 8.1. Setup Notification
-
-### 8.2. Delivering Email Notificaiton
-
-### 8.3. Tracking Opens
-
-### 8.4. Tracking Clicks
-
-## 9. Client Storage
-
-## 10. Client TimeZones and Time Offsets
-
-## 11. Removing Client Data
-
-## 12. Client Email & Domains Aliasing
-
-### 12.1. Email Aliasing
-
-### 12.2. Domain Aliasing
-
-### 12.3. Other Clients Ownership
-
-## 13. Client API-Key
-
-## 14. DB Stored Parameters
-
-## 15. Writing Modules
 
 
