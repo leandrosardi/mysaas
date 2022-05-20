@@ -27,35 +27,7 @@ Use **my-free-membership-site** to develop any kind of:
 
 If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
 
-## Getting Started
-
-**Step 1:** Clone the project:
-
-```bash
-cd ~
-git clone https://github.com/leandrosardi/my-free-membership-site
-```
-
-**Step 2:** Run the ruby script for installing required gems and database.
-
-```bash
-cd ~/my-free-membership-site
-ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
-```
-
-**Step 3:** Running the Web Server
-
-```bash
-cd ~/my-free-membership-site
-ruby ./run.rb db=kepler 
-```
-
-Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
-
-![login screen](./thumbnails/login.png)
-
-
-## Documentation
+## Features
 
 Some features of **my-free-membership-site** include:
 
@@ -88,6 +60,35 @@ Some features of **my-free-membership-site** include:
 14. Writing Modules
 
 15. Removing Client Data
+
+## Getting Started
+
+**Step 1:** Clone the project:
+
+```bash
+cd ~
+git clone https://github.com/leandrosardi/my-free-membership-site
+```
+
+**Step 2:** Run the ruby script for installing required gems and database.
+
+```bash
+cd ~/my-free-membership-site
+ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+```
+
+**Step 3:** Running the Web Server
+
+```bash
+cd ~/my-free-membership-site
+ruby ./run.rb db=kepler 
+```
+
+Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
+
+![login screen](./thumbnails/login.png)
+
+
 
 
 
