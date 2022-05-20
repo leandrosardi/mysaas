@@ -43,13 +43,13 @@ Some features of **my-free-membership-site** include:
 
 11. [background processesing](./docu/11.background-processesing) for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
-12. [extensiblilty](./docu/12.extensiblilty), writing your own modules or installing the modules of thirth parties.
+12. [extensiblilty](./docu/12.extensiblilty), writing your own modules or installing the modules of thirth parties;
 
-13. DB Stored Parameters
+13. stored parameters;
 
-14. Writing Modules
+14. appendix 1: writing modules;
 
-15. Removing Client Data
+15. appendix 2: archiving inactive account.
 
 ## Getting Started
 
