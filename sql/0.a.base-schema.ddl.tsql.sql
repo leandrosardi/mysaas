@@ -84,7 +84,7 @@ CREATE TABLE [dbo].[country](
 	[code] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[name_spanish] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
- CONSTRAINT [PK__lncountr__3213E83F3CF40B7E] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__country] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -99,7 +99,7 @@ CREATE TABLE [dbo].[timezone](
 	[offset] [float] NOT NULL,
 	[large_description] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[short_description] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
- CONSTRAINT [PK__timezone__3213E83F1FEBB863] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__timezone] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -117,6 +117,7 @@ CREATE TABLE [dbo].[account](
 	[create_time] [datetime] NOT NULL,
 	[delete_time] [datetime] NULL,
 	[id_timezone] [uniqueidentifier] NOT NULL,
+	[storage_total_kb] bigint NOT NULL, -- max allowed KB in the storage for this client
 	[domain_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[from_email_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[from_name_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
@@ -159,11 +160,6 @@ ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_account
 REFERENCES [dbo].[account] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_timezone]') AND parent_object_id = OBJECT_ID(N'[dbo].[timezone]'))
-ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_timezone] FOREIGN KEY([id_shard])
-REFERENCES [dbo].[shard] ([ID])
-GO
-
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_user_to_contact]') AND parent_object_id = OBJECT_ID(N'[dbo].[account]'))
 ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_user_to_contact] FOREIGN KEY([id_user_to_contact])
 REFERENCES [dbo].[user] ([ID])
@@ -174,9 +170,9 @@ ALTER TABLE [dbo].[user]  WITH CHECK ADD  CONSTRAINT [FK__user__id_account] FORE
 REFERENCES [dbo].[account] ([ID])
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[user_config]') AND type in (N'U'))
+IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[preference]') AND type in (N'U'))
 BEGIN
-CREATE TABLE [dbo].[user_config](
+CREATE TABLE [dbo].[preference](
 	[id] [uniqueidentifier] NOT NULL,
 	[id_user] [uniqueidentifier] NOT NULL,
 	[create_time] [datetime] NOT NULL,
@@ -186,11 +182,11 @@ CREATE TABLE [dbo].[user_config](
 	[value_int] [int] NULL,
 	[value_float] [float] NULL,
 	[value_bool] [bit] NULL,
- CONSTRAINT [PK__user_con__3213E83F279EAAAC] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__preference] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
- CONSTRAINT [UK_user_config__id__name] UNIQUE NONCLUSTERED 
+ CONSTRAINT [UK_preference__id__name] UNIQUE NONCLUSTERED 
 (
 	[id] ASC,
 	[name] ASC
@@ -199,33 +195,8 @@ CREATE TABLE [dbo].[user_config](
 END
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__user_config__id_user]') AND parent_object_id = OBJECT_ID(N'[dbo].[user_config]'))
-ALTER TABLE [dbo].[user]  WITH CHECK ADD  CONSTRAINT [FK__user_config__id_user] FOREIGN KEY([id_user])
-REFERENCES [dbo].[user] ([ID])
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[user_config_history]') AND type in (N'U'))
-BEGIN
-CREATE TABLE [dbo].[user_config_history](
-	[id] [uniqueidentifier] NOT NULL,
-	[id_user] [uniqueidentifier] NOT NULL,
-	[create_time] [datetime] NOT NULL,
-	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[value_string] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[value_int] [int] NULL,
-	[value_float] [float] NULL,
-	[value_bool] [bit] NULL,
-	[type] [int] NULL,
- CONSTRAINT [PK__user_con__3213E83F2D578402] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-END
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__user_config_history__id_user]') AND parent_object_id = OBJECT_ID(N'[dbo].[user_config_history]'))
-ALTER TABLE [dbo].[user_config_history]  WITH CHECK ADD CONSTRAINT [FK__user_config__id_user] FOREIGN KEY([id_user])
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__preference__id_user]') AND parent_object_id = OBJECT_ID(N'[dbo].[preference]'))
+ALTER TABLE [dbo].[user]  WITH CHECK ADD  CONSTRAINT [FK__preference__id_user] FOREIGN KEY([id_user])
 REFERENCES [dbo].[user] ([ID])
 GO
 
@@ -236,15 +207,14 @@ CREATE TABLE [dbo].[notification](
 	[create_time] [datetime] NOT NULL,
 	[delivery_time] [datetime] NULL,
 	[type] [numeric](18, 0) NOT NULL,
-	[id_user] [uniqueidentifier] NULL,
+	[id_user] [uniqueidentifier] NOT NULL, 
 	[name_to] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[email_to] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[name_from] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[email_from] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[subject] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[body] [text] COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[id_host] [uniqueidentifier] NULL,
- CONSTRAINT [PK__notifica__3213E83F0D99FE17] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__notification] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -264,7 +234,7 @@ CREATE TABLE [dbo].[timeoffset](
 	[region] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[utc] [numeric](2, 0) NOT NULL,
 	[dst] [numeric](2, 0) NULL,
- CONSTRAINT [PK__timeoffs__3213E83F3E3F6D37] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__timeoffset] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
@@ -289,7 +259,7 @@ BEGIN
 CREATE TABLE [dbo].[role](
 	[id] [uniqueidentifier] NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
- CONSTRAINT [PK__role__3213E83F4668671F] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__role] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
@@ -307,7 +277,7 @@ CREATE TABLE [dbo].[user_role](
 	[id] [uniqueidentifier] NOT NULL,
 	[id_user] [uniqueidentifier] NOT NULL,
 	[id_role] [uniqueidentifier] NOT NULL,
- CONSTRAINT [PK__user_rol__3213E83F4A38F803] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__user_role] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
@@ -332,7 +302,7 @@ GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[params]') AND type in (N'U'))
 BEGIN
-CREATE TABLE [dbo].[params](
+CREATE TABLE [dbo].[param](
 	[id] [uniqueidentifier] NOT NULL,
 	[name] [varchar](500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 	[type] [int] NOT NULL,
@@ -341,7 +311,7 @@ CREATE TABLE [dbo].[params](
 	[value_numeric] [numeric](18, 0) NULL,
 	[value_datetime] [datetime] NULL,
 	[value_bit] [bit] NULL,
- CONSTRAINT [PK__params__3213E83F37FA4C37] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK__param] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],

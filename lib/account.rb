@@ -13,6 +13,11 @@ module BlackStack
         many_to_one :billingCountry, :class=>:'BlackStack::LnCountry', :key=>:billing_id_lncountry
         many_to_one :user_to_contect, :class=>'BlackStack::User', :key=>:id_user_to_contact
 
+        # signup a new account with its owner user
+        def self.signup(name, email, password)
+          # TODO: Code Me!
+        end
+
         # return the user to contact for any communication.
         # if the client configured the user_to_contact field, this method returns such user.
         # if the client didn't configure the user_to_contact field, this method returns first user signed up that is not deleted.
@@ -52,13 +57,7 @@ module BlackStack
         def storage_sub_folder(name)
           "#{BlackStack::Code::Storage::storage_folder}/#{self.id.to_guid}/#{name}"
         end
-        
-        # returns the max allowed KB in the storage for this client
-        def storage_total_kb
-          # TODO: get this parameter from the paid invoces
-          1024*1024 # 1 GB
-        end
-        
+                
         # returns the max allowed KB in the storage for this client
         # TODO: make it both: linux and windows compatible - issue #12
         def storage_used_kb
