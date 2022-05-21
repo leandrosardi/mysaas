@@ -5,11 +5,11 @@ This project is under construction.
 The first version will be released on 1-Jun-2022.
 Check out [our roadmap here](https://github.com/users/leandrosardi/projects/5).
 
-**my-free-membership-site** is an open-source, extensible and scalable platform for selling memberships and subscriptions online.
+**free-membership-sites** is an open-source, extensible and scalable platform for develop your own SaaS, e-Commerce, Education Platform, Social Network, Forum or any kind of memberships based product.
 
 ![dashboard example](./thumbnails/dashboard.png)
 
-Use **my-free-membership-site** to develop any kind of:
+Use **free-membership-sites** to develop any kind of:
 - softwares as a service;
 - educational site;
 - e-commerce store;
@@ -21,40 +21,55 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 ## Getting Started
 
-**Step 1:** Install your Environment
+**Step 1:** Install the Environment
 
 If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 2.2.4` and `PostgreSQL 14`.
 
 ```
 cd /tmp
-wget 
-
+wget https://raw.githubusercontent.com/leandrosardi/free-membership-sites/main/cli/install-environment.sh
+bash ./install-environment.sh
 ```
 
-**Step 1:** Clone the project:
+If you get a permissions error, prefix the command with sudo.
+
+If you are not running on Ubuntu 18.04 or Ubuntu 20.04, the command above may not work.
+
+**free-memembership-sites** has been tested with Ruby 2.2.4 and PostgreSQL 14.
+Other version may not be stable.
+
+**Step 2:** Clone the project.
+
+Get the source code from GitHub.
 
 ```bash
-cd ~
-git clone https://github.com/leandrosardi/my-free-membership-site
+mkdir ~/code
+cd ~/code
+git clone https://github.com/leandrosardi/free-membership-sites
 ```
 
-**Step 2:** Run the ruby script for 
+If you get a permissions error, prefix the command with sudo.
 
+**Step 3:** Install the App
+
+The command below performs many installation tasks:
+
+```bash
+cd ~/free-membership-sites
+ruby ./cli/install-app.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+```
+
+Such installation tasks are:
 1. installing required gems;
-2. install the database schema;
-3. insert seed records into the database; and
-4. automatically setup configuration file.
+2. creating the database schema;
+3. inserting seed records into the database; and
+4. setup configuration file.
+
+**Step 4:** Run the Web Server
 
 ```bash
-cd ~/my-free-membership-site
-ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
-```
-
-**Step 3:** Running the Web Server
-
-```bash
-cd ~/my-free-membership-site
-ruby ./run.rb db=kepler 
+cd ~/free-membership-sites
+ruby ./cli/run-app.rb db=kepler 
 ```
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
@@ -63,7 +78,7 @@ Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:
 
 ## Features & Documentation
 
-Some features of **my-free-membership-site** include:
+Some features of **free-membership-sites** include:
 
 1. [account management](./docu/1.accounts-management.md);
 
