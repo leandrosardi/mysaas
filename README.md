@@ -56,7 +56,7 @@ The command below performs many installation tasks:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./cli/install-app.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
 ```
 
 Such installation tasks are:
@@ -69,7 +69,7 @@ Such installation tasks are:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./cli/run-app.rb db=kepler 
+ruby ./run.rb db=kepler 
 ```
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
