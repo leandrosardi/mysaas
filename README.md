@@ -45,13 +45,15 @@ Some features of **my-free-membership-site** include:
 
 12. [extensiblilty](./docu/12.extensiblilty), writing your own modules or installing the modules of thirth parties;
 
-13. stored parameters;
+13. automated deploying;
 
-14. appendix 1: writing modules;
+14. stored parameters;
 
-15. appendix 2: managing transcactional and historical data;
+15. appendix 1: writing modules;
 
-16. appendix 3: archiving inactive account.
+16. appendix 2: managing transcactional and historical data;
+
+17. appendix 3: archiving inactive account.
 
 ## Getting Started
 
