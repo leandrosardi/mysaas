@@ -8,18 +8,18 @@ SANDBOX = false # ambiente de desarrollo? => conecta a un SQLEXPRESS
 # DB ACCESS TO THE CENTRAL - KEEP IT SECRET
 # Remember to enable TCP/IP connections from 'SQL Server Configuration Manager'.
 # Remember to set all protocols listining the port 1433 in 'SQL Server Configuration Manager'.
-BlackStack::Core::set_db_params({
-  :db_url => '192.168.1.102',
-  :db_port => 1433,
-  :db_name => 'kepler',
-  :db_user => 'sa',
-  :db_password => 'Amazonia2020',
+BlackStack::Core::DB::set_db_params({
+  :db_url => '%db_url%',
+  :db_port => %db_port%,
+  :db_name => '%db_name%',
+  :db_user => '%db_user%',
+  :db_password => '%db_password%',
 })
 
 # Setup connection to the API, in order get bots requesting and pushing data to the database.
 # TODO: write your API-Key here. Refer to this article about how to create your API key:
 # https://sites.google.com/expandedventure.com/knowledge/
-BlackStack::Core::set_api_url({
+BlackStack::Core::API::set_api_url({
   # IMPORTANT: It is strongly recommended that you 
   # use the api_key of an account with prisma role, 
   # and assigned to the central division too.
@@ -45,32 +45,17 @@ BlackStack::Core::set_api_url({
 # be deleted from the filesystem. But if you add a folder to the 
 # array set_storage_sub_folders it should be added to every new 
 # client automatically. This feature is pending.
-# For more information, please read 
+# 
+# By now, to update the storage forder of an account, you should use
+# the method `Account::update_storage_folder`. 
 #
-# TODO: Move each storage sub-folder to the regarding module
-#
-STORAGE_SUB_FOLDER_DOWNLOADS = 'downloads'
-STORAGE_SUB_FOLDER_UPLOADS = 'uploads'
-STORAGE_SUB_FOLDER_LOGS = 'logs'
-BlackStack::Core::set({
-  :folder => './public/clients',
-  :default_max_allowed_megabytes => 15 * 1024,
-  :sub_folders => [
-    STORAGE_SUB_FOLDER_DOWNLOADS,
-    STORAGE_SUB_FOLDER_UPLOADS,
-    STORAGE_SUB_FOLDER_LOGS,
+BlackStack::Core::Storage::set_storage({
+  :storage_storage_folder => './public/clients',
+  :storage_default_max_allowed_kilobytes => 15 * 1024,
+  :storage_sub_folders => [
+    'downloads', 'uploads', 'logs'
   ],
 })
-
-BlackStack::Core::set_storage_sub_folders([
-  STORAGE_SUB_FOLDER_CHROME_PROFILES,
-  STORAGE_SUB_FOLDER_DOWNLOADS,
-  STORAGE_SUB_FOLDER_UPLOADS,
-  STORAGE_SUB_FOLDER_LOGS,
-  STORAGE_SUB_FOLDER_MAC_STOCK_PICTURES, 
-  STORAGE_SUB_FOLDER_JSON, 
-  STORAGE_SUB_CROWDTRUST_COMMAND_SCREENSHOTS, 
-])
 
 # IMPORTANT NOTE: This value should have a format like FOO.COM. 
 # => Other formats can generate bugs in the piece of codes where 
