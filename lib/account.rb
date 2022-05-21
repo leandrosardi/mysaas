@@ -14,7 +14,7 @@ module BlackStack
         many_to_one :user_to_contect, :class=>'BlackStack::User', :key=>:id_user_to_contact
 
         # signup a new account with its owner user
-        def self.signup(name, email, password)
+        def self.signup(company_name, user_name, user_email, user_password)
           # TODO: Code Me!
         end
 

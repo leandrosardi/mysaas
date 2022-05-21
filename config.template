@@ -5,6 +5,12 @@
 # many features below will be enabled or disabled based on this flag
 SANDBOX = false # ambiente de desarrollo? => conecta a un SQLEXPRESS
 
+# setting up breakpoints for backend processes.
+# enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
+BlackStack::Debugging::set({
+  :allow_breakpoints => false,
+})
+
 # DB ACCESS TO THE CENTRAL - KEEP IT SECRET
 # Remember to enable TCP/IP connections from 'SQL Server Configuration Manager'.
 # Remember to set all protocols listining the port 1433 in 'SQL Server Configuration Manager'.
@@ -75,11 +81,28 @@ CS_HOME_PAGE_DOMAIN = "connectionsphere.com"
 CS_HOME_PAGE_PORT = "443"
 CS_HOME_WEBSITE = "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{CS_HOME_PAGE_PORT}"
 
-# setting up breakpoints for backend processes.
-# enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
-BlackStack::Debugging::set({
-  :allow_breakpoints => false,
-})
+# API access to PostMark
+POSTMARK_API_TOKEN = '%postmark_api_token%'
+
+# parameters for email notifications
+NOTIFICATIONS = {
+  # smtp request sender information
+  :sender_email => '%sender_email%',
+  :from_email => '%from_email%', # reply-to field in the SMTP request
+  :from_name => '%from_name%',
+  
+  # smtp request connection information
+  :smtp_url => '%smtp_url%',
+  :smtp_port => '%smtp_port%',
+  :smtp_user => '%smtp_user%',
+  :smtp_password => '%smtp_password%',
+
+  # email body configuration
+  :logo_url => 'https://connectionsphere.com/apps/images/logo/logo-32-01.png',
+  :signature_picture_url => 'https://connectionsphere.com/apps/images/leandro_sardi.png',
+  :signature_name => 'Leandro D. Sardi',
+  :signature_position => 'Founder & CEO',
+}
 
 # setting up extensions
 BlackStack::Extensions.set({
@@ -96,11 +119,14 @@ BlackStack::Extensions.set({
         :section => 'Software',
         # what is the version of the module to include
         :version => "1.0.0",
+        # the git path from where clone (install) and update the module
+        :git_path => 'https://github.com/leandrosardi/pampa' 
     }, {
         :name => "invoicing-payments-processing",
         :access_roles => ['all'],
         :section => nil,
         :version => "1.0.0",
+        :git_path => 'https://github.com/leandrosardi/invoicing-payments-processing', 
     }],
 });
 

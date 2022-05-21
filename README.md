@@ -17,6 +17,50 @@ Use **my-free-membership-site** to develop any kind of:
 - social network;
 - etc.
 
+If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
+
+## Getting Started
+
+**Step 1:** Install your Environment
+
+If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 2.2.4` and `PostgreSQL 14`.
+
+```
+cd /tmp
+wget 
+
+```
+
+**Step 1:** Clone the project:
+
+```bash
+cd ~
+git clone https://github.com/leandrosardi/my-free-membership-site
+```
+
+**Step 2:** Run the ruby script for 
+
+1. installing required gems;
+2. install the database schema;
+3. insert seed records into the database; and
+4. automatically setup configuration file.
+
+```bash
+cd ~/my-free-membership-site
+ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+```
+
+**Step 3:** Running the Web Server
+
+```bash
+cd ~/my-free-membership-site
+ruby ./run.rb db=kepler 
+```
+
+Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
+
+![login screen](./thumbnails/login.png)
+
 ## Features & Documentation
 
 Some features of **my-free-membership-site** include:
@@ -54,48 +98,6 @@ Some features of **my-free-membership-site** include:
 16. appendix 2: managing transcactional and historical data;
 
 17. appendix 3: archiving inactive account.
-
-## Getting Started
-
-### Software Requirements
-
-**my-free-membership-site** has been tested on:
-
-- Ubuntu 18.04;
-- PostgreSQL 14; and
-- Ruby 2.2.4
-
-If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
-
-### Installation
-
-**Step 1:** Clone the project:
-
-```bash
-cd ~
-git clone https://github.com/leandrosardi/my-free-membership-site
-```
-
-**Step 2:** Run the ruby script for installing required gems and database.
-
-```bash
-cd ~/my-free-membership-site
-ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
-```
-
-**Step 3:** Running the Web Server
-
-```bash
-cd ~/my-free-membership-site
-ruby ./run.rb db=kepler 
-```
-
-Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.
-
-![login screen](./thumbnails/login.png)
-
-
-
 
 
 

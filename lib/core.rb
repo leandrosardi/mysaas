@@ -1,5 +1,11 @@
 module BlackStack
     module Core
+
+        # run a require for 
+        def orm(name)
+            require_relative "./lib/#{name}"
+        end
+
         module DB
             # database connection parameters
             @@db_url = nil
