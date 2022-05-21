@@ -77,40 +77,6 @@ GO
 USE [%database_name%];
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[shard]') AND type in (N'U'))
-BEGIN
-CREATE TABLE [dbo].[division](
-	[id] [uniqueidentifier] NOT NULL,
-	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-
-	[db_url] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[db_port] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[db_user] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[db_password] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[db_name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-
-	[ws_url] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-	[ws_port] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
-
-	[app_url] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[app_port] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-
-	[available] [bit] NULL,
-	[central] [bit] NOT NULL,
-	[home] [bit] NOT NULL,
-
- CONSTRAINT [PK__division__3213E83F711DBAFA] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY],
- CONSTRAINT [IX_division__name] UNIQUE NONCLUSTERED 
-(
-	[name] ASC
-)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
-) ON [PRIMARY]
-END
-GO
-
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[country]') AND type in (N'U'))
 BEGIN
 CREATE TABLE [dbo].[country](
@@ -146,29 +112,17 @@ IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[ac
 BEGIN
 CREATE TABLE [dbo].[account](
 	[id] [uniqueidentifier] NOT NULL,
-	[id_shard] [uniqueidentifier] NOT NULL,
 	[id_account_owner] [uniqueidentifier] NOT NULL,
-	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[id_timezone] [uniqueidentifier] NULL,
+	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
+	[create_time] [datetime] NOT NULL,
+	[delete_time] [datetime] NULL,
+	[id_timezone] [uniqueidentifier] NOT NULL,
 	[domain_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[from_email_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[from_name_for_ssm] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[domain_for_ssm_verified] [bit] NULL,
-	[id_user_to_contact] [uniqueidentifier] NULL,
-	[billing_address] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[billing_city] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[billing_state] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[billing_zipcode] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[billing_id_country] [uniqueidentifier] NULL,
-	[disabled_for_trial_ssm] [bit] NULL,
+	[id_user_to_contact] [uniqueidentifier] NOT NULL, -- this is the user owner of the account
 	[api_key] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[create_storage_time] [datetime] NULL,
-	[create_time] [datetime] NULL,
-	[delete_time] [datetime] NULL,
-	[remove_data_start_time] [datetime] NULL,
-	[remove_data_end_time] [datetime] NULL,
-	[remove_data_result] [bit] NULL,
-	[remove_data_error_description] [text] COLLATE Traditional_Spanish_CI_AS NULL,
  CONSTRAINT [PK_account] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -181,14 +135,13 @@ BEGIN
 CREATE TABLE [dbo].[user](
 	[id] [uniqueidentifier] NOT NULL,
 	[id_account] [uniqueidentifier] NOT NULL REFERENCES [account]([id]),
+	[create_time] [datetime] NOT NULL,
+	[delete_time] [datetime] NULL,
 	[email] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[password] [varchar](5000) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
 	[phone] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
-	[create_time] [datetime] NOT NULL,
-	[delete_time] [datetime] NULL,
 	[verified] [bit] NULL,
-	[linkedin_profile_url] [varchar](8000) COLLATE Traditional_Spanish_CI_AS NULL,
  CONSTRAINT [PK_user] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
@@ -199,11 +152,6 @@ CREATE TABLE [dbo].[user](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 END
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_shard]') AND parent_object_id = OBJECT_ID(N'[dbo].[shard]'))
-ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [FK__account__id_shard] FOREIGN KEY([id_shard])
-REFERENCES [dbo].[shard] ([ID])
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK__account__id_account_owner]') AND parent_object_id = OBJECT_ID(N'[dbo].[account]'))
@@ -233,11 +181,11 @@ CREATE TABLE [dbo].[user_config](
 	[id_user] [uniqueidentifier] NOT NULL,
 	[create_time] [datetime] NOT NULL,
 	[name] [varchar](500) COLLATE Traditional_Spanish_CI_AS NOT NULL,
+	[type] [int] NOT NULL,
 	[value_string] [varchar](500) COLLATE Traditional_Spanish_CI_AS NULL,
 	[value_int] [int] NULL,
 	[value_float] [float] NULL,
 	[value_bool] [bit] NULL,
-	[type] [int] NULL,
  CONSTRAINT [PK__user_con__3213E83F279EAAAC] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC

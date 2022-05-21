@@ -10,7 +10,7 @@ SANDBOX = false # ambiente de desarrollo? => conecta a un SQLEXPRESS
 # Remember to set all protocols listining the port 1433 in 'SQL Server Configuration Manager'.
 BlackStack::Core::DB::set_db_params({
   :db_url => '%db_url%',
-  :db_port => %db_port%,
+  :db_port => '%db_port%',
   :db_name => '%db_name%',
   :db_user => '%db_user%',
   :db_password => '%db_password%',
@@ -23,15 +23,15 @@ BlackStack::Core::API::set_api_url({
   # IMPORTANT: It is strongly recommended that you 
   # use the api_key of an account with prisma role, 
   # and assigned to the central division too.
-  :api_key => 'a272972a-121d-4bc2-9413-a9bd7fa983cf', 
+  :api_key => '%api_key%', 
   # IMPORTANT: It is stringly recommended that you 
   # write the URL of the central division here. 
-  :api_protocol => 'https',
+  :api_protocol => '%api_protocol%',
   # IMPORTANT: Even if you are running process in our LAN, 
   # don't write a LAN IP here, since bots are designed to
   # run anywhere worldwide.
-  :api_domain => 'connectionsphere.com', 
-  :api_port => 443,
+  :api_domain => '%api_domain%', 
+  :api_port => '%api_domain%',
 })
 
 # storage configuration of new accounts
@@ -102,6 +102,5 @@ BlackStack::Extensions.set({
         :section => nil,
         :version => "1.0.0",
     }],
-
 });
 
