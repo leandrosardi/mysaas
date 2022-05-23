@@ -23,7 +23,7 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 **Step 1:** Install the Environment
 
-If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 2.2.4` and `PostgreSQL 14`.
+If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 3.1.2` and `PostgreSQL 14`.
 
 ```
 cd /tmp
@@ -35,7 +35,7 @@ If you get a permissions error, prefix the command with sudo.
 
 If you are not running on Ubuntu 18.04 or Ubuntu 20.04, the command above may not work.
 
-**free-memembership-sites** has been tested with Ruby 2.2.4 and PostgreSQL 14.
+**free-memembership-sites** has been tested with Ruby 3.1.2 and PostgreSQL 14.
 Other version may not be stable.
 
 **Step 2:** Clone the project.
@@ -56,7 +56,7 @@ The command below performs many installation tasks:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+ruby ./cli/install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
 ```
 
 Such installation tasks are:
@@ -69,7 +69,7 @@ Such installation tasks are:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./run.rb db=kepler 
+ruby ./cli/run.rb db=kepler 
 ```
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `demo` and password `demo`.

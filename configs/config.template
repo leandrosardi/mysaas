@@ -8,7 +8,7 @@ SANDBOX = false # ambiente de desarrollo? => conecta a un SQLEXPRESS
 # setting up breakpoints for backend processes.
 # enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
 BlackStack::Debugging::set({
-  :allow_breakpoints => false,
+  :allow_breakpoints => SANDBOX,
 })
 
 # DB ACCESS TO THE CENTRAL - KEEP IT SECRET
