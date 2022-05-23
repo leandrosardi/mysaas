@@ -4,10 +4,10 @@ require 'sinatra'
 require 'pg'
 require 'sequel'
 require_relative './lib/core'
-
-DB = Sequel.connect('postgres://postgres:Amazonia2020@127.0.0.1/kepler') 
-
 require_relative './config'
+
+DB = BlackStack::Core::DB::connect
+
 require_relative './lib/account'
 require_relative './lib/user'
 require_relative './lib/login'

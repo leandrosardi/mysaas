@@ -1,0 +1,95 @@
+<%
+load File.expand_path(__FILE__).gsub('/(erb)', '') + '/version.rb'
+%>
+<footer id="main-footer">
+	
+	<section class='row-fluid'>
+		<div class='span3'>
+			<img src='/core/images/logo/logo-32-01.png' height='90px' title='<%=APP_NAME%>' style='opacity:0.25;' />
+			<br/>
+			<div style='width:100%; text-align:left; margin-top:5px; margin-left:10px;'>
+				<a target='_window' style='text-decoration:none;font-size:18px;margin-right:5px;' title='Follow Us on Facebook' href='https://www.facebook.com/groups/560001971837935'><i class='icon-facebook'></i></a>
+				<a target='_window' style='text-decoration:none;font-size:18px;margin-right:5px;' title='Follow Us on GitHub' href='https://github.com/leandrosardi'><i class='icon-github'></i></a>
+			</div>
+		</div>
+		<div class='span3 text-left'>
+				<b><a href='https://help.expandedventure.com/connectionsphere' target='_window'>Help</a></b><br/>
+				<a href='https://help.expandedventure.com/connectionsphere' target='_window'>Introducing <%=APP_NAME.to_s%></a><br/>
+				<a href='https://help.expandedventure.com/connectionsphere/getting-started' target='_window'>Getting Started</a><br/>
+				<a href='https://help.expandedventure.com/connectionsphere/setup-a-reseller-account' target='_window'>Setting Up a Reseller Account</a><br/>
+		</div>
+
+		<div class='span3 text-left'>
+			<b><a href='<%=CS_HOME_WEBSITE%>/services#marketers' target='_window'>Services for Marketers</a></b><br/>
+			<a href='<%=CS_HOME_WEBSITE%>/prospecting' target='_window'>Prospecting</a><br/>
+			<a href='<%=CS_HOME_WEBSITE%>/affiliatestrackingservice' target='_window'>Affiliates Tracking Service</a><br/>
+			<%
+			if !@login.nil? && @login.user.client.isDivisionAdmin?
+			%>
+			<a href='<%=CS_HOME_WEBSITE%>/farming' target='_window'>Farming</a> <%=internalWidget%><br/>
+			<a href='<%=CS_HOME_WEBSITE%>/emailaddresses' target='_window'>Email Addresses</a> <%=internalWidget%><br/>
+			<%
+			end
+			%>
+			<br/>
+			<b><a href='<%=CS_HOME_WEBSITE%>/services#developers' target='_window'>Services for Developers</a></b><br/>
+			<a href='<%=CS_HOME_WEBSITE%>/threads' target='_window'>Working Threads</a><br/>
+			<%
+			if !@login.nil? && @login.user.client.isDivisionAdmin?
+			%>
+			<a href='<%=CS_HOME_WEBSITE%>/hostsmonitoring' target='_window'>Simple Hosts Monitoring</a> <%=internalWidget%><br/>
+			<%
+			end
+			%>
+		</div>
+
+		<div class='span3 text-left'>
+				<b><a href='https://help.expandedventure.com/developers' target='_window'>Integrations</a></b><br/>
+				<a href='https://help.expandedventure.com/developers/getting-your-api-key' target='_window'>Generating Your API-KEY</a><br/>
+				<a href='https://help.expandedventure.com/developers/connectionsphere-api-1-5' target='_window'>API Specifications</a><br/>
+				<a href='https://help.expandedventure.com/developers/zapier-integrations' target='_window'>Zapier Integrations</a><br/>
+		</div>
+	</section>
+
+	<br/>
+	<br/>
+	<br/>
+
+	<b><%=APP_NAME%></b>, version <a href='https://github.com/leandrosardi/blackstack/wiki/A02.Release-Notes' target='_window'><%=BLACKSTACK_VERSION.to_s%></a><br/>
+	Copyright &copy; <%=DateTime.now.year.to_s%> <a href="<%=COMPANY_URL %>" target='_window'><%=COMPANY_NAME.to_s%></a>, all rights reserved.<br/>
+	Powered by <a href='https://github.com/leandrosardi/blackstack' target='_window'>BlackStack</a>.
+	<a href="#" class="pull-right" id="on-top-link">
+		On Top&nbsp;<i class=" icon-chevron-up"></i>
+	</a>
+</footer>
+
+<!--
+===== STARTING ATS CODE =====
+ConnectionSphere - Affiliates Tracking Service (ATS) Pixel v1.0
+ATS is a Simple service to track researllers and JV partners.
+For more information visit: https://connectionsphere.com:443/affilaitestrackingservice/
+-->
+<script src='https://euler.connectionsphere.com:443/core/javascripts/pixels-1.0.1.min.js' type='text/javascript'></script>
+<script type='text/javascript'>
+
+	$('.maximizable').find('.controls button').click(function(){
+		var section = $('section.maximizable');
+		var button = section.find('div.controls button');
+		var icon = button.find('i');
+
+		if ( section.hasClass('fullscreen') == true ) {
+			section.removeClass('fullscreen');
+			icon.removeClass('icon-resize-small');
+			icon.addClass('icon-resize-full');
+			button.title('turn on fullscreen');
+		} else {
+			section.addClass('fullscreen');
+			icon.addClass('icon-resize-small');
+			icon.removeClass('icon-resize-full');
+			button.title('turn off fullscreen');
+		}
+	});
+</script>
+<!--
+===== ENDING ATS CODE =====
+-->

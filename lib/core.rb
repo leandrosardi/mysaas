@@ -1,11 +1,6 @@
 module BlackStack
     module Core
 
-        # run a require for 
-        def orm(name)
-            require_relative "./lib/#{name}"
-        end
-
         module DB
             # database connection parameters
             @@db_url = nil
@@ -13,7 +8,13 @@ module BlackStack
             @@db_name = nil
             @@db_user = nil
             @@db_password = nil
-            
+
+            # create database connection
+            def self.connect
+                s = "postgres://#{@@db_user}:#{@@db_password}@#{@@db_url}:#{@@db_port}/#{@@db_name}"
+                Sequel.connect(s)
+            end
+
             # database connection getters
             def self.db_url
                 @@db_url

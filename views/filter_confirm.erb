@@ -4,7 +4,7 @@ nid = params[:nid]
 
 # validar que los parametros no esten vacios
 if (nid.to_s.size==0 || nid.to_s.size==0)
-	redirect_adapted_to_nginx getDivisionURL + '/error?err='+ERR_CONFIRM_NOTIFICATION_ID_EXPECTED.to_s
+	redirect_adapted_to_nginx '/error?err='+ERR_CONFIRM_NOTIFICATION_ID_EXPECTED.to_s
 end
 
 # TODO: Validar que nid tenga el formato de un GUID
@@ -14,12 +14,12 @@ notification = Notification.where(:id=>nid, :type=>Notification::NOTIFICATION_CO
 
 # verifico si la notificacion existe
 if (notification == nil)
-	redirect_adapted_to_nginx getDivisionURL + '/error?err='+ERR_CONFIRM_NOTIFICATION_NOT_FOUND.to_s
+	redirect_adapted_to_nginx '/error?err='+ERR_CONFIRM_NOTIFICATION_NOT_FOUND.to_s
 end
 
 # verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
 if (notification.old()>NotificationConfirm::NOTIFICATION_CONFIRM_LINK_TIMEOUT)
-	redirect_adapted_to_nginx getDivisionURL + '/error?err='+ERR_CONFIRM_NOTIFICATION_EXPIRED.to_s
+	redirect_adapted_to_nginx '/error?err='+ERR_CONFIRM_NOTIFICATION_EXPIRED.to_s
 end
 
 # 
@@ -27,7 +27,7 @@ user = BlackStack::User.where(:id=>notification.id_user).first
 
 # verifico que el usuario exista
 if (user == nil)
-	redirect_adapted_to_nginx getDivisionURL + '/error?err='+ERR_CONFIRM_USER_NOT_FOUND.to_s
+	redirect_adapted_to_nginx '/error?err='+ERR_CONFIRM_USER_NOT_FOUND.to_s
 end
 
 # activar la cuenta
@@ -48,6 +48,6 @@ BlackStack::UserDivision.where(:id_user=>user.id).all { |ud|
 }
 
 # redirecciono a la pagina de login
-redirect_adapted_to_nginx getDivisionURL + "/login?msg=Account%20Verified."
+redirect_adapted_to_nginx "/login?msg=Account%20Verified."
 %>
 <!-- ---------------------------------------- -->

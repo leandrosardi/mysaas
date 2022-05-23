@@ -46,7 +46,7 @@ if companyname.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_COMPANY_NAME_IS_NULL.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_COMPANY_NAME_IS_NULL.to_s
 end
 
 if username.to_s.size==0
@@ -54,7 +54,7 @@ if username.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_USER_NAME_IS_NULL.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_USER_NAME_IS_NULL.to_s
 end
 
 if email.to_s.size==0
@@ -62,7 +62,7 @@ if email.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_NULL.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_NULL.to_s
 end
 
 if password.to_s.size==0
@@ -70,7 +70,7 @@ if password.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_NULL.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_NULL.to_s
 end
 
 if phone.to_s.size==0
@@ -78,7 +78,7 @@ if phone.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PHONE_IS_NULL.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PHONE_IS_NULL.to_s
 end
 
 # validar formato de la password
@@ -87,7 +87,7 @@ if !password.password?
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s
 end
 
 if !params['email'].email?
@@ -95,7 +95,7 @@ if !params['email'].email?
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_WRONG.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_WRONG.to_s
 end
 
 # comparar contra la base de datos
@@ -103,7 +103,7 @@ user = BlackStack::User.where(:email=>email).first
 
 # decidir si el intento de login es exitoso o no
 if (user != nil)
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_ALREADY_EXISTS.to_s
+	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_ALREADY_EXISTS.to_s
 end
 
 # TODO: Validar formato del email
@@ -183,7 +183,7 @@ if (parsed['status'] != 'success')
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?errmsg="+CGI.escape("Unexpected Error: "+parsed['status'].to_s)
+	redirect_adapted_to_nginx "#{redirect_on_error}?errmsg="+CGI.escape("Unexpected Error: "+parsed['status'].to_s)
 end
 
 # blanquo la variable de sesion de redirect
@@ -194,46 +194,3 @@ session['redirect_after_login_or_signup'] = nil
 id_login = parsed["id_login"].gsub("{", "").gsub("}", "").to_s
 login_url = "#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/login2.json?api_key=#{BlackStack::Pampa::api_key}&id_login=#{id_login}&redirect=#{CGI.escape(redirect.to_s)}" 
 %>
-
-<!--
-===== STARTING ATS CODE =====
-ConnectionSphere - Affiliates Tracking Service (ATS) Pixel v1.0
-ATS is a Simple service to track researllers and JV partners.
-For more information visit: https://connectionsphere.com:443/affilaitestrackingservice/
--->
-<script src='https://euler.connectionsphere.com:443/core/javascripts/pixels-1.0.1.min.js' type='text/javascript'></script>
-<script type='text/javascript'>
-    pixelsJs.init({
-        // This the URL of the ConnectionSphere server where we host your user account. 
-        server: '<%=DEFAULT_ATS_LISTENER_DOMAIN%>',
-        // This is the ID of the tracking pixel you want to track.
-        id_tracking_pixel: '<%=DEFAULT_ATS_TRACKING_PIXEL_ID%>',
-        // This line creates a unique identifier for every new visitor, even before signup.
-        visitor_id: pixelsJs.getVisitorId(),
-        // This is a reserved parameter to track conversion of campaigns of our ConnectionSphere's Prospecinng serivice.
-        // Add the parameter id_result to the URL of the page you want to track, in order to track any lead from  our ConnectionSphere's Prospecinng serivice.
-        // For more information, visit: https://connectionsphere.com:443/prospecting/ 
-        id_result: pixelsJs.getIdResult(),
-        // This is a reserved parameter to track the traffic of any specific reseller or JV partner.
-        // Add the parameter id_affiliate to the URL of the page you want to track, in order to track the reseller who is bringing this visit to your website.
-        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
-        id_affiliate: pixelsJs.getIdAffiliate(),
-        // This is a reserved parameter to track anything you want, like the source of the traffic, and ad campaign, etc.
-        // Add the parameter tag to the URL of the page you want to track, in order to break-down the traffic of your website.
-        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
-        tag: pixelsJs.getParam('cs.ats.tag'),                        
-        // Enable this line if you want to track the email address of a user on your website.
-        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
-        signup_email: '<%=user.email%>',
-        // Enable this line if you want to track a new pourchase from a user in your website.
-        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
-        //revenue: 0.0,
-		// Setup a function to call just after draw the pixel.
-		done: function() {
-			window.location.href = '<%=login_url%>';
-		}
-    });
-</script>
-<!--
-===== ENDING ATS CODE =====
--->

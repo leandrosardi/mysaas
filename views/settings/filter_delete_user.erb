@@ -26,7 +26,7 @@
 		# libero recursos
 		DB.disconnect
 		GC.start
-		redirect_adapted_to_nginx getDivisionURL + '/settings/users?errdesc=' + CGI.escape(parsed['status'].to_s)
+		redirect_adapted_to_nginx '/settings/users?errdesc=' + CGI.escape(parsed['status'].to_s)
 	end
 
 	# actualizo el registro
@@ -47,5 +47,5 @@
     GC.start
 
  	# redireccionar al dashboard
- 	redirect_adapted_to_nginx getDivisionURL + '/settings/users?msgdesc=Account%20Deleted.'
+ 	redirect_adapted_to_nginx '/settings/users?msgdesc=Account%20Deleted.'
 %>

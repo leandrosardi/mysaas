@@ -1,0 +1,333 @@
+<%
+login = @login
+user = BlackStack::User.where(:id=>login.id_user).first
+%>
+
+<!-- Page footer
+================================================== -->
+<%= ERB.new(File.read(File.expand_path("./views/templates/footer.public.erb"))).result(binding) %>
+<!-- / Page footer -->
+
+<script type="text/javascript">	
+	applyReadMore();
+
+	showWait('Loading... ');
+
+	const MATCH_LINKEDIN_USER_URL   = /((https?:\/\/)?(www\.)?linkedin\.com\/in\/)(([-A-Za-z0-9](\/?))+$)/
+
+	// overload the onload event in order to
+	// hide the "Loading..." message when the 
+	// onload event has done.
+	var old_onload = window.onload;
+	window.onload = function () {
+		// call the original onload function
+		if (typeof old_onload == 'function') {
+			old_onload();
+		}
+
+		// setup smooth scrolling, fiexd top navbar, fixed left bar
+		ajaxStatus.setup();
+
+		// enable select-all-text when focus on any input with class `select-all-on-focus`
+		enableSelectAllTextOnFocus();
+
+		// apply tooltips
+		applyToolTips();
+
+		// hide the "Loading..." message
+		if (hide_loading_message_after_page_load == true) {
+			hideWait();
+		}
+	}
+
+	// Inserting a text where cursor is using.
+	// https://stackoverflow.com/questions/1064089/inserting-a-text-where-cursor-is-using-javascript-jquery
+	function insertAtCaret(txtarea, text) {
+	  if (!txtarea) {
+		return;
+	  }
+	
+	  var scrollPos = txtarea.scrollTop;
+	  var strPos = 0;
+	  var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+		"ff" : (document.selection ? "ie" : false));
+	  if (br == "ie") {
+		txtarea.focus();
+		var range = document.selection.createRange();
+		range.moveStart('character', -txtarea.value.length);
+		strPos = range.text.length;
+	  } else if (br == "ff") {
+		strPos = txtarea.selectionStart;
+	  }
+	
+	  var front = (txtarea.value).substring(0, strPos);
+	  var back = (txtarea.value).substring(strPos, txtarea.value.length);
+	  txtarea.value = front + text + back;
+	  strPos = strPos + text.length;
+	  if (br == "ie") {
+		txtarea.focus();
+		var ieRange = document.selection.createRange();
+		ieRange.moveStart('character', -txtarea.value.length);
+		ieRange.moveStart('character', strPos);
+		ieRange.moveEnd('character', 0);
+		ieRange.select();
+	  } else if (br == "ff") {
+		txtarea.selectionStart = strPos;
+		txtarea.selectionEnd = strPos;
+		txtarea.focus();
+	  }
+	
+	  txtarea.scrollTop = scrollPos;
+	}
+
+	function validatePopupMessage(popup, templates_div_query='.templates') {
+		var max_length = $(popup).data('max-length');
+		var parent = $(popup).find(templates_div_query).get(0);
+		var container = $(parent.parentNode).get(0);
+		var spintax = templatesJs.getSpintax(parent);
+		var ret = true; 
+
+		// disable error messages
+		$(popup).find('.number-of-variations').hide();
+		$(popup).find('.spintax-validation-max-length').hide();
+		$(popup).find('.spintax-validation-urls').hide();
+		$(popup).find('.spintax-validation-emails').hide();
+		$(popup).find('.spintax-validation-format').hide();
+		// validar que spintax tenga mas de 0 caracteres
+		if ( spintax.length == 0 ) { ret = false; }
+
+		// validate it is valid spintax format
+		if ( commonsJs.isValidSpintax(spintax) == false ) {
+			$(popup).find('.spintax-validation-format').show();
+			ret = false;
+		} else {
+			$(popup).find('.spintax-validation-format').hide();
+
+			// enable/disable create button
+			// working with fillingup forms
+			if ( templatesJs.isCodeOn(parent) == false ) {
+				// validate if the user filled up all the blank-spaces 
+				if ( templatesJs.isReady(parent) == false ) { 
+					ret = false; 
+				}
+
+			// writing raw spintax
+			} else {
+				// show number of variations
+				$(popup).find('.number-of-variations').show();
+				// update number of variations
+				$(popup).find('.number-of-variations').find('.number').text( commonsJs.spintaxVariationsCount(spintax).toString() );
+			}
+		}
+
+		spintax_for_max_length_validation = spintax
+		<%
+		MERGETAGS.each { |mergetag, desc|
+			%>
+			spintax_for_max_length_validation = spintax_for_max_length_validation.replace(/<%=Regexp.escape(mergetag)%>/g, "x".repeat(<%=desc['length'].to_s%>));
+			<%
+		}
+		%>
+
+		size = commonsJs.spintaxMaxLenght(spintax_for_max_length_validation);
+
+		$(popup).find('.chars').html(size.toString() + '/' + max_length.toString());
+
+		if ( size > max_length ) {
+			$(popup).find('.spintax-validation-max-length').show();
+			ret = false;
+		}
+		// validate there are no emails
+		var patt_email = new RegExp(/[\da-z\_\.]+\@[\da-z\-\.]+\.[a-z\.]{2,6}/); // TODO: move this to commons.js
+		var patt_url = new RegExp(/(https?:\/\/)?[\da-z\-\.]+\.[a-z\.]{2,6}/); // TODO: move this to commons.js
+
+		if ( patt_email.test(spintax) == true ) {
+			$(popup).find('.spintax-validation-emails').show();
+			ret = false;
+		} else {
+			$(popup).find('.spintax-validation-emails').hide();
+		} // patt_email.test(spintax) == true
+
+		// validate there are not URLs
+		if ( patt_url.test(spintax) == true ) {
+			if ( $(popup).data('trigger-type').toString() == '<%=MESSAGE_TRIGGER_FOLLOWUP_0.to_s%>' ) { // LinkedIn is not allowing links in the invitation message
+				$(popup).find('.spintax-validation-urls').show();
+				ret = false;
+			} else {
+				$(popup).find('.spintax-validation-urls').hide();
+			}
+		} else {
+			$(popup).find('.spintax-validation-urls').hide();
+		} // patt_url.test(spintax) == true
+
+		// return
+		return ret
+	}
+
+	function applyMergeTagsTool() {
+		// mergetags
+		$('.mergetag').click(function() {
+			container_id = $(this).data('template-container');
+			value = $(this).data('value');
+			var txt = $('#'+container_id+' .templates .raw-code').get(0);
+			// Inserting text after cursor position in text area
+			// More info: https://stackoverflow.com/questions/5203428/inserting-text-after-cursor-position-in-text-area
+			insertAtCaret(txt, value);
+
+			validatePopupMessage($('#'+container_id));
+		});	
+	}
+
+	// modify the behaviour of elements whom have been already rendered in the webpage
+	prettyPrint();
+	$('[title]').tooltip();
+
+	// 
+	function updateFormGctOnIntros() {
+		// if client is configured to do gct-on-intro
+		let is_gtc_on_intro = $('#form-gct-on-intros').attr('data-on');
+		if (is_gtc_on_intro == 'no') {
+			let s = $('#form-disable-gct-on-intro').attr('data-name');
+			$('#form-gct-on-intros').find('.name').text(s);
+		}
+		else if (is_gtc_on_intro == 'yes') {
+			let s = $('#form-enable-gct-on-intro').attr('data-name');
+			$('#form-gct-on-intros').find('.name').text(s);
+		}
+		else {
+			$('#form-gct-on-intros').find('.name').html(' <i> (choose an option)</i>');
+		}
+	} 
+
+	function enableActivateButton() {
+		var input = $('#linkedin-url').val();
+		var dropd = $('#form-gct-on-intros');
+		var a = MATCH_LINKEDIN_USER_URL.test(input);
+		var b = dropd.attr('data-on') != '' 
+
+
+		if ( a && b ) {
+			$('#gct-setup-modal').find("#activate-btn").prop('disabled', false);
+			$('#gct-setup-modal').find("#activate-btn").addClass('btn-primary');
+			$('#gct-setup-modal').find("#activate-btn").removeClass('btn-disabled');
+			$('#gct-setup-modal').find("#invalid-input").text('');
+		}
+		else {
+			$('#gct-setup-modal').find("#activate-btn").prop('disabled', true);
+			$('#gct-setup-modal').find("#activate-btn").removeClass('btn-primary');
+			$('#gct-setup-modal').find("#activate-btn").addClass('btn-disabled');
+			$('#gct-setup-modal').find("#invalid-input").text('');
+			if ( !a ) {
+				$('#gct-setup-modal').find("#invalid-input").append('The URL must be like https://linkedin.com/in/foo.');
+			} 
+			
+			if ( !b ) {
+				if ( !a ) {
+					$('#gct-setup-modal').find("#invalid-input").append($('<br/>'));
+				}
+				$('#gct-setup-modal').find("#invalid-input").append('Choose when to create group chats between You and the Lead.');
+			}
+		}
+	}
+
+	// Linkedin url input validation
+	$('#linkedin-url').keyup(function() {
+		enableActivateButton();
+	})
+
+	$('.form-choose-when-do-gct').click(function() {
+		$('#form-gct-on-intros').attr('data-on', $(this).attr('data-on'));
+		$('#form-gct-on-intros').find('.name').text($(this).attr('data-name'));
+		enableActivateButton();
+	});
+
+	/*********************************************************
+  	 ***
+	 *** GCT Activation Popup
+	 *** Message Edition Popups 
+	 ***
+	 *********************************************************/
+
+	// if user press ESC, then I close any popup
+	$('.popup').keydown(function(event) {
+		if (event.key == "Escape") { 
+			$('.popup').hide('fade');
+		};
+	});
+
+	// if click on this button, then I close any popup
+	$('.popup .cancel-button').click(function() {
+		$('.popup').hide('fade');
+	});
+
+	// if click on this button, then I close any popup
+	$('.popup #templates-cancel').click(function() {
+		$('#templates-modal').hide('fade');
+	});
+
+	function enableGCT() {
+		ajaxStatus.setup();
+		ajaxStatus.switchToSaving() ;
+
+		var url = $('#gct-setup-modal').find('#linkedin-url').val().toString();
+		var on = $('#gct-setup-modal').find("#form-gct-on-intros").attr('data-on');
+		$.ajax({
+			method: "GET",
+			url: '<%=getDivisionURL%>/api1.3/prospecting/enable_gct.json?uid=<%=user.id%>&url='+url+'&gct_on_introduction_message='+on,
+			error: function(http) {
+				ajaxStatus.switchToError();
+//				jQuery("body").html(http.responseText);
+			}
+		}).done(function(response){
+			if (response != "success") {
+				ajaxStatus.switchToError();
+			}
+			else {
+				ajaxStatus.switchToSuccess();
+				$("#dis-ln-box").css({ display: "grid" });
+				$("#act-ln-box").css({ display: "none" });
+				$('#gct_on_intros').attr('data-on', on);
+				$('#gct-url').text(url);
+				$('#gct-url').attr('href', url);
+				updateGctOnIntros();
+			}
+		})
+	}
+
+	function disableGCT() {
+		ajaxStatus.setup();
+		ajaxStatus.switchToSaving();
+		$.ajax({
+			method: "GET",
+			url: '<%=getDivisionURL%>/api1.3/prospecting/disable_gct.json?uid=<%=user.id%>',
+			error: function(http) {
+//				ajaxStatus.switchToError();
+				jQuery("body").html(http.responseText);
+			}
+		}).done(function(response){
+			if (response != "success") {
+				ajaxStatus.switchToError();
+			}
+			else {
+				ajaxStatus.switchToSuccess();
+				$("#act-ln-box").css({ display: "grid" })
+				$("#dis-ln-box").css({ display: "none" })
+			}
+		})
+	}
+
+	function onClickActivateGCT() {
+		$('#gct-setup-modal').hide('fade');
+		enableGCT();
+	}
+
+	// Close modal button  
+	$('.popup #close-modal').click(function () {
+		$('.popup').hide('fade');
+	});
+
+	// Click on Activate GCT button 
+	$('#gct-setup-modal').find('#activate-btn').click(function() {
+		onClickActivateGCT();
+	});
+</script>

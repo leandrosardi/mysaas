@@ -4,7 +4,7 @@ err = params[:err]
 
 # validar que los parametros no esten vacios
 if (nid.to_s.size==0 || nid.to_s.size==0)
-	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_ID_EXPECTED.to_s
+	redirect_adapted_to_nginx '/forgot?err='+ERR_RESET_NOTIFICATION_ID_EXPECTED.to_s
 end
 
 # TODO: Validar que nid tenga el formato de un GUID
@@ -14,12 +14,12 @@ notification = Notification.where(:id=>nid, :type=>Notification::NOTIFICATION_RE
 
 # verifico si la notificacion existe
 if (notification == nil)
-	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_NOT_FOUND.to_s
+	redirect_adapted_to_nginx '/forgot?err='+ERR_RESET_NOTIFICATION_NOT_FOUND.to_s
 end
 
 # verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
 if (notification.old()>NotificationReset::NOTIFICATION_RESET_LINK_TIMEOUT)
-	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_EXPIRED.to_s
+	redirect_adapted_to_nginx '/forgot?err='+ERR_RESET_NOTIFICATION_EXPIRED.to_s
 end
 
 # 
@@ -27,7 +27,7 @@ user = BlackStack::User.where(:id=>notification.id_user).first
 
 # verifico que el usuario exista
 if (user == nil)
-	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_USER_NOT_FOUND.to_s
+	redirect_adapted_to_nginx '/forgot?err='+ERR_RESET_USER_NOT_FOUND.to_s
 end
 %>
 

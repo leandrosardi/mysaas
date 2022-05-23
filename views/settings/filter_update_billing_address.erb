@@ -36,7 +36,7 @@ if (
 	GC.start
 	
 	# redireccionar al dashboard
-	redirect_adapted_to_nginx getDivisionURL + "/settings/clientinformation?errdesc=#{CGI.escape('All fields in the Billing Information are Mandatry.')}"
+	redirect_adapted_to_nginx "/settings/clientinformation?errdesc=#{CGI.escape('All fields in the Billing Information are Mandatry.')}"
 end
   
 # Actualizo la password
@@ -59,9 +59,9 @@ if redirect_after_update.to_s.size > 0
 	# elimino la variable de sesion
 	session['redirect_after_clientinformation_update'] = nil
 	# redirecciono
-	redirect_adapted_to_nginx getDivisionURL + "/#{redirect_after_update.to_s}"
+	redirect_adapted_to_nginx "/#{redirect_after_update.to_s}"
 else
-	redirect_adapted_to_nginx getDivisionURL + '/settings/clientinformation?msg=Information%20Updated.'
+	redirect_adapted_to_nginx '/settings/clientinformation?msg=Information%20Updated.'
 end
 %>
 <!-- ---------------------------------------- -->

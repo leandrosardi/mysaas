@@ -15,7 +15,7 @@ phone = session['member.users.phone'].to_s
 	<div class="mynavbar mysticky">
 		<section class="row-fluid">	
 			<div class='span6'>
-				<%=nav2("Settings", "#{getDivisionURL}/settings/dashboard", "Users")%>
+				<%=nav2("Settings", "/settings/dashboard", "Users")%>
 			</div>
 			<div class='span6' align='right' style='text-align: right;alignment-adjust: right; margin-left: 0;'>
 				<button id='save' name='save' class="btn btn-blue btn-medium" type="button" title='Save Changes On Selected Users'>
@@ -72,7 +72,7 @@ phone = session['member.users.phone'].to_s
 								<input class="checkbox select-row" type="checkbox" id="<%=u.id.to_guid%>" data-id="<%=u.id.to_guid%>">
 							</td>
 							<td>
-								<a href='<%=getDivisionURL%>/settings/user/<%=u.id.to_guid%>'><img class='avatar' src="<%="https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(u.email.strip.downcase)%>" alt="<%=u.name.gsub('"', '&#34;')%>" title="<%=u.name.gsub('"', '&#34;')%>"></a>
+								<a href='/settings/user/<%=u.id.to_guid%>'><img class='avatar' src="<%="https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(u.email.strip.downcase)%>" alt="<%=u.name.gsub('"', '&#34;')%>" title="<%=u.name.gsub('"', '&#34;')%>"></a>
 							</td>
 							<td style='position:relative;'>
 								<input onFocus="this.select();" class='user-input' type='text' value='<%=u.name.to_s.encode_html%>' style='width:100%'>
@@ -84,7 +84,7 @@ phone = session['member.users.phone'].to_s
 								elsif u.id.to_guid != c.id_user_to_contact.to_s.to_guid
 									if users.size > 1
 									%>
-										<button class='btn btn-mini btn-red' style='position:absolute;right:0px;top:7px;' onclick="window.location='<%=getDivisionURL%>/settings/filter_delete_user?uid=<%=u.id.to_guid%>'">delete</button>
+										<button class='btn btn-mini btn-red' style='position:absolute;right:0px;top:7px;' onclick="window.location='/settings/filter_delete_user?uid=<%=u.id.to_guid%>'">delete</button>
 									<%
 									else
 									%>
@@ -98,7 +98,7 @@ phone = session['member.users.phone'].to_s
 								if u.id.to_guid == c.id_user_to_contact.to_s.to_guid
 								%>
 									<span class="label label-green">contact user</span>
-									<a href='<%=getDivisionURL%>/settings/clientinformation' class='btn-small'>change contact user</a>
+									<a href='/settings/clientinformation' class='btn-small'>change contact user</a>
 								<%
 								end
 								%>
@@ -145,14 +145,14 @@ phone = session['member.users.phone'].to_s
 							</td>
 
 							<td style='vertical-align: middle; text-align:center;'>
-								<a class='simple' href='<%=getDivisionURL%>/settings/user/<%=u.id.to_guid%>'>view</a>
+								<a class='simple' href='/settings/user/<%=u.id.to_guid%>'>view</a>
 							</td>
 						</tr>
 						<%
 						}
 						%>
 
-						<form method='get' action='<%=getDivisionURL%>/settings/filter_add_user'>
+						<form method='get' action='/settings/filter_add_user'>
 						<input type='hidden' id='cid' name='cid' value='<%=c.id%>'>
 						<tr>
 							<td>
@@ -225,7 +225,7 @@ phone = session['member.users.phone'].to_s
 			s += 'uid[]='+id+':'+user+':'+phone+':'+linkedin_url+':'+gtc+'&'
 		});
 		console.log(s)
-		window.location = '<%=getDivisionURL%>/settings/filter_update_user?'+s;
+		window.location = '/settings/filter_update_user?'+s;
 	});
 
 	$(".resend").click(function() {

@@ -95,7 +95,7 @@
 
 		<section class="row-fluid">	
 			<section class='span6'>
-				<%=nav2("Settings", "#{getDivisionURL}/settings/dashboard", "Client Information")%>
+				<%=nav2("Settings", "/settings/dashboard", "Client Information")%>
 			</section>
 			<section class='span6'>
 			</section>
@@ -118,7 +118,7 @@
 
 				<div class="span6">
 	
-					<form class="form-horizontal" id="form_client_info" action="<%=getDivisionURL%>/settings/filter_update_information" method="get">
+					<form class="form-horizontal" id="form_client_info" action="/settings/filter_update_information" method="get">
 						<h4>
 							<%
 							if c.name.to_s.size > 0
@@ -203,7 +203,7 @@
 						</div>	
 					</form>
 
-					<form class="form-horizontal" id="form_billing_address" action="<%=getDivisionURL%>/settings/filter_update_billing_address" method="get">
+					<form class="form-horizontal" id="form_billing_address" action="/settings/filter_update_billing_address" method="get">
 
 						<h4>
 							<%
@@ -274,7 +274,7 @@
 					</form>
 				</div>
 	
-				<form class="form-horizontal" id="form_reseller_info" action="<%=getDivisionURL%>/settings/filter_update_reseller_signature" method="get" style="margin: -20px 0 0px !important">
+				<form class="form-horizontal" id="form_reseller_info" action="/settings/filter_update_reseller_signature" method="get" style="margin: -20px 0 0px !important">
 					<div class="span6">
 						<div style="display: flex; align-items: center;">
 							<h4>

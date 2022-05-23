@@ -17,7 +17,7 @@ if !login.nil?
 <div class="mynavbar mysticky">
 	<section class="row-fluid">	
 		<div class='span6'>
-			<%=nav3("Settings", "#{getDivisionURL}/settings/dashboard", "Users", "#{getDivisionURL}/settings/users", user.name.to_s)%>
+			<%=nav3("Settings", "/settings/dashboard", "Users", "/settings/users", user.name.to_s)%>
 		</div>
 		<div class='span6' align='right' style='text-align: right;alignment-adjust: right; margin-left: 0;'>
 			<button id='save' name='save' class="btn btn-blue btn-medium" type="button" title='Save Changes On Selected Users'>
@@ -145,7 +145,7 @@ end # if !login.nil?
 		</div>
 	</div>
 	<div class='span6'>
-		<form method='GET' action='<%=getDivisionURL%>/settings/filter_create_user_feedback'>
+		<form method='GET' action='/settings/filter_create_user_feedback'>
 			<input id='rate' name='rate' type='hidden' value=''>
 			<input id='id_user_from' name='id_user_from' type='hidden' value='<%=@login.user.id.to_guid%>'>
 			<input id='id_user_to' name='id_user_to' type='hidden' value='<%=user.id.to_guid%>'>

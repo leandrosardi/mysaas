@@ -10,7 +10,7 @@
     if id_client.nil? || id_client.to_s.size == 0
 		DB.disconnect
 		GC.start
-		redirect_adapted_to_nginx getDivisionURL + "/settings/clientinformation?errdesc=Client%20parameter%20expected."
+		redirect_adapted_to_nginx "/settings/clientinformation?errdesc=Client%20parameter%20expected."
 	else
         c = BlackStack::Client.where(:id => id_client).first
 

@@ -31,7 +31,7 @@
 		DB.disconnect
 		GC.start
 		# redireccionar al dashboard
-		redirect_adapted_to_nginx getDivisionURL + "/settings/clientinformation?errdesc=#{CGI.escape(parsed['status'].to_s)}"
+		redirect_adapted_to_nginx "/settings/clientinformation?errdesc=#{CGI.escape(parsed['status'].to_s)}"
 	end
 	
 	# libero recursos
@@ -44,9 +44,9 @@
 		# elimino la variable de sesion
 		session['redirect_after_clientinformation_update'] = nil
 		# redirecciono
-		redirect_adapted_to_nginx getDivisionURL + "/#{redirect_after_update.to_s}"
+		redirect_adapted_to_nginx "/#{redirect_after_update.to_s}"
 	else
-		redirect_adapted_to_nginx getDivisionURL + '/settings/clientinformation?msg=Information%20Updated.'
+		redirect_adapted_to_nginx '/settings/clientinformation?msg=Information%20Updated.'
 	end
 %>
 <!-- ---------------------------------------- -->

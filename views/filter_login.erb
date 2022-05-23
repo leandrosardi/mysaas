@@ -12,7 +12,7 @@ end
 
 # validar que los parametros no esten vacios
 if (email.to_s.size==0 || password.to_s.size==0)
-	redirect_adapted_to_nginx getDivisionURL + '/login?err='+ERR_LOGIN_NULL_VALUE.to_s
+	redirect_adapted_to_nginx '/login?err='+ERR_LOGIN_NULL_VALUE.to_s
 end
 
 # comparar contra la base de datos
@@ -31,7 +31,7 @@ if (user != nil)
 		DB.disconnect
 		GC.start
 		#
-		redirect_adapted_to_nginx getDivisionURL + '/login?err='+ERR_LOGIN_FATAL_USER_HAS_NOT_DIVISION.to_s
+		redirect_adapted_to_nginx '/login?err='+ERR_LOGIN_FATAL_USER_HAS_NOT_DIVISION.to_s
 		
 	elsif (c==1)
 		ud = BlackStack::UserDivision.where(:id_user=>user.id).first
@@ -44,7 +44,7 @@ if (user != nil)
 			DB.disconnect
 			GC.start
 			# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-			redirect_adapted_to_nginx getDivisionURL + '/login?err='+ERR_LOGIN_SERVER_HAS_BEEN_DISABLED.to_s
+			redirect_adapted_to_nginx '/login?err='+ERR_LOGIN_SERVER_HAS_BEEN_DISABLED.to_s
 		else
 			# TODO: Atrapar el error en caso que el servidor este apagado
 			
@@ -78,7 +78,7 @@ if (user != nil)
 				DB.disconnect
 				GC.start
 				# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-				redirect_adapted_to_nginx getDivisionURL + '/login?msgerr='+parsed["status"].to_s
+				redirect_adapted_to_nginx '/login?msgerr='+parsed["status"].to_s
 			end
 		end
 		
@@ -117,11 +117,11 @@ if (user != nil)
 
 	else # menor a 0
 		# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-		redirect_adapted_to_nginx getDivisionURL + '/login?err='+ERR_LOGIN_FATAL_CANNOT_GET_NUMBER_OF_DIVISIONS.to_s
+		redirect_adapted_to_nginx '/login?err='+ERR_LOGIN_FATAL_CANNOT_GET_NUMBER_OF_DIVISIONS.to_s
 		
 	end # if c
 else
-	redirect_adapted_to_nginx getDivisionURL + '/login?err='+ERR_LOGIN_WRONG_USER_PASSWORD.to_s
+	redirect_adapted_to_nginx '/login?err='+ERR_LOGIN_WRONG_USER_PASSWORD.to_s
 end
 %>
 <!-- ---------------------------------------- -->
