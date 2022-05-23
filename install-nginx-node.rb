@@ -4,15 +4,11 @@ require_relative './config.rb'
 
 logger = BlackStack::BaseLogger.new(nil)
 
-logger.log 'Welcome to install-node.rb!'
-logger.log 'This script will 
-1. connect server via SSL;
-1. install CockroachDB;
-3. secure the node;
-4. start the node;
-5. initialize the node.
-
-For more information, refer to: https://github.com/leandrosardi/free-membership-sites/issues/3#issuecomment-1134714952'
+logger.log 'Welcome to install-db.rb!'
+logger.log "This script will 
+\t1. connect the database;
+\t2. install the database schema; and
+\t3. install the database seed data."
 
 logger.logs 'Connect database...'
 DB = BlackStack::Core::DB::connect
