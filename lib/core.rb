@@ -1,3 +1,9 @@
+require 'blackstack_commons'
+require 'simple_command_line_parser'
+require 'simple_cloud_logging'
+require 'pg'
+require 'sequel'
+
 module BlackStack
     module Core
 

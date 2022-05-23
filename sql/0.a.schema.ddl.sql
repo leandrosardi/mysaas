@@ -1,7 +1,7 @@
 /*
  * CREATE DATABASE no puede ser ejecutado dentro de un bloque de transaccion
  *
-CREATE DATABASE %database_name%
+CREATE DATABASE kepler
     WITH
     OWNER = postgres
     ENCODING = 'UTF8'
@@ -9,9 +9,6 @@ CREATE DATABASE %database_name%
     LC_CTYPE = 'Spanish_Argentina.1252'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
-
-COMMENT ON DATABASE kepler
-    IS 'This is the master database where all users are stored.';
 */
 
 /*

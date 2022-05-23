@@ -56,7 +56,7 @@ The command below performs many installation tasks:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./cli/install.rb db=kepler ip=127.0.0.1 port=5432 user=postgres password=<write your password here>
+ruby ./install.rb
 ```
 
 Such installation tasks are:

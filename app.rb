@@ -1,8 +1,4 @@
-require 'blackstack_commons'
-require 'simple_command_line_parser'
 require 'sinatra'
-require 'pg'
-require 'sequel'
 require_relative './lib/core'
 require_relative './config'
 
