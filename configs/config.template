@@ -56,7 +56,7 @@ BlackStack::Core::API::set_api_url({
 # the method `Account::update_storage_folder`. 
 #
 BlackStack::Core::Storage::set_storage({
-  :storage_storage_folder => './public/clients',
+  :storage_folder => './public/clients',
   :storage_default_max_allowed_kilobytes => 15 * 1024,
   :storage_sub_folders => [
     'downloads', 'uploads', 'logs'
@@ -98,8 +98,8 @@ NOTIFICATIONS = {
   :smtp_password => '%smtp_password%',
 
   # email body configuration
-  :logo_url => 'https://connectionsphere.com/apps/images/logo/logo-32-01.png',
-  :signature_picture_url => 'https://connectionsphere.com/apps/images/leandro_sardi.png',
+  :logo_url => 'https://connectionsphere.com/core/images/logo/logo-32-01.png',
+  :signature_picture_url => 'https://connectionsphere.com/core/images/leandro_sardi.png',
   :signature_name => 'Leandro D. Sardi',
   :signature_position => 'Founder & CEO',
 }

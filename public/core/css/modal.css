@@ -1,0 +1,64 @@
+.modal {
+    margin-left: 0 !important;
+    display: none; /* Hidden by default */
+    position: fixed !important;; /* Stay in place */
+    z-index: 1000 !important;; /* Sit on top */
+    left: 0 !important;;
+    top: 0 !important;;
+    width: 100% !important;; /* Full width */
+    height: 100% !important; /* Full height */
+    background-color: rgb(0, 0, 0) !important;; /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4) !important;; /* Black w/ opacity */
+}
+
+/* Modal Header */
+.modal-header {
+    padding: 2px 16px;
+    background-color: #418ce4;
+    color: white;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 2px 16px;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #5cb85c;
+    color: white;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    top: -150px !important;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#top-pipeline {
+    transition: 0.3s;
+}
+
+#top-pipeline.floating {
+    position: fixed;
+    top: 3.1em;
+    z-index: 500;
+    width: 500px;
+    background-color: white;
+    border: 1px #0b0b0b solid;
+    padding: 1em 1em;
+    margin-left: -20px;
+}
+
+.over-flow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

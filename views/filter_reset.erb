@@ -1,0 +1,61 @@
+<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
+<% 
+nid = params[:nid]
+password_1 = params[:password_1]
+password_2 = params[:password_2]
+
+# validar que los parametros no esten vacios
+if (nid.to_s.size==0 || nid.to_s.size==0)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_ID_EXPECTED.to_s
+end
+
+# TODO: Validar que nid tenga el formato de un GUID
+
+# 
+notification = Notification.where(:id=>nid, :type=>Notification::NOTIFICATION_RESET).first
+
+# verifico si la notificacion existe
+if (notification == nil)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_NOT_FOUND.to_s
+end
+
+# verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
+if (notification.old()>NotificationReset::NOTIFICATION_RESET_LINK_TIMEOUT)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_EXPIRED.to_s
+end
+
+# 
+user = BlackStack::User.where(:id=>notification.id_user).first
+
+# verifico que el usuario exista
+if (user == nil)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_USER_NOT_FOUND.to_s
+end
+
+# validar que los parametros no esten vacios
+if (password_1.to_s.size==0 || password_1.to_s.size==0)
+	redirect_adapted_to_nginx getDivisionURL + URI::encode('/reset?err='+ERR_RESET_NULL_PASSWORD_1.to_s+'&nid='+nid)
+end
+
+# validar que los parametros no esten vacios
+if (password_2.to_s.size==0 || password_2.to_s.size==0)
+	redirect_adapted_to_nginx getDivisionURL + URI::encode('/reset?err='+ERR_RESET_NULL_PASSWORD_2.to_s+'&nid='+nid)
+end
+
+# validar que los parametros no esten vacios
+if (password_1.to_s != password_2.to_s)
+	redirect_adapted_to_nginx getDivisionURL + URI::encode('/reset?err='+ERR_RESET_PASSWORDS_NOT_MATCH.to_s+'&nid='+nid)
+end
+
+# validar que la password cumpla las normas de sguridad
+if !password_2.password?
+	redirect_adapted_to_nginx getDivisionURL + URI::encode('/reset?err='+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s+'&nid='+nid)
+end
+
+# Actualizo la password
+DB.execute("UPDATE [user] SET password='#{password_1}' WHERE [id]='#{user.id}'")
+
+# redireccionar al dashboard
+redirect_adapted_to_nginx getDivisionURL + '/login?msg=Password%20Updated.'
+%>
+<!-- ---------------------------------------- -->

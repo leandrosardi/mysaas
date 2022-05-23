@@ -4,9 +4,6 @@ require_relative './user'
 module BlackStack
   module Core
     class Account < Sequel::Model(:account)
-        # always include this line in the model definition
-        BlackStack::Core::Account.dataset = BlackStack::Core::Account.dataset.disable_insert_output
- 
         # attributes
         one_to_many :users, :class=>:'BlackStack::User', :key=>:id_client
         many_to_one :timezone, :class=>:'BlackStack::Timezone', :key=>:id_timezone

@@ -1,0 +1,30 @@
+<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
+<% 
+email = params[:email]
+
+# validar que los parametros no esten vacios
+if (email.to_s.size==0)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_FORGOT_NULL_VALUE.to_s
+end
+
+# verificar que el usuario existe
+user = BlackStack::User.where(:email=>email).first
+if (user != nil)
+	# envio el correo electronico de bienvenida
+	n = NotificationReset.new()
+	n.id = guid()
+	n.create_time = now()
+	n.id_user = user.id
+	n.name_to = user.email
+	n.email_to = user.email
+	n.name_from = NOTIFICATIONS[:from_name]
+	n.email_from = NOTIFICATIONS[:from_email]
+	n.send() # el metodo SEND se encarga tambien de guardar el objeto
+	
+	#
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?msg=Recovery%20Email%20Sent.'
+else
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_FORGOT_USER_NOT_FOUND.to_s
+end
+%>
+<!-- ---------------------------------------- -->

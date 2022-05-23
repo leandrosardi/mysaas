@@ -1,0 +1,37 @@
+<%
+redirect = params[:redirect]
+if (redirect.to_s.size > 0)
+	session['redirect_after_login_or_signup'] = redirect
+end
+%>
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
+
+<html>
+	<!-- Message and error alerts
+	================================================== -->
+	<%= ERB.new(File.read(File.expand_path("./views/templates/head.public.erb"))).result(binding) %>
+	<!-- / Message and error alerts -->
+
+	<body>
+
+		<!-- Page content
+			================================================== -->
+		<section class="row-fluid">
+
+			<!-- Content here
+				================================================== -->
+			<%=yield%>
+			<!-- / Content here -->			
+		</section>
+
+		<!-- Page footer
+		================================================== -->
+		<%= ERB.new(File.read(File.expand_path("./views/templates/footer.public.erb"))).result(binding) %>
+		<!-- / Page footer -->
+
+	</body>
+</html>

@@ -1,0 +1,84 @@
+		/* 
+		* Style for menus in the pipeline edition screen.
+		*
+		*/
+		.btn-filter {
+			width: 150px; 
+			overflow-x: hidden; 
+			text-align: left;
+		}
+		
+		ul.btn-templates-list {
+			position: absolute;
+			top: -215px;
+			height: 200px;
+			width: 320px; 
+			overflow-x: hidden; 
+			overflow-y: auto;
+		}
+		
+		ul.btn-templates-list li.item {
+			font-size: 10px;
+			cursor: pointer;
+		}
+		
+		ul.btn-templates-list li.item a.template {
+			position: relative;
+			font-size: 10px;
+		}
+		
+		.sa {
+			color: red;
+			padding-left: 10px;
+			padding-right: 5px;
+			position: absolute;
+			right: 0px;
+			background-color: white;
+		}
+		
+		ul.btn-filter-list {
+			height: 200px;
+			width: 175px; 
+			overflow-x: hidden; 
+			overflow-y: auto;
+		}
+
+        ul.btn-filter-list li.disabled a {
+            cursor: default;
+            opacity: 0.8;
+        }
+        ul.btn-filter-list li.disabled{
+          position: relative;
+        }
+        ul.btn-filter-list li.disabled:before{
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          z-index: 1;
+          content: "";
+          opacity: 0;
+        }
+
+		ul.btn-filter-list li.separator {
+			border-bottom: 1px dashed #bbb;
+			color: #bbb;
+			margin-left: 10px;
+			padding-left: 10px;
+		
+			margin-top: 5px;
+			padding-top: 5px;
+		}
+
+		ul.btn-filter-list li.item {
+			background-color: white;
+			color: black;
+			cursor: pointer;
+		}
+		
+		ul.btn-filter-list li.item:hover {
+			background-color: blue;
+			color: white;
+			cursor: pointer;
+		}

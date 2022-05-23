@@ -184,8 +184,8 @@ module BlackStack
                 # validate: the :storage_folder key exists
                 raise 'The :storage_folder key is required' if h[:storage_folder].nil?
 
-                # validate: the :storage_folder_max_allowed_kilobytes key exists
-                raise 'The :storage_folder_max_allowed_kilobytes key is required' if h[:storage_folder_max_allowed_kilobytes].nil?
+                # validate: the :storage_default_max_allowed_kilobytes key exists
+                raise 'The :storage_default_max_allowed_kilobytes key is required' if h[:storage_default_max_allowed_kilobytes].nil?
 
                 # validate: the :storage_sub_folders key exists
                 raise 'The :storage_sub_folders key is required' if h[:storage_sub_folders].nil?
@@ -194,7 +194,7 @@ module BlackStack
                 raise 'The :storage_folder key must be a string' if h[:storage_folder].class != String
 
                 # validate: the :storage_max_allowed_kilobytes key is an integer, and is greater than 0
-                raise 'The :storage_folder_max_allowed_kilobytes key must be an integer, and greater than 0' if h[:storage_folder_max_allowed_kilobytes].class != Fixnum || h[:storage_folder_max_allowed_kilobytes] <= 0
+                raise 'The :storage_default_max_allowed_kilobytes key must be an integer, and greater than 0' if h[:storage_default_max_allowed_kilobytes].class != Fixnum || h[:storage_default_max_allowed_kilobytes] <= 0
 
                 # validate: the :storage_sub_folders key is an array of strings
                 raise 'The :storage_sub_folders key must be an array of strings' if h[:storage_sub_folders].class != Array || h[:storage_sub_folders].any? { |e| e.class != String }

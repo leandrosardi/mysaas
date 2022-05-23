@@ -1,0 +1,52 @@
+<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
+<%
+	login = BlackStack::Login.where(:id=>session['login.id']).first
+	if (login == nil)
+	# libero recursos
+	DB.disconnect
+	GC.start
+	  redirect_adapted_to_nginx CS_LOGIN_PAGE
+	end
+	user = BlackStack::User.where(:id=>login.id_user).first
+	c = BlackStack::Client.where(:id=>user.id_client).first
+	division = c.division
+	
+	sCompanyName = params["company_name"]
+	sPayPalEmail = params["paypal_email"]
+	sIdTimeZone = params["id_timezone"]
+	
+	session['settings.information.company_name'] = sCompanyName.to_s
+	session['settings.information.paypal_email'] = sPayPalEmail.to_s
+	session['settings.information.id_timezone'] = sIdTimeZone.to_s
+	  
+	# Actualizo la password
+	DB.execute("UPDATE [client] SET name='#{sCompanyName.to_s.gsub("'", "''")}', id_timezone='#{sIdTimeZone.to_s}', paypal_email='#{sPayPalEmail.to_s.to_s.gsub("'", "''")}' WHERE [id]='#{c.id}'")
+	
+	# envio la informacion a la division central
+	url = "#{BlackStack::Pampa::api_url}/api1.2/central/update_timezone.json"
+	res = BlackStack::Netting::call_post(url, {'api_key' => BlackStack::Pampa::api_key, 'cid' => c.id, 'id_timezone' => sIdTimeZone.to_s })
+	parsed = JSON.parse(res.body)
+	if parsed["status"]!="success"
+		# libero recursos
+		DB.disconnect
+		GC.start
+		# redireccionar al dashboard
+		redirect_adapted_to_nginx getDivisionURL + "/settings/clientinformation?errdesc=#{CGI.escape(parsed['status'].to_s)}"
+	end
+	
+	# libero recursos
+	DB.disconnect
+	GC.start
+	
+	# redireccionar al dashboard o a la pantalla que se haya pedido
+	redirect_after_update = session['redirect_after_clientinformation_update']
+	if redirect_after_update.to_s.size > 0
+		# elimino la variable de sesion
+		session['redirect_after_clientinformation_update'] = nil
+		# redirecciono
+		redirect_adapted_to_nginx getDivisionURL + "/#{redirect_after_update.to_s}"
+	else
+		redirect_adapted_to_nginx getDivisionURL + '/settings/clientinformation?msg=Information%20Updated.'
+	end
+%>
+<!-- ---------------------------------------- -->

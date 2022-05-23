@@ -1,0 +1,619 @@
+<!--#include virtual = "./lgi/commons.asp"-->
+
+<%
+	redirect = params[:redirect]
+	if (redirect.to_s.size > 0)
+		session['redirect_after_clientinformation_update'] = redirect
+	end
+
+	login = BlackStack::Login.where(:id=>session['login.id']).first
+	user = BlackStack::User.where(:id=>login.id_user).first
+	c = BlackStack::Client.where(:id=>user.id_client).first
+
+	checked = ''
+	disabled = ''
+	domain_for_ssm = ''
+	from_name_for_ssm = ''
+	from_email_for_ssm = ''
+	id_user_to_contact  = ''
+
+	# memoria de lo ultimo que el usuario escribio en el formulario
+	billing_address = c.billing_address.to_s
+	billing_city = c.billing_city.to_s
+	billing_state = c.billing_state.to_s
+	billing_zipcode = c.billing_zipcode.to_s
+	billing_id_lncountry = c.billing_id_lncountry.to_s
+	billing_address = session['settings.information.billing_address'].to_s if billing_address.size == 0 && session['settings.information.billing_address'].to_s.size > 0
+	billing_city = session['settings.information.billing_city'].to_s if billing_city.size == 0 && session['settings.information.billing_city'].to_s.size > 0
+	billing_state = session['settings.information.billing_state'].to_s if billing_state.size == 0 && session['settings.information.billing_state'].to_s.size > 0
+	billing_zipcode = session['settings.information.billing_zipcode'].to_s if billing_zipcode.size == 0 && session['settings.information.billing_zipcode'].to_s.size > 0
+	billing_id_lncountry = session['settings.information.billing_id_lncountry'].to_s if billing_id_lncountry.size == 0 && session['settings.information.billing_id_lncountry'].to_s.size > 0	
+
+	# memoria de la configuracion de cuentas reseller
+	if c.resellerSignature?
+		checked = 'checked'
+		disabled = ''
+		domain_for_ssm = c.domain_for_ssm
+		from_name_for_ssm = c.from_name_for_ssm
+		from_email_for_ssm = c.from_email_for_ssm
+		id_user_to_contact  = c.id_user_to_contact 
+	else
+		checked = ''
+		disabled = 'disabled'
+		domain_for_ssm = ''
+		from_name_for_ssm = ''
+		from_email_for_ssm = ''
+		id_user_to_contact  = ''
+	end
+
+	# datos del perfil
+	sCompanyName = c.name.to_s
+	if (sCompanyName.to_s.size==0)
+		sCompanyName = session['settings.information.company_name'].to_s
+	end
+
+	sPayPalEmail = c.paypal_email.to_s
+	if (sPayPalEmail.to_s.size==0)
+		sPayPalEmail = session['settings.information.paypal_email'].to_s
+	end
+
+	sIdTimeZone = nil
+	# si el cliente no tiene zona horaria configurada
+	if (c.timezone == nil)
+		# obtengo la zona horaria de la cookie, en case que se haya intentado setear pero el filtro haya retornado error
+		sIdTimeZone = session['settings.information.id_timezone']
+	end
+	# si no obtuve la zona horaria de una cookie, ya sea porque la cookie esta vacia o porque el cliente tiene zona horaria configurada
+	if (sIdTimeZone == nil)
+		# obtengo la zona horaria con el metodo getTimezone, que retorna la zona horaria por defecto si el ciente no tiene zona horaria configurada
+		sIdTimeZone = c.getTimezone().id
+	end
+
+	# mensajes
+	msg = params[:msg]
+	err = params[:err]
+	errmsg = params[:errmsg]
+%>
+
+	<style>
+		#loader {
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #3498db;
+			width: 120px;
+			height: 120px;
+			-webkit-animation: spin 2s linear infinite; /* Safari */
+			animation: spin 2s linear infinite;
+		}
+	</style>
+	<!-- Page content
+		================================================== -->
+
+	<section class="container">
+
+		<input type="hidden" id="id_postmark" name="id_postmark" />
+
+		<section class="row-fluid">	
+			<section class='span6'>
+				<%=nav2("Settings", "#{getDivisionURL}/settings/dashboard", "Client Information")%>
+			</section>
+			<section class='span6'>
+			</section>
+		</section>
+
+		<br/>
+
+		<section class="row-fluid">
+	
+			<div class="form-horizontal span12 box" style="margin-bottom: 20px">
+
+				<section id="loader-div" style="padding: 5em; display: none;">
+					<div id="loader" style="margin: 0 auto"></div>
+					<div>
+						<br>
+						<h1 style="text-align: center;">Loading Reseller Information...</h1>
+					</div>
+				</section>
+					
+
+				<div class="span6">
+	
+					<form class="form-horizontal" id="form_client_info" action="<%=getDivisionURL%>/settings/filter_update_information" method="get">
+						<h4>
+							<%
+							if c.name.to_s.size > 0
+								%>
+								<span class='badge badge-green'>done</span>
+								<%
+							else
+								%>
+								<span class='badge badge-blue'>pending</span>
+								<%
+							end
+							%>
+							Client Information
+						</h4>
+						<div class="control-group span12">						
+							<label class="control-label" for="inputKeywords">Company Name</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="company_name" id="company_name" placeholder="Write your Company to be used for the invoicing" value="<%=sCompanyName.encode_html%>">
+							</div>
+							<br/>
+							
+							<label class="control-label" for="inputKeywords">Time Zone</label>
+							<div class="controls">
+								<select class="input-xlarge" name="id_timezone" id="id_timezone">
+									<%
+									BlackStack::Timezone.order(:offset, :large_description).all { |t|
+										sSelected = ""
+										if (t.id == sIdTimeZone)
+											sSelected = "selected"
+										end
+										%>
+										<option value='<%=t.id%>' <%=sSelected%>>(GMT <%=t.offsetDescription().to_s.encode_html%>) <%=t.short_description.encode_html%></option>
+										<%
+									}
+									%>
+								</select>
+							</div>
+							<br/>
+							
+							<!--
+							<label class="control-label" for="inputKeywords">PayPal Email</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="paypal_email" id="paypal_email" placeholder="We need this email to link your payment." value="<%=sPayPalEmail.encode_html%>" /><br/>
+								<span style="font-size:10px;color:gray;">Keep this field in blank if your paypal email is the same than your account.</span>
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">Address</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="new_password" id="new_password" placeholder="" value="">
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">City</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="repeat_password" id="repeat_password" placeholder="" value="">
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">State</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="repeat_password" id="repeat_password" placeholder="" value="">
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">Country</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="repeat_password" id="repeat_password" placeholder="" value="">
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">Phone Number</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="repeat_password" id="repeat_password" placeholder="" value="">
+							</div>
+							<br/>
+							-->
+							<div class="controls">				
+								<button type="submit" class="btn btn-blue btn-large" tabindex="5"><i class="icon-ok"></i> Save</button>
+							</div>
+							<br/>
+						</div>	
+					</form>
+
+					<form class="form-horizontal" id="form_billing_address" action="<%=getDivisionURL%>/settings/filter_update_billing_address" method="get">
+
+						<h4>
+							<%
+							if c.hasBillingAddress?
+								%>
+								<span class='badge badge-green'>done</span>
+								<%
+							else
+								%>
+								<span class='badge badge-blue'>pending</span>
+								<%
+							end
+							%>
+							Billing Address
+						</h4>
+						<div class="control-group span12">						
+							
+							<label class="control-label" for="inputKeywords">Address</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="billing_address" id="billing_address" value="<%=billing_address.encode_html%>">
+							</div>
+							<br/>
+							
+							<label class="control-label" for="inputKeywords">City</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="billing_city" id="billing_city" value="<%=billing_city.encode_html%>" /><br/>
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">State</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="billing_state" id="billing_state" value="<%=billing_state.encode_html%>" /><br/>
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">Country</label>
+							<div class="controls">
+								<select class='input-xlarge' id='billing_id_lncountry' name='billing_id_lncountry'>
+									<%
+									selected = ""
+									selected = "selected" if billing_id_lncountry.to_s.size == 0
+									%>
+									<option value='' <%=selected%>></option>
+									<%
+									BlackStack::LnCountry.order(:name).all { |y|
+										selected = ""
+										selected = "selected" if billing_id_lncountry.to_s == y.id
+										%>
+										<option value='<%=y.id.to_guid%>' <%=selected%>><%=y.name.to_s.encode_html%></option>
+										<%
+									}
+									%>
+								</select>
+							</div>
+							<br/>
+
+							<label class="control-label" for="inputKeywords">Zip Code</label>
+							<div class="controls">
+								<input type="text" class="input-xlarge" name="billing_zipcode" id="billing_zipcode" value="<%=billing_zipcode.encode_html%>" /><br/>
+							</div>
+							<br/>
+
+							<div class="controls">				
+								<button type="submit" class="btn btn-blue btn-large" tabindex="5"><i class="icon-ok"></i> Save</button>
+							</div>
+							<br/>
+						</div>	
+					</form>
+				</div>
+	
+				<form class="form-horizontal" id="form_reseller_info" action="<%=getDivisionURL%>/settings/filter_update_reseller_signature" method="get" style="margin: -20px 0 0px !important">
+					<div class="span6">
+						<div style="display: flex; align-items: center;">
+							<h4>
+								<%
+								if c.resellerSignature?
+									%>
+									<span class='badge badge-green'>done</span>
+									<%
+								else
+									%>
+									<span class='badge badge-blue'>pending</span>
+									<%
+								end
+								%>
+								Reseller Signature <input class="checkbox" id="allowed" name="allowed" type="checkbox" style="margin-right: 1em;" <%= checked %> />
+							</h4>
+							
+						</div>
+						<div style="width: 75%;">
+							<span style="font-size:10px;color:gray;">If you are going to resell our services with a white label, use the fields below to setup the sender name and domain to use the email notifications to your clients.</span>
+						</div>
+						<br/>
+						<div class="control-group span12">		
+								<input type="hidden" id="id_client" name="id_client" value="<%=c.id.to_guid%>" />
+
+								<label class="control-label" for="sender_name" style="width: 90px !important" >Sender Name</label>
+								<div class="controls">
+									<input type="text" class="input-xlarge" style="margin-left: -60px !important" name="sender_name" id="sender_name" placeholder="Name in the From field of the email notifications" required <%= disabled %> value="<%=from_name_for_ssm.encode_html%>">
+								</div>
+								<br/>
+
+								<label class="control-label" for="sender_contact_user" style="width: 90px !important" >Contact User</label>
+								<div class="controls">
+									<select name="sender_contact_user" id="sender_contact_user" class="input-xlarge" style="margin-left: -60px !important; display: block;" required <%= disabled %>>
+										<option value="">Select a email</option>
+										<% BlackStack::User.where(:id_client => c.id).order(:email).all do |user|  %>
+											<option value="<%=user.id.to_guid%>"><%=user.email.encode_html%></option>
+										<% end %>
+									</select>
+									<span style="font-size:10px;color:gray; margin-left: -60px">
+										We don't want to contact your clients by mistake.
+									</span>
+									<br/>
+									<span style="font-size:10px;color:gray; margin-left: -60px">
+										Tell us, which of all the users in your account we should contact.
+									</span>
+								</div>
+								<br/>
+
+								<label class="control-label" for="sender_email" style="width: 90px !important">Sender Email</label>
+								<div class="controls">
+									<input type="text" class="input-xlarge" style="margin-left: -60px !important" name="sender_email" id="sender_email" placeholder="Email in the From field of the email notifications" required <%= disabled %> value="<%=from_email_for_ssm.encode_html%>">
+								</div>
+								<br/>
+
+								<div class="controls">				
+									<button type="submit" class="btn btn-blue btn-large"><i class="icon-ok"></i> Save</button>
+								</div>
+								<br/>
+
+								<div id="success_div_verified" class="control" style="background-color: palegreen; border: 0.25em mediumseagreen solid; margin: 0em 2.5em 0em 2.5em; padding: 0.5em; font-weight: bold; display: none;">
+									<span id="success_div_verified_message">The sender email has been verified in Postmark</span>
+								</div>
+
+								<div id="error_div_verified" class="control" style="background-color: lightcoral; border: 0.25em darkred solid; margin: 0em 2.5em 0em 2.5em; display: none; padding: 0.5em; font-weight: bold;">
+									<span id="error_div_verified_message" style="color: darkred;"> Not Verified <a id="error_div_verified_link" style="cursor: pointer;" onclick="sendVerificationEmail()">Resend Verification Email</a> <a style="float:right" href="https://postmarkapp.com/manual#adding-a-sender-signature">Help</a> </span>
+									<br>
+									<span id="error_div_verified_submessage" style="color: darkred;">The verification can take a few minutes to be processes in our systems and databases.</span>
+								</div>
+								<br/>
+
+								<!--
+									<div id="error_div_dkim" class="control" style="background-color: lightgoldenrodyellow; border: 0.25em orange solid; margin: 0em 2.5em 0em 2.5em; display: none; padding: 0.5em; font-weight: bold;">
+										<span id="error_div_dkim_message" style="color: red; cursor: pointer;"></span> <a style="float:right" href="https://postmarkapp.com/manual#verifying-a-domain">Help</a>
+									</div>
+								-->
+						</div>
+
+						<br/>
+		
+						<h4>
+							<%
+							if !c.api_key.nil?
+								%>
+								<span class='badge badge-green'>done</span>
+								<%
+							else
+								%>
+								<span class='badge badge-blue'>pending</span>
+								<%
+							end
+							%>
+							API Key
+						</h4>
+						<label class="control-label" for="inputKeywords">API Key</label>
+						<div class="controls">
+						<input type="text" class="input-xlarge" name="api_key" id="api_key" value="<%= c.api_key.nil? ? '' : c.api_key.to_guid %>" onclick='this.select();' readonly>
+						<br/>
+						<br/>
+						<label align='left' style='horizontal-align:left;'>
+							Your access point URL is:<br/>
+							<a href='<%=@login.user.client.api_url%>' target='_window'><%=@login.user.client.api_url%></a>
+						</label>
+						<%
+						disabled = ''
+						onclick = 'onclick="openModalApiKey()"'
+						if !c.api_key.nil?
+							if BlackStack::Pampa::api_key.to_guid == c.api_key.to_guid
+								disabled = 'disabled'
+								onclick = ''
+							%>
+							<span style='color:red;font-size:12px;'>
+								You Can't Update This API-KEY.<br/>
+								You are the <span class='badge badge-pink'>Website Owner</span>.<br/>
+								You Are Running the Webserver using this API-KEY for validating the API-CALLs.
+							</span>
+							<%
+							end
+						end # if !c.api_key.nil?
+						%>
+						<br/>
+						<span id="reset_api_key" class="btn btn-red btn-large" <%=onclick%> <%=disabled%>><i class="icon-repeat"></i> Reset</span>
+						</div>
+						<br/>
+
+
+					</div>						
+				</form>
+
+			</div>
+						
+			<div id="myModal" class="modal fade" role="dialog" style="display: none;">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">DKIM and SPF Information</h4>
+						</div>
+						<div class="modal-body">
+							<div id="dkim_info">
+								<h3>DKIM Information</h3>
+								<h5>Hostname</h5>
+								<pre id="dkim_host"></pre>
+								<h5>Value (Text)</h5>
+								<pre id="dkim_code"></pre>
+							</div>
+							<div id="spf_info">
+								<h3>SPF Information</h3>
+								<h5>Hostname</h5>
+								<pre id="spf_host"></pre>
+								<h5>Value (Text)</h5>
+								<pre id="spf_code"></pre>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="close_modal" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="changeApiKey" class="modal fade" role="dialog" style="display: none">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Warning</h4>
+						</div>
+						<div class="modal-body">
+							<h4>This action can not be reversed.</h4>
+							<h4>Are you sure the you want change your API Key?</h4>
+						</div>
+						<div class="modal-footer">
+							<button type="button" id="change_api_key" class="btn btn-red" data-dismiss="modal">Change</button>
+							<button type="button" id="close_modal" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+	</section>
+
+	<script>
+		$(document).ready(function() {
+				<% if id_user_to_contact.to_s.size != 0 %>
+					$('#sender_contact_user').val('<%=id_user_to_contact.to_guid%>');
+				<% end %>
+				if ($('#allowed').prop('checked')) {
+					updateResellerConfigurationAlert();
+				} 
+		});
+
+		$('#allowed').on('click', function() {
+			if ($(this).prop('checked')) {
+				$('#sender_name').prop('disabled', false);
+				$('#sender_email').prop('disabled', false);
+				$('#sender_contact_user').prop('disabled', false);
+			} else {
+				$('#sender_name').prop('disabled', true);
+				$('#sender_email').prop('disabled', true);
+				$('#sender_contact_user').prop('disabled', true);
+			}
+		});
+
+		$('#close_modal').on('click', function() {
+			$('#myModal').hide();
+		});
+
+		function updateResellerConfigurationAlert() {
+			$('#loader-div').show();
+			$('#form_client_info').hide();
+			$('#form_reseller_info').hide();
+
+			$.ajax({
+				method: 'GET',
+				url: './filter_postmark_check_domain',
+				data: {
+					id_client: $('#id_client').val()
+				},
+				error: function(http) {
+					jQuery("body").html(http.responseText); // esto es una buena practica y debe agregarse al checklist de desarrollo
+				}
+			}).done(function (response) {
+				json = JSON.parse(response)
+				if (json.status == "No Verified") {
+					$('#form_client_info').show();
+					$('#form_reseller_info').show();
+					$('#error_div_verified').show();
+					$('#id_postmark').val(json.value);
+					$('#loader-div').hide();
+				} else if (json.status == 'success') {
+					$('#id_postmark').val(json.value);
+					$('#success_div_verified').show();
+					$('#loader-div').hide();
+					$('#form_client_info').show();
+					$('#form_reseller_info').show();
+					//verifiedDKIMandSPF();
+				} else {
+					$('#alert-error').text(json.status);
+					$('#alert-error').show();
+					$('#loader-div').hide();
+					$('#form_client_info').show();
+					$('#form_reseller_info').show();
+				}
+			});
+		};
+
+		function verifiedDKIMandSPF() {
+			$('#dkim_info').hide();
+			$('#spf_info').hide();
+			$('#error_div_dkim_message').unbind();
+			$.ajax({
+				method: 'GET',
+				url: './filter_postmark_verified_dkim',
+				data: {
+					id_postmark: $('#id_postmark').val()
+				},
+				error: function(http) {
+					jQuery("body").html(http.responseType)
+				}
+			}).done(function(response) {
+				json = JSON.parse(response);
+				if (json.status == 'verification') {
+					$('#error_div_dkim').show();
+					$('#error_div_dkim_message').text(json.value);
+					$('#form_client_info').show();
+					$('#form_reseller_info').show();
+					$('#loader-div').hide();
+					if (json.dkim_verified == false) {
+						$('#dkim_host').text(json.dkim_pending_host);
+						$('#dkim_code').text(json.dkim_pending_text_value);
+						$('#dkim_info').show();
+					}
+					if (json.spf_verified == false) {
+						$('#spf_host').text(json.spf_host);
+						$('#spf_code').text(json.spf_text_value);
+						$('#spf_info').show();
+					}
+					$('#error_div_dkim_message').on('click', function() {
+						$('#myModal').show();
+						$('#myModal').modal();
+					});
+				} else if (json.status == 'success') {
+					$('#loader-div').hide();
+					$('#form_client_info').show();
+					$('#form_reseller_info').show();
+				} else {
+					window.location.replace(`./clientinformation?errdesc=${encodeURIComponent(json.status)}`)
+				}
+			})
+		}
+
+		function sendVerificationEmail() {
+			$.ajax({
+				method: 'GET',
+				url: './filter_postmark_verified_email',
+				data: {
+					id_postmark: $('#id_postmark').val()
+				},
+				error: function(http)  {
+					jQuery("body").html(http.responseType)
+				},
+				
+			}).done(function(response) {
+				json = JSON.parse(response);
+				if (json.value != '0') {
+					window.location.replace(`./clientinformation?errdesc=${encodeURIComponent(json.status)}`)
+				} else {
+					window.location.replace(`./clientinformation?msg=${encodeURIComponent(json.status)}`)
+				}
+			});
+		}
+
+		function openModalApiKey() {
+			$('#changeApiKey').modal();
+		}
+
+		$('#change_api_key').on('click', function() {
+			resetApiKey();
+		});
+
+		function resetApiKey() {
+			$.ajax({
+				method: 'GET',
+				url: '/api1.2/division/set_api_key.json',
+				data: {
+					id_client: '<%=user.client.id.to_guid%>',
+					api_key: '<%=BlackStack::Pampa::api_key%>',
+				},
+			}).done(function(response) {
+				json = JSON.parse(response);
+				if (json.status == 'success') {
+					$('#api_key').val(json.value);
+				} else {
+					alert(json.status);
+				}
+			}).fail(function(response) {
+				jQuery("body").html(response.responseType);
+			});
+		}
+
+	</script>

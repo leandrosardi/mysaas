@@ -3,9 +3,6 @@ require 'sequel'
 module BlackStack
     module Core
         class User < Sequel::Model(:user)
-            # always include this line in the model definition
-            BlackStack::Core::User.dataset = BlackStack::Core::User.dataset.disable_insert_output
-
             # get the value of a preference parameter for this user
             def get_preference(name)
                 # TODO: Code Me!

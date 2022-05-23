@@ -1,0 +1,91 @@
+<%
+nid = params[:nid]
+err = params[:err]
+
+# validar que los parametros no esten vacios
+if (nid.to_s.size==0 || nid.to_s.size==0)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_ID_EXPECTED.to_s
+end
+
+# TODO: Validar que nid tenga el formato de un GUID
+
+# 
+notification = Notification.where(:id=>nid, :type=>Notification::NOTIFICATION_RESET).first
+
+# verifico si la notificacion existe
+if (notification == nil)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_NOT_FOUND.to_s
+end
+
+# verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
+if (notification.old()>NotificationReset::NOTIFICATION_RESET_LINK_TIMEOUT)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_NOTIFICATION_EXPIRED.to_s
+end
+
+# 
+user = BlackStack::User.where(:id=>notification.id_user).first
+
+# verifico que el usuario exista
+if (user == nil)
+	redirect_adapted_to_nginx getDivisionURL + '/forgot?err='+ERR_RESET_USER_NOT_FOUND.to_s
+end
+%>
+
+<div style='position:absolute;left:50px;top:25px;height:90px;'>
+	<a href='/'><img src="/core/images/logo/logo-16-01.png" height="90px" title="ConnectionSphere Logo"></a>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<section class='box span10'>	
+								
+	<%
+	if err!=nil
+	%>
+	<div class="alert alert-error">
+	  <a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=getErrorDescription(err.to_i).encode_html%>
+	</div>
+	<%
+	end # err
+	%>
+
+	<span align='left'>
+		<h4>Reset your password</b></h4>
+	</span>
+
+	<form action="./reset" method="post">
+		<input type="hidden" name="action" id="id_action" value="signup">
+		<input type="hidden" name="nid" id="nid" value="<%=notification.id%>">
+		<fieldset>
+			<div class="fields">
+				<!--
+				<input type="text" name="firstname" id="id_firstname" placeholder="First Name" tabindex="1" value="">
+				-->
+				
+				<input type="password" class='input-xlarge' name="password_1" id="id_password_1" placeholder="Write New Password" tabindex="3" value="" onfocus="$(this).select();">
+				<input type="password" class='input-xlarge' name="password_2" id="id_password_2" placeholder="Repeat Password" tabindex="4" value="" onfocus="$(this).select();">
+			</div>
+			<button type="submit" class="btn btn-primary" tabindex="5">Reset</button>
+		</fieldset>
+	</form>
+
+	<div>
+		</br>
+		<p>Did you remember your password?<br/><a href='./login'>Log In here</a>.</p>
+		</br>
+		<p>Don't have an account?<br/><a href='/prospecting/pipeline/new/welcome'>Sign Up Here</a>.</p>
+	</div>
+</section>
+
+<br/>
+<br/>
+<br/>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+	     document.getElementById("id_password_1").focus();
+	});
+</script>
+

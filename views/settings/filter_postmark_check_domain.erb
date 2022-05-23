@@ -1,0 +1,23 @@
+<%
+    return_message = {}
+
+    id_client = params[:id_client]
+    domain_for_ssm = ''
+    from_name_for_ssm = ''
+    from_email_for_ssm = ''
+    id = ''
+    
+    if id_client.nil? || id_client.to_s.size == 0
+		DB.disconnect
+		GC.start
+		redirect_adapted_to_nginx getDivisionURL + "/settings/clientinformation?errdesc=Client%20parameter%20expected."
+	else
+        c = BlackStack::Client.where(:id => id_client).first
+
+        # libero recursos
+        DB.disconnect	
+        GC.start
+        return c.checkDomainForSSMVerified()
+    end
+
+%>

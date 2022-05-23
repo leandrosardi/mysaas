@@ -3,6 +3,7 @@ require 'simple_command_line_parser'
 require 'sinatra'
 require 'pg'
 require 'sequel'
+require_relative './lib/core'
 
 DB = Sequel.connect('postgres://postgres:Amazonia2020@127.0.0.1/kepler') 
 
@@ -15,7 +16,6 @@ require_relative './lib/login'
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
   :configuration => [{
-  {
     :name=>'port', 
     :mandatory=>false, 
     :description=>'Listening port.', 
@@ -303,7 +303,7 @@ get '/', :auth1 => true do
   redirect '/dashboard'
 end
 get '/dashboard', :auth1 => true, :agent => /(.*)/ do
-  erb :'/dashboard', :layout => :'/layouts/apps'
+  erb :'/dashboard', :layout => :'/layouts/core'
 end
 
 
@@ -318,12 +318,12 @@ get '/settings/', :auth1 => true do
   redirect '/settings/dashboard'
 end
 get '/settings/dashboard', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/dashboard', :layout => :'/layouts/apps'
+  erb :'/settings/dashboard', :layout => :'/layouts/core'
 end
 
 # account configuration screen
 get '/settings/clientinformation', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/clientinformation', :layout => :'/layouts/apps'
+  erb :'/settings/clientinformation', :layout => :'/layouts/core'
 end
 post '/settings/filter_update_billing_address' do
   erb :'/settings/filter_update_billing_address'
@@ -352,7 +352,7 @@ end
 
 ## users management screen
 get '/settings/users', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/users', :layout => :'/layouts/apps'
+  erb :'/settings/users', :layout => :'/layouts/core'
 end
 post '/settings/filter_update_user', :agent => /(.*)/ do
   erb :'/settings/filter_update_user'
@@ -360,7 +360,7 @@ end
 
 # change password screen
 get '/settings/password', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/password', :layout => :'/layouts/apps'
+  erb :'/settings/password', :layout => :'/layouts/core'
 end
 post '/settings/filter_update_password' do
   erb :'/settings/filter_update_password'

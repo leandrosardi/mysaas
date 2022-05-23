@@ -1,0 +1,779 @@
+<%
+load File.expand_path(__FILE__).gsub(/\/views\/layouts\/prisma.erb/, '') + '/version.rb'
+
+# valido que exista el login
+login = BlackStack::Login.where(:id=>session['prisma.login.id']).first
+if (login==nil && request.path_info!='prisma/login')
+	redirect_adapted_to_nginx getDivisionURL + "/prisma/login"
+end
+
+# valido que ecista el usuario logeado 
+user = BlackStack::User.where(:id=>login.id_user).first
+if (user==nil)
+	redirect_adapted_to_nginx getDivisionURL + "/prisma/login"
+end
+
+if user.client.user_roles.select { |ur| ur.role.name == BlackStack::Role::ROLE_PRISMA_USER }.first == nil
+	redirect_adapted_to_nginx getDivisionURL + "/login"	
+end
+
+# array de hashes
+divisions = []
+
+# cargo el array divisions 
+q =
+"select d.id AS id_division, d.name AS name, d.ws_url, d.ws_port, d.app_url, d.app_port " +
+"from division d WITH (NOLOCK) " +
+"WHERE ISNULL(d.home,0)=1 " +
+"AND ISNULL(d.central,0)=0 " +
+"AND ISNULL(d.available,0)=1 " +
+"order by d.name DESC "
+DB[q].all do |row|
+	divisions << row
+	# 
+	DB.disconnect
+	GC.start
+end
+%>
+
+<!DOCTYPE html height='100%' style='height:100%;'>
+<!--[if IE 9 ]><html class="ie9"><![endif]-->
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="format-detection" content="telephone=no">
+        <meta charset="ISO-8859-1">
+        <title>PRISMA GCCS - Global Command & Control System</title>
+
+        <!-- CSS -->
+        <link href="../../prisma/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../prisma/css/animate.min.css" rel="stylesheet">
+        <link href="../../prisma/css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../prisma/css/form.css" rel="stylesheet">
+        <link href="../../prisma/css/calendar.css" rel="stylesheet">
+        <link href="../../prisma/css/style.css" rel="stylesheet">
+        <link href="../../prisma/css/icons.css" rel="stylesheet">
+        <link href="../../prisma/css/generics.css" rel="stylesheet">
+        <link href="../../prisma/css/pagination.css" rel="stylesheet">
+
+        <!-- Javascript Libraries -->
+        <!-- jQuery -->
+        <script src="../../prisma/js/jquery.min.js"></script> <!-- jQuery Library -->
+        <script src="../../prisma/js/jquery-ui.min.js"></script> <!-- jQuery UI -->
+        
+        <!-- Bootstrap -->
+        <script src="../../prisma/js/bootstrap.min.js"></script>
+        <!-- Pagination -->
+        <script src="../../prisma/js/pagination.min.js"></script>
+        
+        <!--  Form Related -->
+        <script src="../../prisma/js/validation/validate.min.js"></script> <!-- jQuery Form Validation Library -->
+        <script src="../../prisma/js/validation/validationEngine.min.js"></script> <!-- jQuery Form Validation Library - requirred with above js -->
+        <script src="../../prisma/js/select.min.js"></script> <!-- Custom Select -->
+        <script src="../../prisma/js/chosen.min.js"></script> <!-- Custom Multi Select -->
+        <script src="../../prisma/js/datetimepicker.min.js"></script> <!-- Date & Time Picker -->
+        <script src="../../prisma/js/colorpicker.min.js"></script> <!-- Color Picker -->
+        <script src="../../prisma/js/icheck.js"></script> <!-- Custom Checkbox + Radio -->
+        <script src="../../prisma/js/autosize.min.js"></script> <!-- Textare autosize -->
+        <script src="../../prisma/js/toggler.min.js"></script> <!-- Toggler -->
+        <script src="../../prisma/js/input-mask.min.js"></script> <!-- Input Mask -->
+        <script src="../../prisma/js/spinner.min.js"></script> <!-- Spinner -->
+        <script src="../../prisma/js/slider.min.js"></script> <!-- Input Slider -->
+        <script src="../../prisma/js/fileupload.min.js"></script> <!-- File Upload -->
+        <script src='../../prisma/js/jquery.stickytableheaders.min.js'></script>
+
+        <!-- Text Editor -->
+        <script src="../../prisma/js/editor.min.js"></script> <!-- WYSIWYG Editor -->
+        <script src="../../prisma/js/markdown.min.js"></script> <!-- Markdown Editor -->
+        
+        <!-- UX -->
+        <script src="../../prisma/js/scroll.min.js"></script> <!-- Custom Scrollbar -->
+        
+        <!-- Other -->
+        <script src="../../prisma/js/calendar.min.js"></script> <!-- Calendar -->
+        <script src="../../prisma/js/feeds.min.js"></script> <!-- News Feeds -->
+        <script src="../../prisma/js/moment.min.js"></script> <!-- Moment -->
+        
+        <!-- Charts -->
+        <script src="../../prisma/js/charts/jquery.flot.js"></script> <!-- Flot Main -->
+        <script src="../../prisma/js/charts/jquery.flot.time.js"></script> <!-- Flot sub -->
+        <script src="../../prisma/js/charts/jquery.flot.animator.min.js"></script> <!-- Flot sub -->
+        <script src="../../prisma/js/charts/jquery.flot.resize.min.js"></script> <!-- Flot sub - for repaint when resizing the screen -->
+
+        <!-- All JS functions -->
+        <script src="../../prisma/js/functions.js"></script>
+        <style>
+			html, body {
+			  height: 100%;
+			}
+
+			textarea {
+				background-color:black;
+				color:white;
+			}
+
+			div.editor-container {
+				position:absolute;
+				top:0;
+				right:0;
+				height:100%;
+				padding:0;
+				margin:0;
+			}
+
+			textarea.editor {
+				width:100%;
+				height:100%;
+				font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+				font-size:11px;
+				white-space: pre;
+				overflow-wrap: normal;
+				overflow-x: scroll;
+			}
+			
+        	input::-moz-selection { 
+			    background-color: rgb(47,54,153);
+			}
+			
+			input::selection {
+			    background-color: rgb(47,54,153);
+			}
+
+        	textarea::-moz-selection { 
+			    background-color: rgb(47,54,153);
+			}
+			
+			textarea::selection {
+			    background-color: rgb(47,54,153);
+			}
+						
+        	td.details {
+				border-bottom: 1px dashed white;        		
+        	}
+        	
+			td.red-light {
+				background-color: rgb(153,0,48);
+			}
+
+			td.green-light {
+				background-color:rgb(0,64,0); 
+			}
+ 
+			div.loading {
+				position:absolute;
+				top:0px;
+				left:0px;
+				width:81px;
+				height:25px;
+				background:yellow;
+				color:black;
+				font-weight:bolder;
+				font-size:14px;
+				text-align:center;
+				vertical-align:middle;
+				opacity:100%;
+			}
+			
+			span.link {
+				cursor: pointer;
+			}
+			
+        	td.sort {
+        		cursor: pointer;
+        		color: rgb(200,200,255);
+        	}
+        
+        	input.small { 
+        		font-size: 10px;
+        		height: 25px; 
+        	}
+
+        	button.small { 
+        		font-size: 10px;
+        		height: 25px; 
+        		width: 40px; 
+        	}
+
+        	button.mini { 
+        		font-size: 10px;
+        		height: 25px; 
+        		width: 30px;
+        		margin-left: 0px; 
+        	}
+
+        	button.medium { 
+        		font-size: 10px;
+        		height: 25px; 
+        		width: 60px; 
+        	}
+
+        	select.small { 
+        		font-size: 10px;
+        		height: 25px; 
+        	}
+
+        	td { font-size: 10px; }
+        	th { font-size: 10px; }
+
+        	td.checkbox_column {
+				width: 25px;
+				max-width: 25px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+        	td.date_column {
+				width: 120px;
+				max-width: 120px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+        	td.small_text_column {
+				width: 75px;
+				max-width: 75px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+        	td.text_column {
+				width: 150px;
+				max-width: 150px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+        	td.number_column {
+				width: 50px;
+				max-width: 50px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+        	td.fix {
+				width: 100px;
+				max-width: 100px;
+				white-space:nowrap;
+				overflow:hidden;
+				text-overflow:ellipsis;
+				font-size: 10px; 
+			}
+
+			tr.selectable { border: 4px solid transparent; } 
+			tr.record:hover { border: 4px solid yellow; } 
+			tr.record:hover td { border-top: 4px solid yellow; z-index: 0; }
+			
+        	tr.right { text-align: right; }
+        	th.right { text-align: right; }
+        	td.right { text-align: right; font-size: 10px; }
+
+        	tr.top { vertical-align: top; }
+        	th.top { vertical-align: top; }
+        	td.top { vertical-align: top; font-size: 10px; }
+
+			tr.selected { background-color: blue ; } 
+
+        	input.filter { padding:0px; margin: 0px; width:'100%'; line-height:'5px'; display:block; }
+        	select.filter { padding:0px; margin: 0px; width:'50%'; line-height:'5px'; display:block; }
+        	
+            .paginationjs .paginationjs-pages li>a {
+                background: rgba(0, 0, 0, 0) !important;
+                color: white !important;
+            }
+            li.paginationjs-prev 
+            div > button.btn-margin {
+                margin-left: 0.5em;
+            }
+            div.total-clients > #btn-right-page {
+                margin-right: 0.5em;
+                margin-bottom: 0.75em;
+            }
+            #action-accept {
+                margin-top: 1em;
+            }
+            .total-clients {
+                float: right;
+            }
+            .icheckbox_minimal:hover {
+                border: 1px solid rgba(255,255,255,0.7);
+            }
+            .icheckbox_minimal:checked {
+                background: rgba(255,255,255,0.6) !important;
+            }
+            #filter-buttons {
+                display: none;
+            }
+            .fix-padding-top {
+                padding-top: 1em;
+            }
+            #divLoading
+            {
+                display : none;
+            }
+            #divLoading.show
+            {
+                display : block;
+                position : fixed;
+                z-index: 2000;
+                background-image : url('/prisma/img/loadinfo.gif');
+                background-color:#666;
+                opacity : 0.4;
+                background-repeat : no-repeat;
+                background-position : center;
+                left : 0;
+                bottom : 0;
+                right : 0;
+                top : 0;
+            }
+            #loadinggif.show
+            {
+                left : 50%;
+                top : 50%;
+                position : absolute;
+                z-index : 101;
+                width : 32px;
+                height : 32px;
+                margin-left : -16px;
+                margin-top : -16px;
+            }
+            div.content {
+            width : 1000px;
+            height : 1000px;
+            }
+        </style>
+        
+        <script>			
+			var divisions = <%=divisions.to_json%>;
+
+			// this is a flag to run one AJAX call at time, and don't run AJAX when a popup is open.
+			lock_ajax = false;
+
+			function htmlEntities(str) {
+			    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+			}
+
+			// Itera las divisiones, llamando a una funcion callbackFunction por cada una.
+			// La funcion callbackFunction debe recibe un parametro: division.
+			function loadFromDivisions(callbackFunction) {
+				$('#divisions-modal').modal('show');
+				$('.divisions').html('');
+		
+			};
+
+			// 
+			function newHttpRequest()
+			{
+				var xmlhttp;
+				if (window.XMLHttpRequest)
+				{	
+				 	// code for IE7+, Firefox, Chrome, Opera, Safari
+					xmlhttp=new XMLHttpRequest();
+				}
+				else
+				{
+				 	// code for IE6, IE5
+					xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+				}
+		
+				return xmlhttp ;
+			}
+	
+			function getCurrentTime()
+			{
+				var xmlhttp = newHttpRequest()
+				url = "./now.json"
+				ret = "Unknown"
+										
+				xmlhttp.onreadystatechange=function()
+				{
+					if (xmlhttp.readyState==4 && xmlhttp.status==200)
+				    {
+			     	 	response = xmlhttp.responseText ;	
+						obj = JSON.parse(response);
+							
+						if (obj.status == "success") {
+							ret = new Date(obj.year, obj.month-1, obj.day, obj.hour, obj.minute, obj.second, 0);
+						} else {
+							ret = "Error: " + obj.status.toString()
+						}
+					}
+					else {
+						ret = "Error: Bard Request"
+					}
+				}
+
+				xmlhttp.open("GET", url, false);
+				xmlhttp.send();
+				return ret ;
+			}
+
+			// t is the jquery table object
+			// n is the desiderd number of rows 
+			function adjust_table_row_number(t, n, class_name='selectable') {
+				trs = t.find('tr');
+				m = trs.length;
+				if (n > m) {
+					// agrego filas
+					i = m;
+					while ( i<n ) {
+						t.append("<tr class='record "+class_name+"' data-id=''></tr>");
+						$(".selectable").mouseup(function() { selectRow(this); });
+						i++;
+					}
+				} else if ( n < m ) {
+					// elimino filas
+					i = n;
+					while ( i<m ) {
+						trs[i].remove();
+						i++;
+					}
+				}
+			}
+
+			//
+			function selectRow(r) {
+				if ( $(r).hasClass('cant-toggle') == false ) {
+					$(r).toggleClass('selected');
+					$(r).addClass('cant-toggle');
+					setTimeout( function() { $(r).removeClass('cant-toggle'); } , 100);
+				}
+			}
+		
+			//
+			function selectAll() {
+				r = $('.selectable')
+				if ( r.hasClass('selected') == false ) {
+					r.addClass('selected');
+					$('.selectable').addClass('selected');
+				} else {
+					r.removeClass('selected');
+					$('.selectable').removeClass('selected');
+				}
+			}
+
+			// toggleRows es una funcion reutilizable para actualizar los registros de una tabla. 
+			// Por cada fila seleccionada en la tabla de datos, llama a un access point para actualizar 
+			//	el valor de algun campo del registro.
+			// Luego actualiza una celda del registro con el nuevo valor actualizado.
+			// 
+			// value: es el nuevo valor que se le quire dar al campo.
+			// td_id: es el ID de la celda (td) que se actualizara el nuevo valor en el regitro.
+			// api_url: es la url de access point que sive para actualizar ese campo en particular.
+			//
+			// El id del objeto a actualizar se obtiene del atributo data-id de la fila (tr).
+			// El nombre descriptivo de cada registro (que se muestra en el popup) se obtiene de
+			//	del atributo data-name de la fila (tr).
+			// 
+			function toggleRows(value, api_url, ws_url, ws_port) {
+				var ids = [];
+				
+				$('#rows-modal').modal('show');
+				$('#rows-modal').find(".rows").empty();
+				//$('#rows-modal').find(".btn-close").prop('disabled', true);
+				$("tr.selected").each(function() {
+					ids.push( $(this).data("id") );
+				});
+				// 
+				if ( ids.length > 0 ) {
+					$.ajax({
+						type: "POST",
+						url: api_url, 
+						data: {
+							ws_url: ws_url, 
+							ws_port: ws_port, 
+							value: value,
+							ids: JSON.stringify(ids),
+						}, success: function(data) {
+							res = JSON.parse(data);
+							if (res.status == 'success') {
+								load_rows();
+								//console.log("success.ids: " + res.ids);
+								//console.log("success.ids.size: " + res.size);
+								//console.log("success.params: " + res.params);
+								// TODO: mostrar algun success message
+							} else {
+								//
+								console.log("error: " + res.status);
+								// TODO: abrir popup de error
+							}
+						}, error: function(data) {
+							//
+							console.log(this.id + ": Communication Error.");
+						}
+					});
+				}
+			}
+		</script>
+
+    </head>
+    <body id="skin-blur-blue" height='100%' style='height:100%;'>
+
+        <header id="header" class="media">            
+			<div class='loading'>
+				loading...
+			</div>
+
+            <span class="logo pull-left" href="#" style='width:500px;text-align:left;'><%=request.path_info.to_s.gsub(/\//, ' / ')%></span>
+            
+            <div class='logo' style='width:auto;text-align:right;vertical-align:middle;border-spacing:0px;'>
+                <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						BlackStack
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="../blackstack/overview">Overview</a></li>
+						<!--
+						<li><a disable>Users <i>(not available)</i></a></li>
+						<li><a href="../blackstack/ipns">PayPal IPNs</a></li>
+						-->
+						<li class='divider'></li>
+						<!--
+						<li><a href="../blackstack/params">Params</a></li>
+						<li><a href="../blackstack/logs">Logs</a></li>
+						-->
+						<li><a href="../blackstack/workers">Workers</a></li>
+						<li><a href="../blackstack/balance">Balance</a></li>
+					</ul>
+	            </div>
+
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						FlyWheel
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="../flywheel/clients">Clients</a></li>
+						<li><a href="../flywheel/pipelines">Pipelines</a></li>
+						<!--
+						<li><a href="../flywheel/messages">Messages</a></li>
+						<li><a href="../flywheel/searches">Searches</a></li>
+						<li><a href="../flywheel/bots">Bots</a></li>
+						<li><a href="../flywheel/chats">Chats</a></li>
+						<li><a href="../flywheel/errors">Errors</a></li>
+						-->
+					</ul>
+	            </div>				
+				<!--
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						DataShop
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a><i>Farm</i> (unavailable)</a></li>
+						<li><a href="../datashop/snapshop">Snapshot</a></li>
+						<li><a><i>Clients</i> (unavailable)</a></li>
+						<li><a><i>Searches</i> (unavailable)</a></li>
+					</ul>
+	            </div>
+
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						FreePost
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="./searches">Email Servers</a></li>
+						<li><a href="./searches">Clients</a></li>
+						<li><a href="./searches">FollowUps</a></li>
+						<li><a href="./searches">Lists</a></li>
+						<li><a href="./searches">Campaigns</a></li>
+					</ul>
+	            </div>
+
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						CrowdTruth
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="./searches">Clients</a></li>
+						<li><a href="./searches">Posts</a></li>
+					</ul>
+	            </div>
+
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						Fakeness
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="./searches">Clients</a></li>
+						<li><a href="./searches">Bots</a></li>
+						<li><a href="./searches">Templates</a></li>
+						<li><a href="./searches">Proxies</a></li>
+						<li><a href="./searches">Providers</a></li>
+					</ul>
+	            </div>
+
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						Fakeness
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li><a href="./searches">?</a></li>
+					</ul>
+	            </div>
+				-->
+	            <div class='btn-group m-b-10'>
+					<button type="button" class="btn btn-sm btn-alt dropdown-toggle" data-toggle="dropdown">
+						Account
+						<span class="caret"></span>
+					</button>
+	
+					<ul class="dropdown-menu">
+						<li style='font-size:10px;'><a><%=user.email%></a></li>
+						<li class='divider'>Working Queue</li>
+						<li><a><i>Profile</i> (unavailable)</a></li>
+						<li><a><i>TimeSheet</i> (unavailable)</a></li>
+						<li class='divider'>Working Queue</li>
+						<li><a href='/prisma/filter_logout'>Log Out</a></li>
+					</ul>
+	            </div>
+	            <div class='btn-group m-b-10'>
+					<table width='100px'>
+						<tr>
+							<td width='100%' align='center'>
+								<span class='small'><a href='https://github.com/leandrosardi/blackstack/wiki/A02.Release-Notes' target='_window'>Powered by<br/>BlackStack, v.<%=BLACKSTACK_VERSION.to_s%></a></span>
+							</td>
+						</tr>
+					</table>
+					
+	            </div>
+			</div>
+        </header>
+                
+        <section id="main" class="p-relative" role="main">
+			<%= yield %>
+        </section>
+
+		<!--
+        <div id="divLoading" style="display: none;"> 
+        </div>
+ 		-->
+ 	
+		<div class="loading-container">
+			<img src="img/media-player/loading.gif" width="100px">
+		</div>
+
+        <script type="text/javascript">
+            function unSelectAll() {
+            	$('.selected').removeClass('selected');
+            }
+            
+            $(document).ready(function(){
+                /* must run this for tables with fixed header for vertical scrolling */
+				$('.table-fixed-header').stickyTableHeaders({
+					scrollableArea : $(".scrollable-area")[0]
+				});
+
+                /* Input Masking - you can include your own way */
+                (function(){
+                    $('.mask-date').mask('0000-00-00');
+                    $('.mask-time').mask('00:00');
+                    $('.mask-date_time').mask('0000-00-00 00:00:00');
+                })();
+
+				//
+				$('.loading').hide();
+
+				//
+				$('.selectall').on("click", function() { 
+					$(this).select(); 
+				}); 
+				$('.selectall').focus(function() { 
+					$(this).select(); 
+				}); 
+				$('.selectall').focusin(function() { 
+					$(this).select(); 
+				}); 
+
+				//
+				load_rows();
+				setInterval(function(){ 
+					load_rows();
+				}, 10*60*1000); // cada 10 minutos
+
+            });
+            
+            $('.sort').click(function () {
+            	order = '';
+            	$('#sort_column').val( $(this).data('column-name') );
+            	if ( $('#sort_order').val() == 'desc' ) {
+            		order = 'asc';
+            	} else {
+            		order = 'desc';
+            	}
+            	
+            	$('#sort_order').val(order);
+            	
+            	$('.sort').find('.order').empty();
+            	
+            	if (order == 'asc') {
+            		$(this).find('.order').html(' &#8593;');
+            	} else {
+            		$(this).find('.order').html(' &#8595;');
+            	}
+            	
+            	unSelectAll();
+            	load_rows(false);
+            });
+            
+            $('.filter').change(function () {
+            	unSelectAll();
+            	load_rows(false);
+            });
+
+            $('#page').change(function () {
+            	unSelectAll();
+            	load_rows(false);
+            });
+
+            $('#period').change(function () {
+            	load_rows(false);
+            });
+
+            $('#divisions').change(function() { 
+            	unSelectAll();
+            	load_rows(false); 
+            }) ;
+
+            $('#refresh').click(function () {
+            	load_rows();
+            });
+            
+            $('.select-all').click(function() { 
+            	selectAll(); 
+            }) ;
+
+			$('.command').click(function () {
+				$(this).select();
+			});
+        </script>
+    </body>
+</html>
+
+<%
+DB.disconnect
+GC.start
+%>
+
+

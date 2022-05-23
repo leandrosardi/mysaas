@@ -1,0 +1,239 @@
+<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
+<% 
+companyname = params[:companyname]
+username = params[:username]
+email = params[:email]
+password = params[:password]
+phone = params[:phone]
+redirect = session['redirect_after_login_or_signup']
+redirect_on_error = params[:'redirect_on_error']
+client = nil
+user = nil
+division = nil
+userDivision = nil
+login = nil
+
+redirect_on_error = "/signup" if redirect_on_error.to_s.size == 0
+
+# actualizar las variables de sesion
+if companyname.to_s.size>0
+	session['companyname'] = companyname.to_s
+else
+	session['companyname'] = ""
+end
+
+if username.to_s.size>0
+	session['username'] = username.to_s
+else
+	session['username'] = ""
+end
+
+if email.to_s.size>0
+	session['email'] = email.to_s
+else
+	session['email'] = ""
+end
+
+if phone.to_s.size>0
+	session['phone'] = phone.to_s
+else
+	session['phone'] = ""
+end
+
+# validar que los parametros no esten vacios
+if companyname.to_s.size==0
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_COMPANY_NAME_IS_NULL.to_s
+end
+
+if username.to_s.size==0
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_USER_NAME_IS_NULL.to_s
+end
+
+if email.to_s.size==0
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_NULL.to_s
+end
+
+if password.to_s.size==0
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_NULL.to_s
+end
+
+if phone.to_s.size==0
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PHONE_IS_NULL.to_s
+end
+
+# validar formato de la password
+if !password.password?
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s
+end
+
+if !params['email'].email?
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_WRONG.to_s
+end
+
+# comparar contra la base de datos
+user = BlackStack::User.where(:email=>email).first
+
+# decidir si el intento de login es exitoso o no
+if (user != nil)
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_ALREADY_EXISTS.to_s
+end
+
+# TODO: Validar formato del email
+
+# TODO: Validar normas de seguridad de la password
+
+# TODO: Validar formato de la password
+
+DB.transaction do
+	# crear el cliente
+	client = BlackStack::Client.new()
+	client.id = guid()
+	client.name = companyname
+	client.active = 1
+	client.save()
+	
+	# crear el usuario
+	user = BlackStack::User.new()
+	user.id = guid()
+	user.id_client = client.id
+	user.email = email
+	user.name = username
+	user.phone = phone
+	user.password = password
+	user.create_time = now()
+	user.division_email = email
+	user.save()
+	
+	# le asigno una division
+	# TODO: BUG: al hacer signup se alterna aleatoriamente entre las divisiones EULER o COPERNICO 
+#	division = BlackStack::Division.getDefault()
+	q = 
+	"SELECT TOP 1 d.id AS did " +
+	"FROM division d " +
+	"WHERE d.name='#{SIGNUP_DIVISION}' "
+	row = DB[q].first
+	division =BlackStack::Division.where(:id=>row[:did]).first
+	
+	# TODO: Validar que se haya conseguido una division
+	
+	# vinculo el usuario a esta division
+	userDivision = BlackStack::UserDivision.new()
+	userDivision.id = guid()
+	userDivision.id_user = user.id
+	userDivision.id_division = division.id
+	userDivision.save()
+	
+	# registrar el login
+	login = BlackStack::Login.new
+	login.id = guid()
+	login.id_user = user.id
+	login.create_time = now()
+	login.save()
+		
+	# guardar el ID de intento de login en una variable de sesion
+	session['login.id'] = login.id 
+end # transaction
+
+# envio un request a la division para que registre a este usuario
+# TODO: Si la llamada de abajo falla, el servidor central debe redirigir a una pagina de error, 
+# => y debe reintentar el alta en la division cuando el usuario haga un intento de login.
+res = BlackStack::Netting::call_post(
+	"#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/signup.json", 
+	{
+		'api_key' => BlackStack::Pampa::api_key, 
+		'cid' => client.id,
+		'uid' => user.id,
+		'email' => user.division_email,
+		'companyname' => companyname,
+		'username' => username,
+		'phone' => phone,
+	}
+)
+parsed = JSON.parse(res.body)
+if (parsed['status'] != 'success')
+	# libero recursos
+	DB.disconnect	
+	GC.start
+	#
+	redirect_adapted_to_nginx getDivisionURL + "#{redirect_on_error}?errmsg="+CGI.escape("Unexpected Error: "+parsed['status'].to_s)
+end
+
+# blanquo la variable de sesion de redirect
+redirect = session['redirect_after_login_or_signup'] #"/settings/filter_create_invoice?item_number=SSM.2.Semi-Dedicated-Monthly.2&n=1"
+session['redirect_after_login_or_signup'] = nil
+
+#
+id_login = parsed["id_login"].gsub("{", "").gsub("}", "").to_s
+login_url = "#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/login2.json?api_key=#{BlackStack::Pampa::api_key}&id_login=#{id_login}&redirect=#{CGI.escape(redirect.to_s)}" 
+%>
+
+<!--
+===== STARTING ATS CODE =====
+ConnectionSphere - Affiliates Tracking Service (ATS) Pixel v1.0
+ATS is a Simple service to track researllers and JV partners.
+For more information visit: https://connectionsphere.com:443/affilaitestrackingservice/
+-->
+<script src='https://euler.connectionsphere.com:443/core/javascripts/pixels-1.0.1.min.js' type='text/javascript'></script>
+<script type='text/javascript'>
+    pixelsJs.init({
+        // This the URL of the ConnectionSphere server where we host your user account. 
+        server: '<%=DEFAULT_ATS_LISTENER_DOMAIN%>',
+        // This is the ID of the tracking pixel you want to track.
+        id_tracking_pixel: '<%=DEFAULT_ATS_TRACKING_PIXEL_ID%>',
+        // This line creates a unique identifier for every new visitor, even before signup.
+        visitor_id: pixelsJs.getVisitorId(),
+        // This is a reserved parameter to track conversion of campaigns of our ConnectionSphere's Prospecinng serivice.
+        // Add the parameter id_result to the URL of the page you want to track, in order to track any lead from  our ConnectionSphere's Prospecinng serivice.
+        // For more information, visit: https://connectionsphere.com:443/prospecting/ 
+        id_result: pixelsJs.getIdResult(),
+        // This is a reserved parameter to track the traffic of any specific reseller or JV partner.
+        // Add the parameter id_affiliate to the URL of the page you want to track, in order to track the reseller who is bringing this visit to your website.
+        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
+        id_affiliate: pixelsJs.getIdAffiliate(),
+        // This is a reserved parameter to track anything you want, like the source of the traffic, and ad campaign, etc.
+        // Add the parameter tag to the URL of the page you want to track, in order to break-down the traffic of your website.
+        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
+        tag: pixelsJs.getParam('cs.ats.tag'),                        
+        // Enable this line if you want to track the email address of a user on your website.
+        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
+        signup_email: '<%=user.email%>',
+        // Enable this line if you want to track a new pourchase from a user in your website.
+        // For more information, visit: https://connectionsphere.com:443/affiliatestrackingservice/ 
+        //revenue: 0.0,
+		// Setup a function to call just after draw the pixel.
+		done: function() {
+			window.location.href = '<%=login_url%>';
+		}
+    });
+</script>
+<!--
+===== ENDING ATS CODE =====
+-->
