@@ -17,13 +17,13 @@ Use **free-membership-sites** to develop any kind of:
 - social network;
 - etc.
 
-If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
+If you have skills in any of: design, Ruby, CockrouchDB or Bootstrap and would like to tackle something on this roadmap, we'd be grateful!
 
 ## Getting Started
 
 **Step 1:** Install the Environment
 
-If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 3.1.2` and `PostgreSQL 14`.
+If you are running on Ubuntu 18.04 or Ubuntu 20.04, you can run these commands for install both `Ruby 3.1.2` and `CockrouchDB 22.1`.
 
 ```
 cd /tmp
@@ -35,7 +35,7 @@ If you get a permissions error, prefix the command with sudo.
 
 If you are not running on Ubuntu 18.04 or Ubuntu 20.04, the command above may not work.
 
-**free-memembership-sites** has been tested with Ruby 3.1.2 and PostgreSQL 14.
+**free-memembership-sites** has been tested with Ruby 3.1.2 and CockrouchDB 22.1.
 Other version may not be stable.
 
 **Step 2:** Clone the project.
@@ -50,20 +50,41 @@ git clone https://github.com/leandrosardi/free-membership-sites
 
 If you get a permissions error, prefix the command with sudo.
 
-**Step 3:** Install the App
+Rename the template configuration fileL
+
+```
+cd ~/code/free-membership-sites
+cp ./config.template ./config.rb
+```
+
+Edit `./config.rb` with any editor like `nano` or `vim`, and setup the connection parameters to the database.
+
+```ruby
+# DB ACCESS TO THE CENTRAL - KEEP IT SECRET
+# Remember to enable TCP/IP connections from 'SQL Server Configuration Manager'.
+# Remember to set all protocols listining the port 1433 in 'SQL Server Configuration Manager'.
+BlackStack::Core::DB::set_db_params({
+  :db_url => '%db_url%',
+  :db_port => '%db_port%',
+  :db_name => '%db_name%',
+  :db_user => '%db_user%',
+  :db_password => '%db_password%',
+})
+```
+
+**Step 3:** Install the Database Schema
 
 The command below performs many installation tasks:
 
 ```bash
 cd ~/free-membership-sites
-ruby ./install.rb
+ruby ./cli/install-db-schema.rb
 ```
 
 Such installation tasks are:
 1. installing required gems;
-2. creating the database schema;
-3. inserting seed records into the database; and
-4. setup configuration file.
+2. creating the database schema; and
+3. inserting seed records into the database.
 
 **Step 4:** Run the Web Server
 

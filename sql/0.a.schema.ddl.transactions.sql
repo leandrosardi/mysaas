@@ -1,13 +1,13 @@
 /*
  * CREATE DATABASE no puede ser ejecutado dentro de un bloque de transaccion
  *
-CREATE DATABASE kepler
+CREATE DATABASE blackstack
     WITH
-    OWNER = postgres
+    --OWNER = blackstack
     ENCODING = 'UTF8'
-    LC_COLLATE = 'Spanish_Argentina.1252'
-    LC_CTYPE = 'Spanish_Argentina.1252'
-    TABLESPACE = pg_default
+    --LC_COLLATE = 'Spanish_Argentina.1252'
+    --LC_CTYPE = 'Spanish_Argentina.1252'
+    --TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 */
 
@@ -42,7 +42,7 @@ COMMENT ON ROLE blackstack_prod IS 'These are the users who access the database 
 */
 
 -- create extension to handle guids
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- possible countries assigned to a user.
 CREATE TABLE IF NOT EXISTS country(

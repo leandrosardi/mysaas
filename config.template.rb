@@ -3,7 +3,7 @@
 
 # is this a development environment?
 # many features below will be enabled or disabled based on this flag
-SANDBOX = false # ambiente de desarrollo? => conecta a un SQLEXPRESS
+SANDBOX = true # ambiente de desarrollo? => conecta a un SQLEXPRESS
 
 # setting up breakpoints for backend processes.
 # enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
@@ -29,15 +29,15 @@ BlackStack::Core::API::set_api_url({
   # IMPORTANT: It is strongly recommended that you 
   # use the api_key of an account with prisma role, 
   # and assigned to the central division too.
-  :api_key => '%api_key%', 
+  :api_key => '4db9d88c-dee9-4b5a-8d36-134d38e9f763', 
   # IMPORTANT: It is stringly recommended that you 
   # write the URL of the central division here. 
-  :api_protocol => '%api_protocol%',
+  :api_protocol => 'http',
   # IMPORTANT: Even if you are running process in our LAN, 
   # don't write a LAN IP here, since bots are designed to
   # run anywhere worldwide.
-  :api_domain => '%api_domain%', 
-  :api_port => '%api_domain%',
+  :api_domain => '127.0.0.1', 
+  :api_port => '80',
 })
 
 # storage configuration of new accounts
@@ -66,21 +66,22 @@ BlackStack::Core::Storage::set_storage({
 # IMPORTANT NOTE: This value should have a format like FOO.COM. 
 # => Other formats can generate bugs in the piece of codes where 
 # => this constant is concatenated. 
-APP_DOMAIN = "connectionsphere.com" 
-APP_NAME = "ConnectionSphere"
+APP_DOMAIN = "127.0.0.1" 
+APP_NAME = "%app_name%"
 
 # Company Information
-COMPANY_NAME = "Expanded Venture"
-COMPANY_ADDRESS = "Basualdo 113 (1408), Buenos Aires City, Argentina"
-COMPANY_PHONE = "+54 11 4682 4132"
-COMPANY_URL = "https://ExpandedVenture.com"
+COMPANY_NAME = "%company_name%"
+COMPANY_ADDRESS = "%company_address%"
+COMPANY_PHONE = "%company_phone%"
+COMPANY_URL = "%company_url%"
 
 # app url
-CS_HOME_PAGE_PROTOCOL = "https"
-CS_HOME_PAGE_DOMAIN = "connectionsphere.com"
-CS_HOME_PAGE_PORT = "443"
+CS_HOME_PAGE_PROTOCOL = "http"
+CS_HOME_PAGE_DOMAIN = "127.0.0.1"
+CS_HOME_PAGE_PORT = "80"
 CS_HOME_WEBSITE = "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{CS_HOME_PAGE_PORT}"
 
+=begin
 # API access to PostMark
 POSTMARK_API_TOKEN = '%postmark_api_token%'
 
@@ -129,4 +130,4 @@ BlackStack::Extensions.set({
         :git_path => 'https://github.com/leandrosardi/invoicing-payments-processing', 
     }],
 });
-
+=end
