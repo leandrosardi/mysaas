@@ -255,7 +255,7 @@ phone = session['member.users.phone'].to_s
 			o.text("sending...")
 			
 			// envio el ajax
-			xhttp.open("GET", "<%=CS_HOME_PAGE_PROTOCOL%>://<%=PROCESS.division.home.app_url%>:<%=PROCESS.division.home.app_port%>/api1.2/division/send_confirmation_email.json?api_key=<%=BlackStack::Pampa::api_key.to_s%>&uid="+o.data("uid"), true);
+			xhttp.open("GET", "/api1.2/division/send_confirmation_email.json?api_key=<%=BlackStack::Pampa::api_key.to_s%>&uid="+o.data("uid"), true);
 			xhttp.send();
 		<%
 		end

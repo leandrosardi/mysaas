@@ -1,4 +1,3 @@
-<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
 <%
   cid = params[:cid]
   username = params[:username]
@@ -39,40 +38,6 @@
 	msg = 'Wrong email format. <b>Note:</b> You must write one, and only one, valid email address.'
     redirect_adapted_to_nginx "/settings/users?errdesc=#{CGI.escape(msg)}"  	
   end
-
-=begin
-  # IMPORTANTE: Algunos access point iteran los usuarios de un cliente, y envian una notificacion a cada uno.
-  # => Si la cantidad de usuarios es demasiado grande, el access point demorara demasiado generando errores
-  # => de http read timeout.
-  n = BlackStack::User.where(:id_client=>cid).count
-  if (n>=15)
-	# libero recursos
-	DB.disconnect
-	GC.start
-	msg = 'No more than 15 users are allowed. <b><a href="mailto:'+HELPDESK_EMAIL+'">Contact support</a></b> if you need to add more users to your account.'
-    redirect_adapted_to_nginx "/settings/users?err=#{CGI.escape(msg)}"  	
-  end
-=end
-  while (nTries < 5 && bSuccess == false)
-    begin
-      nTries = nTries + 1
-      url = "#{CS_HOME_WEBSITE}/api1.2/central/add_user.json"
-      res = BlackStack::Netting::call_post(url,
-        {'api_key' => BlackStack::Pampa::api_key,
-        'cid' => cid,
-        'username' => username,
-        'email' => email,
-		'ws_url' => PROCESS.division.home.ws_url,
-		'ws_port' => PROCESS.division.home.ws_port,}
-      )
-      parsed = JSON.parse(res.body)
-      bSuccess = true
-    rescue Errno::ECONNREFUSED => e
-      sError = "Errno::ECONNREFUSED:" + e.to_html
-    rescue => e2
-      sError = "Exception:" + e2.to_html
-    end
-  end # while
 
   if (bSuccess==false)
 	# libero recursos
