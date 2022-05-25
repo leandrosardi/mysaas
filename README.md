@@ -23,7 +23,10 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 **Step 1:** Install the Environment
 
-If you are running on Ubuntu 22.04, you can run this command to install `Ruby 3.1.2`.
+**free-memembership-sites** has been developed and tested on Ruby 3.1.2.
+
+The code below will install RVM and Ruby 3.1.2 in your computer.
+It has been tested on Ubuntu 20.04.
 
 ```
 cd /tmp
@@ -33,7 +36,7 @@ bash ./install-environment.sh
 
 If you get a permissions error, prefix the command with sudo.
 
-**free-memembership-sites** has been tested with Ubuntu 22.04 and Ruby 3.1.2.
+**free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
 **Step 2:** Clone the project.
