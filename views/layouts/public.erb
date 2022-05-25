@@ -11,26 +11,22 @@ end
 <!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
 
 <html>
-	<!-- Message and error alerts
-	================================================== -->
-	<%= ERB.new(File.read(File.expand_path("./views/templates/head.public.erb"))).result(binding) %>
+	<!-- Message and error alerts -->
+	<%= ERB.new(File.read(File.expand_path("views/templates/head.public.erb"))).result(binding) %>
 	<!-- / Message and error alerts -->
 
 	<body>
 
-		<!-- Page content
-			================================================== -->
+		<!-- Page content -->
 		<section class="row-fluid">
 
-			<!-- Content here
-				================================================== -->
+			<!-- Content here -->
 			<%=yield%>
 			<!-- / Content here -->			
 		</section>
 
-		<!-- Page footer
-		================================================== -->
-		<%= ERB.new(File.read(File.expand_path("./views/templates/footer.public.erb"))).result(binding) %>
+		<!-- Page footer -->
+		<%= ERB.new(File.read(File.expand_path("views/templates/footer.public.erb"))).result(binding) %>
 		<!-- / Page footer -->
 
 	</body>

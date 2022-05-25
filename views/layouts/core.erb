@@ -4,15 +4,13 @@
 <!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
 <!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
 
-<!-- Message and error alerts
-================================================== -->
-<%= ERB.new(File.read(File.expand_path("./views/templates/head.erb"))).result(binding) %>
+<!-- Message and error alerts -->
+<%= ERB.new(File.read(File.expand_path("views/templates/head.erb"))).result(binding) %>
 <!-- / Message and error alerts -->
 
 <body class=" default-layout wysihtml5-supported" style>
-	<!-- Main navigation bar
-		================================================== -->
-	<%= ERB.new(File.read(File.expand_path("./views/templates/header.erb"))).result(binding) %>
+	<!-- Main navigation bar -->
+	<%= ERB.new(File.read(File.expand_path("views/templates/header.erb"))).result(binding) %>
 	<!-- / Main navigation bar -->
 	
 	<div id="conversation-modal" class='popup' tabindex="-1" style="color: rgb(60,60,60); background-color: white; opacity: 1.0; z-index:999998; display:none; position:fixed; text-align: left; top: 40px; left: 0px; width: 100%; height:100%;">
@@ -254,23 +252,19 @@
 		</div>
 	</div>
 
-	<!-- Left navigation panel
-		================================================== -->
-	<%= ERB.new(File.read(File.expand_path("./views/templates/leftbar.erb"))).result(binding) %>
+	<!-- Left navigation panel -->
+	<%= ERB.new(File.read(File.expand_path("views/templates/leftbar.erb"))).result(binding) %>
 	<!-- / Left navigation panel -->
 	
-	<!-- Page content
-		================================================== -->
+	<!-- Page content -->
 	<section class="row-fluid">
 
-		<!-- Content here
-			================================================== -->
+		<!-- Content here -->
 		<%=yield%>
 		<!-- / Content here -->
 		
-		<!-- Page footer
-			================================================== -->
-		<%= ERB.new(File.read(File.expand_path("./views/templates/footer.erb"))).result(binding) %>
+		<!-- Page footer -->
+		<%= ERB.new(File.read(File.expand_path("views/templates/footer.erb"))).result(binding) %>
 		<!-- / Page footer -->
 	</section>
 
