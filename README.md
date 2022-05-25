@@ -39,6 +39,8 @@ If you get a permissions error, prefix the command with sudo.
 **free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
+If you are trying to install **free-membership-sites** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/free-membership-sites/issues/16#issuecomment-1137154114). 
+
 **Step 2:** Clone the project.
 
 Get the source code from GitHub.

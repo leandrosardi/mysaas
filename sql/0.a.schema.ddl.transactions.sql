@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS user_role (
 	create_time timestamp NOT NULL,
 	id_creator uuid NOT NULL REFERENCES "user" (id),
 	id_user uuid NOT NULL REFERENCES "user" (id),
-	id_role uuid NOT NULL REFERENCES "role" (id),
+	id_role uuid NOT NULL REFERENCES "role" (id)
 );
 
 -- register the login of each user
