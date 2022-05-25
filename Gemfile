@@ -6,7 +6,7 @@ ruby '~>3.1.2'
 # BlackStack framework gems
 gem 'blackstack-core', '~>1.2.1'
 #gem 'blackstack_deployer', '~>1.1.2'
-gem 'simple_cloud_logging', '~>1.1.28'
+gem 'simple_cloud_logging', '~>1.2.1'
 gem 'simple_command_line_parser', '~>1.1.2'
 # Other gems needed for running free-membership-sites
 gem 'pry', '~>0.14.1'
