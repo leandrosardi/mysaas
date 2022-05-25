@@ -1,4 +1,4 @@
-require 'blackstack_commons'
+require 'blackstack-core'
 require 'simple_command_line_parser'
 require 'simple_cloud_logging'
 require 'pg'
