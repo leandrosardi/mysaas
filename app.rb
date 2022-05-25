@@ -1,6 +1,7 @@
 require 'sinatra'
 require_relative './lib/core'
 require_relative './config'
+require_relative './version'
 
 DB = BlackStack::Core::DB::connect
 
