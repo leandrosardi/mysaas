@@ -1,13 +1,11 @@
 require 'sinatra'
-require_relative './lib/core'
-require_relative './config'
-require_relative './version'
-
+require 'lib/core.rb'
+require 'config'
+require 'version'
 DB = BlackStack::Core::DB::connect
-
-require_relative './lib/account'
-require_relative './lib/user'
-require_relative './lib/login'
+require 'lib/account'
+require 'lib/user'
+require 'lib/login'
 
 # 
 parser = BlackStack::SimpleCommandLineParser.new(

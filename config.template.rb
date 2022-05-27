@@ -11,9 +11,7 @@ BlackStack::Debugging::set({
   :allow_breakpoints => SANDBOX,
 })
 
-# DB ACCESS TO THE CENTRAL - KEEP IT SECRET
-# Remember to enable TCP/IP connections from 'SQL Server Configuration Manager'.
-# Remember to set all protocols listining the port 1433 in 'SQL Server Configuration Manager'.
+# DB ACCESS - KEEP IT SECRET
 BlackStack::Core::DB::set_db_params({
   :db_url => '%db_url%',
   :db_port => '%db_port%',
