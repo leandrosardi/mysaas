@@ -25,25 +25,12 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 **Step 1:** Install the Environment
 
-**free-memembership-sites** has been developed and tested on Ruby 3.1.2.
-
-The code below will install RVM and Ruby 3.1.2 in your computer.
-It has been tested on Ubuntu 20.04.
-
-```
-cd /tmp
-wget https://raw.githubusercontent.com/leandrosardi/free-membership-sites/main/cli/install-environment.sh
-bash ./install-environment.sh
-```
-
-If you get a permissions error, prefix the command with sudo.
-
 **free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
 If you are trying to install **free-membership-sites** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/free-membership-sites/issues/16#issuecomment-1137154114). 
 
-**Step 2:** Clone the project.
+**Step 1:** Clone the project.
 
 Get the source code from GitHub.
 
@@ -55,23 +42,43 @@ git clone https://github.com/leandrosardi/free-membership-sites
 
 If you get a permissions error, prefix the command with sudo.
 
-**Step 3:** Install the Database Schema
+**Step 2:** Install [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) and [simple_command_line_parser](https://github.com/leandrosardi/simple_command_line_parser) gems.
+
+Our [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) will help you to install the database engine, create the database schema, seed the database with initial data, install all required gems and run the webserver. All of them from one single line of code!
+
+```bash
+gem install blackstack-deployer
+```
+
+Our [simple_command_line_parser](https://github.com/leandrosardi/simple_command_line_parser) is just a library for define command line arguments.
+
+```bash
+gem install simple_command_line_parser
+```
+
+**Step 3:** Install the Envionment.
+
+As said above, our [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) will help you to install the database engine, create the database schema, seed the database with initial data, install all required gems and run the webserver. All of them from one single line of code!
 
 The command below performs many installation tasks:
 
 ```bash
 cd ~/code/free-membership-sites
-ruby ./install.rb
+ruby ./install.rb ssh_ip=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
 ```
 
 Such installation tasks are:
-1. install CockrouchDB 22.1 in your database; 
+1. install CockrouchDB 22.1 in your server; 
 2. install required Ruby gems;
 3. creating the database schema; 
 4. install seed records into the database; and
 5. run the webserver.
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
+
+The `install.rb` command has many paremeters, as listed below:
+
+_(pending)_
 
 ![login screen](./thumbnails/login.png)
 

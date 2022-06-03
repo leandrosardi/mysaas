@@ -1,3 +1,7 @@
+# ignore private key files
+*.ppk
+*.pem
+
 # picture files in temp folders
 /temp/*.jpg
 /temp/*.png
