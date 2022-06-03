@@ -1,6 +1,12 @@
 require 'sinatra'
 require 'lib/core.rb'
 
+puts
+puts
+puts "Go to http://127.0.0.1 to see this website running."
+puts
+puts
+
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
   :configuration => [{
