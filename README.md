@@ -1,3 +1,5 @@
+![logo](./logo.png)
+
 # free-membership-sites
 
 **IMPORTANT:**
@@ -111,5 +113,6 @@ Some features of **free-membership-sites** include:
 
 17. appendix 3: archiving inactive account.
 
+## Dependencies
 
-
+The logo has been taken from [here](https://www.shareicon.net/supermarket-shopping-store-commerce-and-shopping-online-store-shopping-cart-commerce-802984).

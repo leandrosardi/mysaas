@@ -15,10 +15,13 @@ module BlackStack
             @@db_user = nil
             @@db_password = nil
 
+            def self.connection_string
+                "postgres://#{@@db_user}:#{@@db_password}@#{@@db_url}:#{@@db_port}/#{@@db_name}"
+            end # connection_string
+
             # create database connection
             def self.connect
-                s = "postgres://#{@@db_user}:#{@@db_password}@#{@@db_url}:#{@@db_port}/#{@@db_name}"
-                Sequel.connect(s)
+                Sequel.connect(BlackStack::Core::DB.connection_string)
             end
 
             # database connection getters
