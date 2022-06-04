@@ -1,3 +1,17 @@
+=begin
+require 'net/ssh'
+
+ssh = Net::SSH.start('54.197.146.193', 'ubuntu', :keys => './plank.pem', :port => 22)
+
+s = "sudo cockroach sql --host 172.31.20.234:26257 --certs-dir certs -e \"CREATE USER blackstack WITH PASSWORD '%crdb_database_password%';\""
+print "#{s}... "
+puts ssh.exec!(s)
+
+ssh.close
+
+exit(0)
+=end
+
 # Example script of connecting to an AWS/EC2 instance using a key file; and running a command.
 
 require 'simple_command_line_parser'
@@ -5,11 +19,15 @@ require 'blackstack-deployer'
 
 require_relative './deployment-routines/upgrade-packages.rb'
 require_relative './deployment-routines/install-packages.rb'
+
 require_relative './deployment-routines/install-ruby.rb'
-require_relative './deployment-routines/install-free-membership-sites.rb'
+
 require_relative './deployment-routines/install-crdb-environment.rb'
 require_relative './deployment-routines/start-crdb-environment.rb'
 require_relative './deployment-routines/install-crdb-database.rb'
+
+require_relative './deployment-routines/install-free-membership-sites.rb'
+require_relative './deployment-routines/setup-free-membership-sites.rb'
 
 l = BlackStack::BaseLogger.new(nil)
 
@@ -49,6 +67,12 @@ parser = BlackStack::SimpleCommandLineParser.new(
 
   # ssh access
   }, {
+    :name=>'crdb_database_password', 
+    :mandatory=>false, 
+    :description=>'The password for the database user blackstack.', 
+    :type=>BlackStack::SimpleCommandLineParser::STRING,
+    :default => 'bsws2022',
+  }, {
     :name=>'crdb_database_port', 
     :mandatory=>false, 
     :description=>'Listening port for the CockroachDB database.', 
@@ -84,6 +108,7 @@ BlackStack::Deployer::add_nodes([{
  
     # cockroachdb access
     :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
+    :crdb_database_password => parser.value('crdb_database_password'),
     :crdb_database_port => parser.value('crdb_database_port'),
     :crdb_dashboard_port => parser.value('crdb_dashboard_port'),
 
@@ -102,17 +127,17 @@ BlackStack::Deployer::add_routine({
     { :command => :'install-packages', }, 
     # install ruby
     { :command => :'install-ruby', }, 
-    # pull the source code of free-membership-sites
-    { :command => :'install-free-membership-sites', },
-=end
     # install cockroachdb node
     { :command => :'install-crdb-environment', },
     # start cockroachdb node
     { :command => :'start-crdb-environment', },
     # create user, database, tables and roles; and insert some seed data
     { :command => :'install-crdb-database', },
-
-    # TODO: edit free-membership-sites/config.rb
+=end
+    # pull the source code of free-membership-sites
+    { :command => :'install-free-membership-sites', },
+    # edit free-membership-sites/config.rb
+    { :command => :'setup-free-membership-sites', },
 
     # TODO: start free-membership-sites webserver
     # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon

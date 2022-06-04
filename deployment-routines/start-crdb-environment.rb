@@ -18,11 +18,14 @@ cockroach cert create-client root --certs-dir=%crdb_database_certs_path%/certs -
 #        :nomatches => [{ :nomatch => /.+/, :error_description => 'no output is expected' }], # TODO: no output is expected.
     }, {
         :sudo=> true,
-        :command => 'cockroach start --background --max-sql-memory=.25 --cache=.25 --advertise-addr=%net_remote_ip%:%crdb_database_port% --certs-dir=%crdb_database_certs_path%/certs --store=%name% --listen-addr=%eth0_ip%:%crdb_database_port% --http-addr=%eth0_ip%:%crdb_dashboard_port% --join=%net_remote_ip%:%crdb_database_port%',
+        :command => '
+          cockroach start --background --max-sql-memory=.25 --cache=.25 --advertise-addr=%net_remote_ip%:%crdb_database_port% --certs-dir=%crdb_database_certs_path%/certs --store=%name% --listen-addr=%eth0_ip%:%crdb_database_port% --http-addr=%eth0_ip%:%crdb_dashboard_port% --join=%net_remote_ip%:%crdb_database_port% > /dev/null 2>&1;
+          cockroach init --host=%eth0_ip%:%crdb_database_port% --certs-dir=certs;
+        ',
         :matches => [/Cluster successfully initialized/, /cluster has already been initialized/],
-        :nomatches => [
-          { :nomatch => /Failed running "start"/, :error_description => "Failed to start node" },
-        ] 
+        #:nomatches => [
+        #  { :nomatch => /Failed running "start"/, :error_description => "Failed to start node" },
+        #] 
     },
   ],
 });
