@@ -6,7 +6,10 @@ BlackStack::Deployer::add_routine({
         :command => "cockroach sql --host %eth0_ip%:%crdb_database_port% --certs-dir certs -e \"CREATE USER blackstack WITH PASSWORD %crdb_database_password%;\"",
         :matches => [/CREATE ROLE/, /already exists/],
     }, {
-        :command => "cockroach sql --host %eth0_ip%:%crdb_database_port% --certs-dir certs -e \"CREATE DATABASE blackstack WITH CONNECTION LIMIT = -1;\"",
+        :command => "cockroach sql --host %eth0_ip%:%crdb_database_port% --certs-dir certs -e \"CREATE DATABASE blackstack 
+WITH 
+ENCODING = UTF8 
+CONNECTION LIMIT = -1;\"",
         :matches => [/CREATE DATABASE/, /already exists/],
     }, {
         :command => "cockroach sql --host %eth0_ip%:%crdb_database_port% --certs-dir certs -e \"GRANT ALL ON DATABASE blackstack TO blackstack;\"",

@@ -1,18 +1,4 @@
-=begin
-require 'net/ssh'
-
-ssh = Net::SSH.start('54.197.146.193', 'ubuntu', :keys => './plank.pem', :port => 22)
-
-s = "sudo cockroach sql --host 172.31.20.234:26257 --certs-dir certs -e \"CREATE USER blackstack WITH PASSWORD '%crdb_database_password%';\""
-print "#{s}... "
-puts ssh.exec!(s)
-
-ssh.close
-
-exit(0)
-=end
-
-# Example script of connecting to an AWS/EC2 instance using a key file; and running a command.
+# encoding: utf-8
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
@@ -172,8 +158,11 @@ if parser.value('db')
 
   l.logs 'Running database updates... '
   BlackStack::Deployer::DB::set_folder ('./sql');
-  BlackStack::Deployer::DB::set_checkpoint('0')
+  BlackStack::Deployer::DB::set_checkpoint('_')
   BlackStack::Deployer::DB::deploy();
   l.done
 
+  l.logs 'Updatling checkpoint... '
+  File.new('./blackstack-deployer.lock', "w").write(BlackStack::Deployer::DB::checkpoint)
+  l.done
 end # if parser.value('db')
