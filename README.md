@@ -64,7 +64,7 @@ The command below performs many installation tasks:
 
 ```bash
 cd ~/code/free-membership-sites
-ruby ./install.rb ssh_ip=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
+ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
 ```
 
 Such installation tasks are:
