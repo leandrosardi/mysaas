@@ -36,6 +36,14 @@ BlackStack::Deployer::add_routine({
             { :nomatch => /not found/i, :error_description => 'An Error Occurred' },
         ],
         :sudo => false,
-    },
+    }, {
+        # 
+        :command => 'export RUBYLIB=~/code/free-membership-sites',
+        :nomatches => [ 
+            { :nomatch => /.+/i, :error_description => 'No output expected' },
+        ],
+        :sudo => false,
+
+    }
   ],
 });
