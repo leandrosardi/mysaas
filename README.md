@@ -1,6 +1,6 @@
 ![logo](./logo.png)
 
-# MySaaS
+# MySaaS - Open Source SaaS Platform - Extensible and Scalable.  
 
 **IMPORTANT:**
 This project is under construction.
