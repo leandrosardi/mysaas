@@ -24,6 +24,7 @@ l = BlackStack::BaseLogger.new(nil)
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
   :configuration => [{
+
   # ssh access
     :name=>'ssh_hostname', 
     :mandatory=>false, 
@@ -54,7 +55,7 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => '-',
 
-  # ssh access
+  # database installation
   }, {
     :name=>'crdb_database_password', 
     :mandatory=>false, 
@@ -73,6 +74,22 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Listening port for the CockroachDB dashboard.', 
     :type=>BlackStack::SimpleCommandLineParser::INT,
     :default => 8080,
+
+  # installation options
+  }, {
+    :name=>'web', 
+    :mandatory=>false, 
+    :description=>'Enable or disable the installation and running of the web server.', 
+    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :default => true,
+  }, {
+    :name=>'db', 
+    :mandatory=>false, 
+    :description=>'Enable or disable the installation and running of the cockroachdb server, with the creation of the schema and seed of the tables.', 
+    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :default => true,
+
+
   }]
 )
 
@@ -108,33 +125,46 @@ BlackStack::Deployer::add_nodes([{
     :deployment_routine => 'install-free-membership-sites-dev-environment',
 }])
 
-# setup deploying rutine
-BlackStack::Deployer::add_routine({
-  :name => 'install-free-membership-sites-dev-environment',
-  :commands => [
+commands = [
     # update and upgrade apt
     { :command => :'upgrade-packages', }, 
     # install some required packages
     { :command => :'install-packages', }, 
+]
+
+if parser.value('web')
+  commands += [
     # install ruby
     { :command => :'install-ruby', }, 
-    # install cockroachdb node
-    { :command => :'install-crdb-environment', },
-    # start cockroachdb node
-    { :command => :'start-crdb-environment', },
-    # create user, database, tables and roles; and insert some seed data
-    { :command => :'install-crdb-database', },
     # pull the source code of free-membership-sites
     { :command => :'install-free-membership-sites', },
     # edit free-membership-sites/config.rb
     { :command => :'setup-free-membership-sites', },
     # TODO: start free-membership-sites webserver
     # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
+  ]
+end # parser.value('web')
 
-  ],
+if parser.value('db')
+  commands += [
+    # install cockroachdb node
+    { :command => :'install-crdb-environment', },
+    # start cockroachdb node
+    { :command => :'start-crdb-environment', },
+    # create user, database, tables and roles; and insert some seed data
+    { :command => :'install-crdb-database', },
+  ]
+end # parser.value('db')
+
+# setup deploying rutine
+BlackStack::Deployer::add_routine({
+  :name => 'install-free-membership-sites-dev-environment',
+  :commands => commands,
 })
 
 # deploy
 BlackStack::Deployer::run_routine('my-dev-environment', 'install-free-membership-sites-dev-environment')
 
-# TODO: install database updates
+if parser.value('db')
+  # TODO: install database updates
+end # if parser.value('db')
