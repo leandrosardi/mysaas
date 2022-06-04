@@ -126,8 +126,6 @@ if parser.value('web')
     { :command => :'install-mysaas', },
     # edit mysaas/config.rb
     { :command => :'setup-mysaas', },
-    # TODO: start mysaas webserver
-    # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
   ]
 end # parser.value('web')
 
@@ -165,3 +163,21 @@ if parser.value('db')
   BlackStack::Deployer::DB::deploy(true)
   l.done
 end # if parser.value('db')
+
+# TODO: start mysaas webserver
+# Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
+=begin
+if parser.value('web')
+  # setup deploying rutine
+  BlackStack::Deployer::add_routine({
+    :name => 'install-mysaas-dev-environment',
+    :commands => :'start-mysaas',
+  })
+end # if parser.value('web')
+
+source /home/ubuntu/.rvm/scripts/rvm; rvm install 3.1.2; rvm --default use 3.1.2;
+cd ~/code/mysaas; 
+pkill ruby;
+export RUBYLIB=/home/ubuntu/code/mysaas
+nohup ruby app.rb port=80 &
+=end
