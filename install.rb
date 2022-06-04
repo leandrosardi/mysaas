@@ -123,7 +123,6 @@ BlackStack::Deployer::add_nodes([{
 BlackStack::Deployer::add_routine({
   :name => 'install-free-membership-sites-dev-environment',
   :commands => [
-=begin
     # update and upgrade apt
     { :command => :'upgrade-packages', }, 
     # install some required packages
@@ -136,12 +135,10 @@ BlackStack::Deployer::add_routine({
     { :command => :'start-crdb-environment', },
     # create user, database, tables and roles; and insert some seed data
     { :command => :'install-crdb-database', },
-=end
     # pull the source code of free-membership-sites
     { :command => :'install-free-membership-sites', },
     # edit free-membership-sites/config.rb
     { :command => :'setup-free-membership-sites', },
-
     # TODO: start free-membership-sites webserver
     # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
 
