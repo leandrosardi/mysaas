@@ -166,5 +166,14 @@ BlackStack::Deployer::add_routine({
 BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
 
 if parser.value('db')
-  # TODO: install database updates
+  l.logs 'Connecting the database... '
+  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
+  l.done
+
+  l.logs 'Running database updates... '
+  BlackStack::Deployer::DB::set_folder ('./sql');
+  BlackStack::Deployer::DB::set_checkpoint('0')
+  BlackStack::Deployer::DB::deploy();
+  l.done
+
 end # if parser.value('db')

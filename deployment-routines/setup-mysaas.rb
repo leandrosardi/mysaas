@@ -15,7 +15,8 @@ BlackStack::Deployer::add_routine({
             sed -i \"s/@db_user@/blackstack/g\" ./config.rb;
             sed -i \"s/@db_password@/%crdb_database_password%/g\" ./config.rb;            
         ",
-        :nomatches => [ { :nomatch => /.+/, :error_description => 'No output expected.' } ],
+        :matches => [ /^$/, /mv: cannot stat '\.\/config.rb': No such file or directory/ ],
+        #:nomatches => [ { :nomatch => /.+/, :error_description => 'No output expected.' } ],
         :sudo => false,
     },
   ],

@@ -9,3 +9,4 @@ require_relative './install-crdb-database.rb'
 
 require_relative './install-mysaas.rb'
 require_relative './setup-mysaas.rb'
+require_relative './start-mysaas.rb'
