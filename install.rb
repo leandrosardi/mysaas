@@ -16,18 +16,7 @@ exit(0)
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
-
-require_relative './deployment-routines/upgrade-packages.rb'
-require_relative './deployment-routines/install-packages.rb'
-
-require_relative './deployment-routines/install-ruby.rb'
-
-require_relative './deployment-routines/install-crdb-environment.rb'
-require_relative './deployment-routines/start-crdb-environment.rb'
-require_relative './deployment-routines/install-crdb-database.rb'
-
-require_relative './deployment-routines/install-free-membership-sites.rb'
-require_relative './deployment-routines/setup-free-membership-sites.rb'
+require 'deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
 
@@ -147,3 +136,5 @@ BlackStack::Deployer::add_routine({
 
 # deploy
 BlackStack::Deployer::run_routine('my-dev-environment', 'install-free-membership-sites-dev-environment')
+
+# TODO: install database updates
