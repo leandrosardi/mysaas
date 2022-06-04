@@ -5,16 +5,21 @@ BlackStack::Deployer::add_routine({
     { 
         # back up old configuration file
         # setup new configuration file
-        :command => '
+        :command => "
             cd ~/code/free-membership-sites; 
             mv ./config.rb ./config.%timestamp%.rb;
             cp ./config.template.rb ./config.rb;
-            sed -i "s/$db_url$/%net_remote_ip%/g" ./config.rb;
-            sed -i "s/$db_port$/%crdb_database_port%/g" ./config.rb;
-            sed -i "s/$db_name$/blackstack/g" ./config.rb;
-            sed -i "s/$db_user$/blackstack/g" ./config.rb;
-            sed -i "s/$db_password$/%crdb_database_password%/g" ./config.rb;
-        ',
+            sed -i \"s/@db_url@/%net_remote_ip%/g\" ./config.rb;
+        ",
+        :nomatches => [ { :nomatch => /.+/, :error_description => 'No output expected.' } ],
+        :sudo => false,
     },
   ],
 });
+
+=begin
+sed -i \"s/\\\\$db_port\\\\$/%crdb_database_port%/g\" ./config.rb;
+sed -i \"s/\\\\$db_name\\\\$/blackstack/g\" ./config.rb;
+sed -i \"s/\\\\$db_user\\\\$/blackstack/g\" ./config.rb;
+sed -i \"s/\\\\$db_password\\\\$/%crdb_database_password%/g\" ./config.rb;
+=end

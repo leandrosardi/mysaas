@@ -13,11 +13,11 @@ BlackStack::Debugging::set({
 
 # DB ACCESS - KEEP IT SECRET
 BlackStack::Core::DB::set_db_params({
-  :db_url => '$db_url$',
-  :db_port => '$db_port$',
-  :db_name => '$db_name$',
-  :db_user => '$db_user$',
-  :db_password => '$db_password$',
+  :db_url => '@db_url@',
+  :db_port => '@db_port@',
+  :db_name => '@db_name@',
+  :db_user => '@db_user@',
+  :db_password => '@db_password@',
 })
 
 # Setup connection to the API, in order get bots requesting and pushing data to the database.
@@ -65,13 +65,13 @@ BlackStack::Core::Storage::set_storage({
 # => Other formats can generate bugs in the piece of codes where 
 # => this constant is concatenated. 
 APP_DOMAIN = "127.0.0.1" 
-APP_NAME = "$app_name$"
+APP_NAME = "@app_name@"
 
 # Company Information
-COMPANY_NAME = "$company_name$"
-COMPANY_ADDRESS = "$company_address$"
-COMPANY_PHONE = "$company_phone$"
-COMPANY_URL = "$company_url$"
+COMPANY_NAME = "@company_name@"
+COMPANY_ADDRESS = "@company_address@"
+COMPANY_PHONE = "@company_phone@"
+COMPANY_URL = "@company_url@"
 
 # app url
 CS_HOME_PAGE_PROTOCOL = "http"
@@ -81,20 +81,20 @@ CS_HOME_WEBSITE = "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{CS_HOME_P
 
 =begin
 # API access to PostMark
-POSTMARK_API_TOKEN = '$postmark_api_token$'
+POSTMARK_API_TOKEN = '@postmark_api_token@'
 
 # parameters for email notifications
 NOTIFICATIONS = {
   # smtp request sender information
-  :sender_email => '$sender_email$',
-  :from_email => '$from_email$', # reply-to field in the SMTP request
-  :from_name => '$from_name$',
+  :sender_email => '@sender_email@',
+  :from_email => '@from_email@', # reply-to field in the SMTP request
+  :from_name => '@from_name@',
   
   # smtp request connection information
-  :smtp_url => '$smtp_url$',
-  :smtp_port => '$smtp_port$',
-  :smtp_user => '$smtp_user$',
-  :smtp_password => '$smtp_password$',
+  :smtp_url => '@smtp_url@',
+  :smtp_port => '@smtp_port@',
+  :smtp_user => '@smtp_user@',
+  :smtp_password => '@smtp_password@',
 
   # email body configuration
   :logo_url => 'https://connectionsphere.com/core/images/logo/logo-32-01.png',

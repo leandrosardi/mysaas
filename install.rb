@@ -106,6 +106,9 @@ BlackStack::Deployer::add_nodes([{
     :ssh_password => ssh_password,
     :ssh_private_key_file => ssh_private_key_file,
  
+    # git repository
+    :git_branch => 'main',
+
     # cockroachdb access
     :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
     :crdb_database_password => parser.value('crdb_database_password'),

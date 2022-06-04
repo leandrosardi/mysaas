@@ -19,6 +19,15 @@ BlackStack::Deployer::add_routine({
         ],
         :sudo => false,
     }, { 
+        :command => 'cd ~/code/free-membership-sites; git fetch --all',
+        :matches => [/\-> origin\//, /^Fetching origin$/],
+        :nomatches => [ { :nomatch => /error/i, :error_description => 'An error ocurred.' } ],
+        :sudo => false,
+    }, { 
+        :command => 'cd ~/code/free-membership-sites; git reset --hard origin/%git_branch%',
+        :matches => /HEAD is now at/,
+        :sudo => false,
+    }, { 
         :command => 'source /home/%ssh_username%/.rvm/scripts/rvm; cd ~/code/free-membership-sites; rvm install 3.1.2; rvm --default use 3.1.2; bundler update',
         :matches => [ 
             /Bundle updated\!/i,
