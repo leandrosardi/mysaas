@@ -12,7 +12,7 @@ BlackStack::Deployer::add_routine({
         # setup new configuration file
         :command => "
             cd ~/code/mysaas; 
-            pkill ruby;
+            pkill puma;
             source /home/%ssh_username%/.rvm/scripts/rvm; rvm install 3.1.2; rvm --default use 3.1.2;export RUBYLIB=~/code/mysaas;
             nohup ruby app.rb &
         ",
