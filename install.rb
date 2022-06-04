@@ -149,7 +149,7 @@ BlackStack::Deployer::add_routine({
 })
 
 # deploy
-#BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
+BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
 
 if parser.value('db')
   l.logs 'Connecting the database... '
