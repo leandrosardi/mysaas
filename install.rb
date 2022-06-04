@@ -149,20 +149,19 @@ BlackStack::Deployer::add_routine({
 })
 
 # deploy
-BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
+#BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
 
 if parser.value('db')
   l.logs 'Connecting the database... '
   BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
   l.done
 
-  l.logs 'Running database updates... '
-  BlackStack::Deployer::DB::set_folder ('./sql');
-  BlackStack::Deployer::DB::set_checkpoint('_')
-  BlackStack::Deployer::DB::deploy();
-  l.done
+  l.logs 'Loading checkpoint... '
+  BlackStack::Deployer::DB::load_checkpoint
+  l.logf "done (#{BlackStack::Deployer::DB::checkpoint.to_s})"
 
-  l.logs 'Updatling checkpoint... '
-  File.new('./blackstack-deployer.lock', "w").write(BlackStack::Deployer::DB::checkpoint)
+  l.logs 'Running database updates... '
+  BlackStack::Deployer::DB::set_folder ('./sql')
+  BlackStack::Deployer::DB::deploy(true)
   l.done
 end # if parser.value('db')
