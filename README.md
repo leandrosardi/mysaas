@@ -1,17 +1,17 @@
 ![logo](./logo.png)
 
-# free-membership-sites
+# My SaaS
 
 **IMPORTANT:**
 This project is under construction.
 The first version will be released on 1-Jun-2022.
 Check out [our roadmap here](https://github.com/users/leandrosardi/projects/5).
 
-**free-membership-sites** is an open-source, extensible and scalable platform for develop your own SaaS, e-Commerce, Education Platform, Social Network, Forum or any kind of memberships based product.
+**My SaaS** is an open-source, extensible and scalable platform for develop your own SaaS, e-Commerce, Education Platform, Social Network, Forum or any kind of memberships based product.
 
 ![dashboard example](./thumbnails/dashboard.png)
 
-Use **free-membership-sites** to develop any kind of:
+Use **My SaaS** to develop any kind of:
 - softwares as a service;
 - educational site;
 - e-commerce store;
@@ -28,7 +28,7 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 **free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
-If you are trying to install **free-membership-sites** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/free-membership-sites/issues/16#issuecomment-1137154114). 
+If you are trying to install **My SaaS** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/My SaaS/issues/16#issuecomment-1137154114). 
 
 **Step 1:** Clone the project.
 
@@ -37,7 +37,7 @@ Get the source code from GitHub.
 ```bash
 mkdir ~/code
 cd ~/code
-git clone https://github.com/leandrosardi/free-membership-sites
+git clone https://github.com/leandrosardi/My SaaS
 ```
 
 If you get a permissions error, prefix the command with sudo.
@@ -63,7 +63,7 @@ As said above, our [blackstack-deployer](https://github.com/leandrosardi/blackst
 The command below performs many installation tasks:
 
 ```bash
-cd ~/code/free-membership-sites
+cd ~/code/My SaaS
 ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
 ```
 
@@ -84,7 +84,7 @@ _(pending)_
 
 ## Features & Documentation
 
-Some features of **free-membership-sites** include:
+Some features of **My SaaS** include:
 
 1. [account management](./docu/1.accounts-management.md);
 

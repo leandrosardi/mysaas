@@ -28,13 +28,13 @@ parser = BlackStack::SimpleCommandLineParser.new(
   # ssh access
     :name=>'ssh_hostname', 
     :mandatory=>false, 
-    :description=>'SSH IP address of the node where you want to install free-membership-sites.', 
+    :description=>'SSH IP address of the node where you want to install mysaas.', 
     :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => '127.0.0.1',
   }, {
     :name=>'ssh_port', 
     :mandatory=>false, 
-    :description=>'SSH port of the node where you want to install free-membership-sites.', 
+    :description=>'SSH port of the node where you want to install mysaas.', 
     :type=>BlackStack::SimpleCommandLineParser::INT,
     :default=>22,
   }, {
@@ -122,7 +122,7 @@ BlackStack::Deployer::add_nodes([{
     :crdb_dashboard_port => parser.value('crdb_dashboard_port'),
 
     # default deployment routine for this node
-    :deployment_routine => 'install-free-membership-sites-dev-environment',
+    :deployment_routine => 'install-mysaas-dev-environment',
 }])
 
 commands = [
@@ -136,11 +136,11 @@ if parser.value('web')
   commands += [
     # install ruby
     { :command => :'install-ruby', }, 
-    # pull the source code of free-membership-sites
-    { :command => :'install-free-membership-sites', },
-    # edit free-membership-sites/config.rb
-    { :command => :'setup-free-membership-sites', },
-    # TODO: start free-membership-sites webserver
+    # pull the source code of mysaas
+    { :command => :'install-mysaas', },
+    # edit mysaas/config.rb
+    { :command => :'setup-mysaas', },
+    # TODO: start mysaas webserver
     # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
   ]
 end # parser.value('web')
@@ -158,12 +158,12 @@ end # parser.value('db')
 
 # setup deploying rutine
 BlackStack::Deployer::add_routine({
-  :name => 'install-free-membership-sites-dev-environment',
+  :name => 'install-mysaas-dev-environment',
   :commands => commands,
 })
 
 # deploy
-BlackStack::Deployer::run_routine('my-dev-environment', 'install-free-membership-sites-dev-environment')
+BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
 
 if parser.value('db')
   # TODO: install database updates

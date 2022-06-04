@@ -1,12 +1,12 @@
 # setup deploying rutines
 BlackStack::Deployer::add_routine({
-  :name => 'setup-free-membership-sites',
+  :name => 'setup-mysaas',
   :commands => [
     { 
         # back up old configuration file
         # setup new configuration file
         :command => "
-            cd ~/code/free-membership-sites; 
+            cd ~/code/mysaas; 
             mv ./config.rb ./config.%timestamp%.rb;
             cp ./config.template.rb ./config.rb;
             sed -i \"s/@db_url@/%net_remote_ip%/g\" ./config.rb;

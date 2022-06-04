@@ -12,7 +12,7 @@ logger.log 'This script will
 4. start the node;
 5. initialize the node.
 
-For more information, refer to: https://github.com/leandrosardi/free-membership-sites/issues/3#issuecomment-1134714952'
+For more information, refer to: https://github.com/leandrosardi/mysaas/issues/3#issuecomment-1134714952'
 
 logger.logs 'Connect database...'
 DB = BlackStack::Core::DB::connect
