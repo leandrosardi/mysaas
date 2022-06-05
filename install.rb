@@ -40,9 +40,8 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Private key file to login the node via remote SSH. Either ssh_password or ssh_private_key_file must be specified.', 
     :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => '-',
-
-  # database installation
   }, {
+  # database installation
     :name=>'crdb_database_password', 
     :mandatory=>false, 
     :description=>'The password for the database user blackstack.', 
@@ -60,9 +59,15 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Listening port for the CockroachDB dashboard.', 
     :type=>BlackStack::SimpleCommandLineParser::INT,
     :default => 8080,
-
-  # installation options
   }, {
+  # web server installation
+    :name=>'web_port', 
+    :mandatory=>false, 
+    :description=>'Listening port for the Sinatra webserver.', 
+    :type=>BlackStack::SimpleCommandLineParser::INT,
+    :default => 80,
+  }, {
+  # installation options
     :name=>'web', 
     :mandatory=>false, 
     :description=>'Enable or disable the installation and running of the web server.', 
@@ -91,21 +96,24 @@ BlackStack::Deployer::add_nodes([{
     # use this command to connect from terminal: ssh -i "plank.pem" ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
     :name => 'my-dev-environment',
  
-    # ssh access
+    # ssh
     :net_remote_ip => parser.value('ssh_hostname'),  
     :ssh_username => parser.value('ssh_username'),
     :ssh_port => parser.value('ssh_port'),
     :ssh_password => ssh_password,
     :ssh_private_key_file => ssh_private_key_file,
  
-    # git repository
+    # git
     :git_branch => 'main',
 
-    # cockroachdb access
+    # cockroachdb
     :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
     :crdb_database_password => parser.value('crdb_database_password'),
     :crdb_database_port => parser.value('crdb_database_port'),
     :crdb_dashboard_port => parser.value('crdb_dashboard_port'),
+
+    # sinatra
+    :web_port => parser.value('web_port'),
 
     # default deployment routine for this node
     :deployment_routine => 'install-mysaas-dev-environment',
@@ -166,18 +174,10 @@ end # if parser.value('db')
 
 # TODO: start mysaas webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
-=begin
-if parser.value('web')
-  # setup deploying rutine
-  BlackStack::Deployer::add_routine({
-    :name => 'install-mysaas-dev-environment',
-    :commands => :'start-mysaas',
-  })
-end # if parser.value('web')
 
-source /home/ubuntu/.rvm/scripts/rvm; rvm install 3.1.2; rvm --default use 3.1.2;
-cd ~/code/mysaas; 
-pkill ruby;
-export RUBYLIB=/home/ubuntu/code/mysaas
-nohup ruby app.rb port=80 &
-=end
+if parser.value('web')
+  # deploy
+  l.logs 'Starting web server... '
+  BlackStack::Deployer::run_routine('my-dev-environment', 'start-mysaas')
+  l.done
+end # if parser.value('web')
