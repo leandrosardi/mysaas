@@ -16,7 +16,7 @@ msg = params[:msg]
 	if err!=nil
 	%>
 	<div class="alert alert-error">
-		<a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=getErrorDescription(err.to_i).encode_html%>
+	<%=err.to_s.encode_html%>
 	</div>
 	<%
 	end # err

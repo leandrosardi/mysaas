@@ -2,7 +2,7 @@
 
 <%
 login = @login
-user = BlackStack::User.where(:id=>login.id_user).first
+user = BlackStack::Core::User.where(:id=>login.id_user).first
 c = BlackStack::Client.where(:id=>user.id_client).first
 
 username = session['member.users.username'].to_s 
@@ -64,7 +64,7 @@ phone = session['member.users.phone'].to_s
 
 					<tbody>
 						<%
-						users = BlackStack::User.where(:id_client=>c.id).filter('delete_time is null').order(:name).all
+						users = BlackStack::Core::User.where(:id_client=>c.id).filter('delete_time is null').order(:name).all
 						users.each { |u|
 						%>
 						<tr>

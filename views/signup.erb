@@ -5,7 +5,7 @@ email = session['email'].to_s
 phone = session['phone'].to_s
 
 err = params[:err]
-errmsg = params[:errmsg]
+err = params[:err]
 %>
 	
 <div style='position:absolute;left:50px;top:25px;height:90px;'>
@@ -52,25 +52,15 @@ errmsg = params[:errmsg]
 	<div class='span1'></div>
 
 	<div id='signup-container' class='span5 signin-page'>
-		<span align='right'><h3 class='landing'>Sign up</b></h3></span>
+		<span align='right'><h3 class='landing'>Sign up</b></h3></span>	
 		<%
 		if err!=nil
 		%>
 		<div class="alert alert-error">
-			<%=getErrorDescription(err.to_i).encode_html%>
+		<%=err.to_s.encode_html%>
 		</div>
 		<%
 		end # err
-		%>
-			
-		<%
-		if errmsg!=nil
-		%>
-		<div class="alert alert-error">
-		<%=errmsg.to_s.encode_html%>
-		</div>
-		<%
-		end # errmsg
 		%>
 			
 		<form action="/signup" method="post" style='background-color: white;'>

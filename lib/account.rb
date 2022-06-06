@@ -5,10 +5,10 @@ module BlackStack
   module Core
     class Account < Sequel::Model(:account)
         # attributes
-        one_to_many :users, :class=>:'BlackStack::User', :key=>:id_client
-        many_to_one :timezone, :class=>:'BlackStack::Timezone', :key=>:id_timezone
+        one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_client
+        many_to_one :timezone, :class=>:'BlackStack::Core::Timezone', :key=>:id_timezone
         many_to_one :billingCountry, :class=>:'BlackStack::LnCountry', :key=>:billing_id_lncountry
-        many_to_one :user_to_contect, :class=>'BlackStack::User', :key=>:id_user_to_contact
+        many_to_one :user_to_contect, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
 
         # signup a new account with its owner user
         def self.signup(company_name, user_name, user_email, user_password)

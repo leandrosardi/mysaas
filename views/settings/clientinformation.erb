@@ -6,8 +6,8 @@
 		session['redirect_after_clientinformation_update'] = redirect
 	end
 
-	login = BlackStack::Login.where(:id=>session['login.id']).first
-	user = BlackStack::User.where(:id=>login.id_user).first
+	login = BlackStack::Core::Login.where(:id=>session['login.id']).first
+	user = BlackStack::Core::User.where(:id=>login.id_user).first
 	c = BlackStack::Client.where(:id=>user.id_client).first
 
 	checked = ''
@@ -72,7 +72,7 @@
 	# mensajes
 	msg = params[:msg]
 	err = params[:err]
-	errmsg = params[:errmsg]
+	err = params[:err]
 %>
 
 	<style>
@@ -144,7 +144,7 @@
 							<div class="controls">
 								<select class="input-xlarge" name="id_timezone" id="id_timezone">
 									<%
-									BlackStack::Timezone.order(:offset, :large_description).all { |t|
+									BlackStack::Core::Timezone.order(:offset, :large_description).all { |t|
 										sSelected = ""
 										if (t.id == sIdTimeZone)
 											sSelected = "selected"
@@ -310,7 +310,7 @@
 								<div class="controls">
 									<select name="sender_contact_user" id="sender_contact_user" class="input-xlarge" style="margin-left: -60px !important; display: block;" required <%= disabled %>>
 										<option value="">Select a email</option>
-										<% BlackStack::User.where(:id_client => c.id).order(:email).all do |user|  %>
+										<% BlackStack::Core::User.where(:id_client => c.id).order(:email).all do |user|  %>
 											<option value="<%=user.id.to_guid%>"><%=user.email.encode_html%></option>
 										<% end %>
 									</select>

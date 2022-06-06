@@ -12,7 +12,7 @@ BlackStack::Debugging::set({
 })
 
 # DB ACCESS - KEEP IT SECRET
-BlackStack::Core::DB::set_db_params({
+BlackStack::Core::CRDB::set_db_params({
   :db_url => '@db_url@',
   :db_port => '@db_port@',
   :db_name => '@db_name@',

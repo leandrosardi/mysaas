@@ -2,10 +2,11 @@ require 'sinatra'
 require 'lib/core.rb'
 require 'config'
 require 'version'
-DB = BlackStack::Core::DB::connect
+DB = BlackStack::Core::CRDB::connect
 require 'lib/account'
 require 'lib/user'
 require 'lib/login'
+require 'lib/timezone'
 
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
@@ -104,7 +105,7 @@ set(:auth1) do |*roles|
     elsif unavailable?
       redirect "#{CS_HOME_WEBSITE}/unavailable"      
     else
-      @login = BlackStack::Login.where(:id=>session['login.id']).first
+      @login = BlackStack::Core::Login.where(:id=>session['login.id']).first
     end
   end
 end
@@ -135,7 +136,7 @@ set(:api_key) do |*roles|
     
     validation_api_key = params['api_key'].to_guid
     
-    validation_client = BlackStack::Account.where(:api_key => validation_api_key).first
+    validation_client = BlackStack::Core::Account.where(:api_key => validation_api_key).first
     if validation_client.nil?
       # libero recursos
       DB.disconnect 
@@ -155,9 +156,9 @@ end
 # If this account is accessde by an operator, return the [user] object of such an operator.
 # Otherwise, return the logged-in [user].
 def real_user()
-  login = BlackStack::Login.where(:id=>session['login.id']).first
+  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
   uid = !session['login.id_prisma_user'].nil? ? session['login.id_prisma_user'] : login.user.id
-  BlackStack::User.where(:id=>uid).first
+  BlackStack::Core::User.where(:id=>uid).first
 end # def real_user
 
 # Store/Retrieve a shadow parameter of a user.
@@ -168,7 +169,7 @@ def shadow(name, params, x, verbose=false)
   if id_prisma_user.to_s.size == 0
     return @login.user.shadow(name, params, x, verbose)
   else
-    u = BlackStack::User.where(:id => id_prisma_user).first
+    u = BlackStack::Core::User.where(:id => id_prisma_user).first
     return u.shadow(name, params, x, verbose)
   end
 end # def shadow
@@ -191,8 +192,8 @@ end
 =end
 
 def nav1(name1, beta=false)
-  login = BlackStack::Login.where(:id=>session['login.id']).first
-  user = BlackStack::User.where(:id=>login.id_user).first  
+  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
+  user = BlackStack::Core::User.where(:id=>login.id_user).first  
 
   ret = 
   "<p>" + 
@@ -206,8 +207,8 @@ def nav1(name1, beta=false)
 end
 
 def nav2(name1, url1, name2)
-  login = BlackStack::Login.where(:id=>session['login.id']).first
-  user = BlackStack::User.where(:id=>login.id_user).first  
+  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
+  user = BlackStack::Core::User.where(:id=>login.id_user).first  
 
   "<p>" + 
   "<a class='simple' href='/settings/clientinformation'><b>#{user.client.name.encode_html}</b></a>" + 
@@ -219,8 +220,8 @@ def nav2(name1, url1, name2)
 end
 
 def nav3(name1, url1, name2, url2, name3)
-  login = BlackStack::Login.where(:id=>session['login.id']).first
-  user = BlackStack::User.where(:id=>login.id_user).first  
+  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
+  user = BlackStack::Core::User.where(:id=>login.id_user).first  
   "<p>" + 
   "<a class='simple' href='/settings/clientinformation'><b>#{user.client.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 

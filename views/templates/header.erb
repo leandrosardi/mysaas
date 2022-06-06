@@ -128,7 +128,7 @@ end
 		<%
 		id_prisma_user = session['login.id_prisma_user']
 		if id_prisma_user.to_s.size > 0 && false # TODO: reactivate this when it the CSS problem is fixed
-			operator = BlackStack::User.where(:id=>id_prisma_user).first
+			operator = BlackStack::Core::User.where(:id=>id_prisma_user).first
 		%>
 		<div class="row-fluid" style='background: red;'>
 			<div class='span1'></div>
@@ -304,11 +304,11 @@ end
 	<section class="row-fluid">
 	<div class='span12'>
 	<%
-	if params[:err]!=nil
+	if err!=nil
 	%>
-		<div class="alert alert-error">
-			<a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=getErrorDescription(params[:err].to_i)%>
-		</div>
+	<div class="alert alert-error">
+	<%=err.to_s.encode_html%>
+	</div>
 	<%
 	end # err
 	%>

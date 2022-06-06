@@ -1,9 +1,9 @@
 <% 
-login = BlackStack::Login.where(:id=>session['login.id']).first
+login = BlackStack::Core::Login.where(:id=>session['login.id']).first
 if (login == nil)
 	DB.disconnect
 	GC.start
-	redirect_adapted_to_nginx '/settings/users?err='+ERR_PIPELINE_NOT_USER_LOGED_IN.to_s
+	redirect '/settings/users?err='+ERR_PIPELINE_NOT_USER_LOGED_IN.to_s
 end
 
 linkedin_url_pattern = /((https?:\/\/)?(www\.)?linkedin\.com\/in\/)(([-A-Za-z0-9](\/?))+$)/
@@ -23,19 +23,19 @@ params[:uid].each { |uid|
 		DB.disconnect
 		GC.start
 		msg = 'Username is Required.'
-		redirect_adapted_to_nginx "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
 		break
 	elsif linkedin_url.size > 0 && !(linkedin_url =~ linkedin_url_pattern)
 		DB.disconnect
 		GC.start
 		msg = 'Valid Linkedin url is Required.'
-		redirect_adapted_to_nginx "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
 		break
 	elsif linkedin_url.size <= 0 && gtc == "true"
 		DB.disconnect
 		GC.start
 		msg = 'Linkedin url is Required to Allow Group Transfer Chat.'
-		redirect_adapted_to_nginx "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
 		break
 	else
 		DB.execute("UPDATE [user] SET name='#{user}', phone='#{phone}', linkedin_profile_url='#{linkedin_url}', allowed_for_linkedin_group_chat_transfers='#{gtc}' WHERE id='#{uid}'")
@@ -45,6 +45,6 @@ params[:uid].each { |uid|
 } 
 
 # redireccionar al dashboard
-redirect_adapted_to_nginx "/settings/users?msgdesc=Done!"
+redirect "/settings/users?msgdesc=Done!"
 %>
 <!-- ---------------------------------------- -->

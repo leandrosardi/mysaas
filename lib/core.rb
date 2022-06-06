@@ -4,10 +4,19 @@ require 'simple_cloud_logging'
 require 'pg'
 require 'sequel'
 
+# return a postgresql uuid
+def guid()
+    BlackStack::Core::CRDB::guid
+end
+            
+# return current datetime with format `YYYY-MM-DD HH:MM:SS`
+def now()
+    BlackStack::Core::CRDB::now
+end
+
 module BlackStack
     module Core
-
-        module DB
+        module CRDB
             # database connection parameters
             @@db_url = nil
             @@db_port = nil
@@ -15,13 +24,14 @@ module BlackStack
             @@db_user = nil
             @@db_password = nil
 
+            # return the connection string for a postgresql database
             def self.connection_string
                 "postgres://#{@@db_user}:#{@@db_password}@#{@@db_url}:#{@@db_port}/#{@@db_name}"
             end # connection_string
 
             # create database connection
             def self.connect
-                Sequel.connect(BlackStack::Core::DB.connection_string)
+                Sequel.connect(BlackStack::Core::CRDB.connection_string)
             end
 
             # database connection getters
@@ -83,6 +93,19 @@ module BlackStack
                 @@db_name = h[:db_name]
                 @@db_user = h[:db_user]
                 @@db_password = h[:db_password]
+            end # set_db_params
+
+            # return a postgresql uuid
+            def self.guid()
+                DB['SELECT gen_random_uuid() AS id'].first[:id]
+            end
+            
+            # return current datetime with format `YYYY-MM-DD HH:MM:SS`
+            def self.now()
+                # La llamada a GETDATE() desde ODBC no retorna precision de milisegundos, que es necesaria para los registros de log.
+                # La llamada a SYSDATETIME() retorna un valor de alta precision que no es compatible para pegar en los campos del tipo DATATIME.
+                # La linea de abajo obtiene la hora en formato de SYSDATE y le trunca los ultimos digitos para hacer que el valor sea compatible con los campos DATETIME.
+                (DB['SELECT current_timestamp() AS now'].map(:now)[0]).to_s[0..18]
             end
         end # module DB
 
@@ -165,6 +188,9 @@ module BlackStack
             @@storage_sub_folders = []
 
             # accounts storage getters and setters
+            def self.storage_default_max_allowed_kilobytes()
+                @@storage_default_max_allowed_kilobytes
+            end
             def self.storage_folder()
                 @@storage_folder
             end
@@ -215,6 +241,5 @@ module BlackStack
                 @@storage_sub_folders = h[:storage_sub_folders]
             end
         end # module Storage
-
     end # module Core
 end # module BlackStack

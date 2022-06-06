@@ -6,7 +6,7 @@
 
 <%
 login = @login
-user = BlackStack::User.where(:id=>params[:uid]).first
+user = BlackStack::Core::User.where(:id=>params[:uid]).first
 %>
 
 <%

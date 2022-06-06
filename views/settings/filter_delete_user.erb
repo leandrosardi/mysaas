@@ -9,7 +9,7 @@
 		return return_message.to_json
 	end
 
-	user = BlackStack::User.where(:id=>params['uid']).first
+	user = BlackStack::Core::User.where(:id=>params['uid']).first
 	if ( user == nil )
 		return_message[:status] = 'User ID not found in the central database. Call support for assistance.'
 		return_message[:value] = ""
@@ -26,13 +26,12 @@
 		# libero recursos
 		DB.disconnect
 		GC.start
-		redirect_adapted_to_nginx '/settings/users?errdesc=' + CGI.escape(parsed['status'].to_s)
+		redirect '/settings/users?errdesc=' + CGI.escape(parsed['status'].to_s)
 	end
 
 	# actualizo el registro
 	user.delete_time = now()
 	user.email += '-' + random_id.to_guid
-	user.division_email += '-' + random_id.to_guid
 	user.save
 
 	# delete links to pipelines
@@ -47,5 +46,5 @@
     GC.start
 
  	# redireccionar al dashboard
- 	redirect_adapted_to_nginx '/settings/users?msgdesc=Account%20Deleted.'
+ 	redirect '/settings/users?msgdesc=Account%20Deleted.'
 %>

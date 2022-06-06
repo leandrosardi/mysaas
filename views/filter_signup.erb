@@ -1,19 +1,21 @@
-<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
 <% 
+redirect = session['redirect_after_login_or_signup']
+redirect_on_error = params[:'redirect_on_error']
+
 companyname = params[:companyname]
 username = params[:username]
 email = params[:email]
 password = params[:password]
 phone = params[:phone]
-redirect = session['redirect_after_login_or_signup']
-redirect_on_error = params[:'redirect_on_error']
-client = nil
-user = nil
+a = nil
+u = nil
 division = nil
 userDivision = nil
 login = nil
 
+# default values
 redirect_on_error = "/signup" if redirect_on_error.to_s.size == 0
+redirect = "/dashboard" if redirect.to_s.size == 0
 
 # actualizar las variables de sesion
 if companyname.to_s.size>0
@@ -46,7 +48,7 @@ if companyname.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_COMPANY_NAME_IS_NULL.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Company Name is required.")
 end
 
 if username.to_s.size==0
@@ -54,7 +56,7 @@ if username.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_USER_NAME_IS_NULL.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Username is required.")
 end
 
 if email.to_s.size==0
@@ -62,7 +64,7 @@ if email.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_NULL.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Email is required.")
 end
 
 if password.to_s.size==0
@@ -70,7 +72,7 @@ if password.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_NULL.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Password is required.")
 end
 
 if phone.to_s.size==0
@@ -78,7 +80,7 @@ if phone.to_s.size==0
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PHONE_IS_NULL.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Phone is required.")
 end
 
 # validar formato de la password
@@ -87,7 +89,7 @@ if !password.password?
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s
+	redirect "#{redirect_on_error}?err="+ CGI::escape("Password must be at least 6 characters long.")
 end
 
 if !params['email'].email?
@@ -95,15 +97,15 @@ if !params['email'].email?
 	DB.disconnect	
 	GC.start
 	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_IS_WRONG.to_s
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Email is not valid.")
 end
 
 # comparar contra la base de datos
-user = BlackStack::User.where(:email=>email).first
+u = BlackStack::Core::User.where(:email=>email).first
 
 # decidir si el intento de login es exitoso o no
-if (user != nil)
-	redirect_adapted_to_nginx "#{redirect_on_error}?err="+ERR_SIGNUP_EMAIL_ALREADY_EXISTS.to_s
+if !u.nil?
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Email already exists.")
 end
 
 # TODO: Validar formato del email
@@ -112,85 +114,54 @@ end
 
 # TODO: Validar formato de la password
 
+# getting timezone
+t = BlackStack::Core::Timezone.where(:short_description=>DEFAULT_TIMEZONE_SHORT_DESCRIPTION).first
+if t.nil?
+	redirect "#{redirect_on_error}?err=" + CGI::escape("Default timezone not found.")
+end # if t.nil?
+
 DB.transaction do
 	# crear el cliente
-	client = BlackStack::Client.new()
-	client.id = guid()
-	client.name = companyname
-	client.active = 1
-	client.save()
+	a = BlackStack::Core::Account.new
+	a.id = guid
+	a.id_account_owner = BlackStack::Core::Account.where(:api_key=>BlackStack::Core::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
+	a.name = companyname
+	a.create_time = now
+	a.id_timezone = t.id
+	a.storage_total_kb = BlackStack::Core::Storage::storage_default_max_allowed_kilobytes
+	a.save
 	
 	# crear el usuario
-	user = BlackStack::User.new()
-	user.id = guid()
-	user.id_client = client.id
-	user.email = email
-	user.name = username
-	user.phone = phone
-	user.password = password
-	user.create_time = now()
-	user.division_email = email
-	user.save()
+	u = BlackStack::Core::User.new
+	u.id = guid
+	u.id_account = a.id
+	u.create_time = guid
+	u.email = email
+	u.name = username
+	u.phone = phone
+	u.password = password
+	u.create_time = now
+	u.save
 	
-	# le asigno una division
-	# TODO: BUG: al hacer signup se alterna aleatoriamente entre las divisiones EULER o COPERNICO 
-#	division = BlackStack::Division.getDefault()
-	q = 
-	"SELECT TOP 1 d.id AS did " +
-	"FROM division d " +
-	"WHERE d.name='#{SIGNUP_DIVISION}' "
-	row = DB[q].first
-	division =BlackStack::Division.where(:id=>row[:did]).first
-	
-	# TODO: Validar que se haya conseguido una division
-	
-	# vinculo el usuario a esta division
-	userDivision = BlackStack::UserDivision.new()
-	userDivision.id = guid()
-	userDivision.id_user = user.id
-	userDivision.id_division = division.id
-	userDivision.save()
+	# user owner
+	a.id_user_to_contact = u.id
+	a.save
 	
 	# registrar el login
-	login = BlackStack::Login.new
-	login.id = guid()
-	login.id_user = user.id
-	login.create_time = now()
-	login.save()
+	login = BlackStack::Core::Login.new
+	login.id = guid
+	login.id_user = u.id
+	login.create_time = now
+	login.save
 		
 	# guardar el ID de intento de login en una variable de sesion
 	session['login.id'] = login.id 
 end # transaction
 
-# envio un request a la division para que registre a este usuario
-# TODO: Si la llamada de abajo falla, el servidor central debe redirigir a una pagina de error, 
-# => y debe reintentar el alta en la division cuando el usuario haga un intento de login.
-res = BlackStack::Netting::call_post(
-	"#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/signup.json", 
-	{
-		'api_key' => BlackStack::Pampa::api_key, 
-		'cid' => client.id,
-		'uid' => user.id,
-		'email' => user.division_email,
-		'companyname' => companyname,
-		'username' => username,
-		'phone' => phone,
-	}
-)
-parsed = JSON.parse(res.body)
-if (parsed['status'] != 'success')
-	# libero recursos
-	DB.disconnect	
-	GC.start
-	#
-	redirect_adapted_to_nginx "#{redirect_on_error}?errmsg="+CGI.escape("Unexpected Error: "+parsed['status'].to_s)
-end
-
 # blanquo la variable de sesion de redirect
-redirect = session['redirect_after_login_or_signup'] #"/settings/filter_create_invoice?item_number=SSM.2.Semi-Dedicated-Monthly.2&n=1"
+redirect_to = session['redirect_after_login_or_signup'] #"/settings/filter_create_invoice?item_number=SSM.2.Semi-Dedicated-Monthly.2&n=1"
 session['redirect_after_login_or_signup'] = nil
 
-#
-id_login = parsed["id_login"].gsub("{", "").gsub("}", "").to_s
-login_url = "#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/login2.json?api_key=#{BlackStack::Pampa::api_key}&id_login=#{id_login}&redirect=#{CGI.escape(redirect.to_s)}" 
+# redirect
+redirect redirect_to
 %>

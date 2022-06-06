@@ -1,6 +1,6 @@
 <%
 login = @login
-user = BlackStack::User.where(:id=>login.id_user).first
+user = BlackStack::Core::User.where(:id=>login.id_user).first
 %>
 
 <!-- Page footer
