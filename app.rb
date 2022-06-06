@@ -238,9 +238,9 @@ end
 # TODO: here where you have to develop notrial? feature
 get '/', :agent => /(.*)/ do
   if !notrial?
-    erb :'/signup'
+    erb :'/signup', :layout => :'/layouts/public'
   else
-    erb :'/signup'
+    erb :'/signup', :layout => :'/layouts/public'
   end
 end
 

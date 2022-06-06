@@ -8,7 +8,7 @@ gem 'blackstack-core', '~>1.2.1'
 gem 'blackstack_deployer', '~>1.2.10'
 gem 'simple_cloud_logging', '~>1.2.2'
 gem 'simple_command_line_parser', '~>1.1.2'
-# Other gems needed for running free-membership-sites
+# Other gems needed for running mysaas
 gem 'pry', '~>0.14.1'
 gem 'pg', '~>1.3.5'
 gem 'sequel', '~>5.56.0'
