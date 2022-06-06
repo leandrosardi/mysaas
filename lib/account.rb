@@ -10,10 +10,140 @@ module BlackStack
         many_to_one :billingCountry, :class=>:'BlackStack::LnCountry', :key=>:billing_id_lncountry
         many_to_one :user_to_contect, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
 
-        # signup a new account with its owner user
-        def self.signup(company_name, user_name, user_email, user_password)
-          # TODO: Code Me!
-        end
+        # validate the parameters in the signup descriptor `h``.
+        # create new records on tables account, user and login.
+        # return the id of the new login record.
+        # raise an exception if the signup descriptor doesn't pass all the valdiations.
+        def self.signup(h)
+          companyname = h[:companyname]
+          username = h[:username]
+          email = h[:email]
+          password = h[:password]
+          phone = h[:phone]
+          a = nil
+          u = nil
+          l = nil
+
+          # validar que los parametros no esten vacios
+          if companyname.to_s.size==0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Company Name is required."
+          end
+
+          if username.to_s.size==0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Username is required."
+          end
+
+          if email.to_s.size==0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Email is required."
+          end
+
+          if password.to_s.size==0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Password is required."
+          end
+
+          if phone.to_s.size==0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Phone is required."
+          end
+
+          # validar formato de la password
+          if !password.password?
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Password must be at least 6 characters long."
+          end
+
+          if !h['email'].email?
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            #
+            raise "Email is not valid."
+          end
+
+          # comparar contra la base de datos
+          u = BlackStack::Core::User.where(:email=>email).first
+
+          # decidir si el intento de l es exitoso o no
+          if !u.nil?
+            raise "Email already exists."
+          end
+
+          # TODO: Validar formato del email
+
+          # TODO: Validar normas de seguridad de la password
+
+          # TODO: Validar formato de la password
+
+          # getting timezone
+          t = BlackStack::Core::Timezone.where(:short_description=>DEFAULT_TIMEZONE_SHORT_DESCRIPTION).first
+          if t.nil?
+            raise "Default timezone not found."
+          end # if t.nil?
+
+          DB.transaction do
+            # crear el cliente
+            a = BlackStack::Core::Account.new
+            a.id = guid
+            a.id_account_owner = BlackStack::Core::Account.where(:api_key=>BlackStack::Core::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
+            a.name = companyname
+            a.create_time = now
+            a.id_timezone = t.id
+            a.storage_total_kb = BlackStack::Core::Storage::storage_default_max_allowed_kilobytes
+            a.save
+            
+            # crear el usuario
+            u = BlackStack::Core::User.new
+            u.id = guid
+            u.id_account = a.id
+            u.create_time = guid
+            u.email = email
+            u.name = username
+            u.phone = phone
+            u.password = password
+            u.create_time = now
+            u.save
+            
+            # user owner
+            a.id_user_to_contact = u.id
+            a.save
+            
+            # registrar el l
+            l = BlackStack::Core::Login.new
+            l.id = guid
+            l.id_user = u.id
+            l.create_time = now
+            l.save
+          end # transaction
+
+          # libero recursos
+          DB.disconnect
+          GC.start
+
+          # retornar el id del login
+          l.id
+        end # def self.signup(h)
 
         # return the user to contact for any communication.
         # if the client configured the user_to_contact field, this method returns such user.

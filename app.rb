@@ -8,6 +8,13 @@ require 'lib/user'
 require 'lib/login'
 require 'lib/timezone'
 
+# map params key-values to session key-values 
+def params_to_session
+  params.each do |key, value|
+    session[key] = value
+  end
+end
+
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
