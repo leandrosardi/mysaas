@@ -13,6 +13,13 @@ module BlackStack
 
     # return an array of string with the errors found in the extension descriptor
     def self.validate_descriptor(h)
+        name
+        description
+        folder
+        version
+
+        dependencies
+        app
         
     end
 

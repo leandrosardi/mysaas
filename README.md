@@ -88,27 +88,27 @@ Some features of **MySaaS** include:
 
 1. [account management](./docu/1.accounts-management.md);
 
-2. [invoicing and payments processing](./docu/2.invoicing-and-payments-processing);
+2. [invoicing and payments processing](./docu/2.invoicing-and-payments-processing.md);
 
-3. [email notifications](./docu/3.email-notifications) with easy setup of automation rules;
+3. [email notifications](./docu/3.email-notifications.md) with easy setup of automation rules;
 
-4. [affiliates tracking](./docu/4.affiliates-tracking) for managing resellers and pay commission;
+4. [affiliates tracking](./docu/4.affiliates-tracking.md) for managing resellers and pay commission;
 
-5. [domain aliasing](./docu/5.domain-aliasing) for licencing your site to other companies;
+5. [domain aliasing](./docu/5.domain-aliasing.md) for licencing your site to other companies;
 
-6. [abuse preventing](./docu/6.abuse-preventing) by tracking user's network and browser fingertings;
+6. [abuse preventing](./docu/6.abuse-preventing.md) by tracking user's network and browser fingertings;
 
-7. [shadow profiling](./docu/7.shadow-profiling) [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
+7. [shadow profiling](./docu/7.shadow-profiling.md) [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
 
-8. [SSL certificates](./docu/8.ssl-certificates) support;
+8. [SSL certificates](./docu/8.ssl-certificates.md) support;
 
-9. [horizontal scalability](./docu/9.horizontal-scalability) of both: database and webservers;
+9. [horizontal scalability](./docu/9.horizontal-scalability.md) of both: database and webservers;
 
-10. [access points publishing](./docu/10.access-points-publishing) to connect your site with any other products;
+10. [access points publishing](./docu/10.access-points-publishing.md) to connect your site with any other products;
 
-11. [background processesing](./docu/11.background-processesing) for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
+11. [background processesing](./docu/11.background-processesing.md) for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
-12. [extensiblilty](./docu/12.extensiblilty), writing your own modules or installing the modules of thirth parties;
+12. [extensiblilty](./docu/12.extensiblilty.md), writing your own modules or installing the modules of thirth parties;
 
 13. automated deploying;
 
