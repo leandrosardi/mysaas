@@ -9,7 +9,7 @@ Check out [our roadmap here](https://github.com/users/leandrosardi/projects/5).
 
 **MySaaS** is an open-source, extensible and scalable platform for develop your own SaaS, e-Commerce, Education Platform, Social Network, Forum or any kind of memberships based product.
 
-![dashboard example](./thumbnails/dashboard.png)
+![dashboard example](./docu/thumbnails/dashboard.png)
 
 Use **MySaaS** to develop any kind of:
 - softwares as a service;
@@ -28,7 +28,7 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 **free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
-If you are trying to install **MySaaS** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/MySaaS/issues/16#issuecomment-1137154114). 
+If you are trying to install **MySaaS** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/mysaas/issues/16#issuecomment-1137154114). 
 
 **Step 1:** Clone the project.
 
@@ -37,7 +37,7 @@ Get the source code from GitHub.
 ```bash
 mkdir ~/code
 cd ~/code
-git clone https://github.com/leandrosardi/MySaaS
+git clone https://github.com/leandrosardi/mysaas
 ```
 
 If you get a permissions error, prefix the command with sudo.
@@ -80,7 +80,7 @@ The `install.rb` command has many paremeters, as listed below:
 
 _(pending)_
 
-![login screen](./thumbnails/login.png)
+![login screen](./docu/thumbnails/login.png)
 
 ## Features & Documentation
 
