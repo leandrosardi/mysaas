@@ -91,6 +91,12 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Enable or disable the installation and running of the cockroachdb server, with the creation of the schema and seed of the tables.', 
     :type=>BlackStack::SimpleCommandLineParser::BOOL,
     :default => true,
+  }, {
+    :name=>'local', 
+    :mandatory=>false, 
+    :description=>'Enable installing a server in your local machine for development. If this flag is activated, the connection to the database will be attempted to be to the lan IP of the computer. Otherwise, the connection will be attempted to `ssh_hostname`.', 
+    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :default => false,
   }]
 )
 
@@ -172,6 +178,7 @@ BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-envi
 
 if parser.value('db')
   l.logs 'Connecting the database... '
+#  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('local') ? parser.value('ssh_hostname') : BlackStack::Deployer::nodes.select { |n| n.name=='my-dev-environment' }.first.eth0_ip }:#{parser.value('crdb_database_port')}/blackstack")
   BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
   l.done
 
