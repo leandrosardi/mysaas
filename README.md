@@ -50,7 +50,6 @@ If you get a permissions error, prefix the command with sudo.
 export RUBYLIB=~/code/mysaas
 ```
 
-
 **Step 3:** Install [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) and [simple_command_line_parser](https://github.com/leandrosardi/simple_command_line_parser) gems.
 
 Our [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) will help you to install the database engine, create the database schema, seed the database with initial data, install all required gems and run the webserver. All of them from one single line of code!
@@ -82,6 +81,12 @@ Such installation tasks are:
 3. creating the database schema; 
 4. install seed records into the database; and
 5. run the webserver.
+
+
+Some considerations:
+
+- Be sure that your `ssh_user` is in the list of sudoers.
+- Be sure your firewall is not blocking ports 80 (the SaaS website), 8080 (the CockroachDB dashboard) and 26257 (the CockroachDB database).
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
 
