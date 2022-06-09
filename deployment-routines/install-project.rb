@@ -26,7 +26,7 @@ BlackStack::Deployer::add_routine({
         :nomatches => [ 
             { :nomatch => /not found/i, :error_description => 'An Error Occurred' },
         ],
-        :sudo => false,
+        :sudo => true,
     },
   ],
 });

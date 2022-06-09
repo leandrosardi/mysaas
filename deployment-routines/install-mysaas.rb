@@ -22,11 +22,11 @@ BlackStack::Deployer::add_routine({
         :command => 'cd ~/code/mysaas; git fetch --all',
         :matches => [/\-> origin\//, /^Fetching origin$/],
         :nomatches => [ { :nomatch => /error/i, :error_description => 'An error ocurred.' } ],
-        :sudo => false,
+        :sudo => true,
     }, { 
         :command => 'cd ~/code/mysaas; git reset --hard origin/%git_branch%',
         :matches => /HEAD is now at/,
-        :sudo => false,
+        :sudo => true,
     }, { 
         :command => 'source /home/%ssh_username%/.rvm/scripts/rvm; cd ~/code/mysaas; rvm install 3.1.2; rvm --default use 3.1.2; bundler update',
         :matches => [ 
@@ -35,7 +35,7 @@ BlackStack::Deployer::add_routine({
         :nomatches => [ 
             { :nomatch => /not found/i, :error_description => 'An Error Occurred' },
         ],
-        :sudo => false,
+        :sudo => true,
     }, {
         # 
         :command => 'export RUBYLIB=~/code/mysaas',

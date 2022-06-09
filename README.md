@@ -63,7 +63,7 @@ As said above, our [blackstack-deployer](https://github.com/leandrosardi/blackst
 The command below performs many installation tasks:
 
 ```bash
-cd ~/code/MySaaS
+cd ~/code/mysaas
 ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
 ```
 

@@ -19,7 +19,7 @@ BlackStack::Deployer::add_routine({
         # reference: https://askubuntu.com/questions/504546/error-message-source-not-found-when-running-a-script
         :command => "source /home/%ssh_username%/.rvm/scripts/rvm; rvm install 3.1.2; rvm --default use 3.1.2;", 
         :matches => [ /Already installed/i,  /installed/i, /generating default wrappers/i ],
-        :sudo => false,    
+        :sudo => true,    
 
     # TODO: Add validation the ruby 3.1.2 has been installed for the user %ssh_username%.
 

@@ -4,6 +4,8 @@ require 'simple_command_line_parser'
 require 'blackstack-deployer'
 require 'deployment-routines/all-routines'
 
+require_relative '../blackstack-nodes/lib/blackstack-nodes'
+
 l = BlackStack::BaseLogger.new(nil)
 
 # 
