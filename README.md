@@ -87,6 +87,9 @@ Some considerations:
 
 - Be sure that your `ssh_user` is in the list of sudoers.
 - Be sure your firewall is not blocking ports 80 (the SaaS website), 8080 (the CockroachDB dashboard) and 26257 (the CockroachDB database).
+- Use `ifconfig` to get the name of your LAN interface, and assign it to the `laninterface` parameter.
+- Use `local=yes` when you are installing your local environment for development. Remove that parameter if you are running the command for a remote computer.
+- After running the installer, you will probably have not grants for installing or uninstalling gems. You can get back such grants running `cd /usr/local/rvm/gems/ruby-3.1.2;sudo chown -R $USER:$USER .`.
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
 

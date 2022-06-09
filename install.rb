@@ -2,10 +2,6 @@
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
-
-require_relative '../blackstack-deployer/lib/blackstack-deployer'
-require_relative '../blackstack-nodes/lib/blackstack-nodes'
-
 require 'deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
@@ -131,6 +127,7 @@ BlackStack::Deployer::add_nodes([{
     :laninterface => parser.value('laninterface'),
 
     # cockroachdb
+    :crdb_hostname => crdb_hostname,
     :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
     :crdb_database_password => parser.value('crdb_database_password'),
     :crdb_database_port => parser.value('crdb_database_port'),
@@ -142,7 +139,7 @@ BlackStack::Deployer::add_nodes([{
     # default deployment routine for this node
     :deployment_routine => 'install-mysaas-dev-environment',
 }])
-=begin
+
 commands += [
     # update and upgrade apt
     { :command => :'upgrade-packages', }, 
@@ -160,7 +157,7 @@ if parser.value('web')
     { :command => :'setup-mysaas', },
   ]
 end # parser.value('web')
-=end
+
 if parser.value('db')
   commands += [
     # install cockroachdb node
