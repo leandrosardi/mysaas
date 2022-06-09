@@ -76,7 +76,7 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :name=>'laninterface', 
     :mandatory=>false, 
     :description=>'The name of the LAN interface. Some services like CockroachDB need the IP address of the LAN interface.', 
-    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => 'eth0',
   }, {
   # installation options
@@ -101,9 +101,6 @@ raise 'Either ssh_password or ssh_private_key_file must be specified.' if parser
 ssh_password = parser.value('ssh_password').to_s=='-' ? nil : parser.value('ssh_password').to_s
 ssh_private_key_file = parser.value('ssh_private_key_file').to_s=='-' ? nil : parser.value('ssh_private_key_file').to_s
 
-# set the interface
-BlackStack::Deployer::set_interface(parser.value('laninterface'))
-
 # declare nodes
 BlackStack::Deployer::add_nodes([{
     # use this command to connect from terminal: ssh -i "plank.pem" ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
@@ -118,6 +115,9 @@ BlackStack::Deployer::add_nodes([{
  
     # git
     :git_branch => 'main',
+
+    # name of the LAN interface
+    :laninterface => parser.value('laninterface'),
 
     # cockroachdb
     :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
