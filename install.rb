@@ -139,7 +139,7 @@ BlackStack::Deployer::add_nodes([{
     # default deployment routine for this node
     :deployment_routine => 'install-mysaas-dev-environment',
 }])
-=begin
+
 commands += [
     # update and upgrade apt
     { :command => :'upgrade-packages', }, 
@@ -157,7 +157,7 @@ if parser.value('web')
     { :command => :'setup-mysaas', },
   ]
 end # parser.value('web')
-=end
+
 if parser.value('db')
   commands += [
     # install cockroachdb node
