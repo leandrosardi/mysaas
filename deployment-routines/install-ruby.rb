@@ -10,11 +10,11 @@ BlackStack::Deployer::add_routine({
         :sudo => false,
     }, { 
         :command => "gpg2 --keyserver keyserver.ubuntu.com --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB;cat /tmp/rvm.sh | bash -s stable --rails", 
-        :matches => [/(\d)+ gems installed/i, /1 gem installed/i],
+        :matches => [/(\d)+ gems installed/i, /1 gem installed/i, /Good signature from/i, /Successfully installed/i],
         :nomatches => [ 
             { :nomatch => /error/i, :error_description => 'An Error Occurred' },
         ],
-        :sudo => false,
+        :sudo => true,
     }, { 
         # reference: https://askubuntu.com/questions/504546/error-message-source-not-found-when-running-a-script
         :command => "source /home/%ssh_username%/.rvm/scripts/rvm; rvm install 3.1.2; rvm --default use 3.1.2;", 
@@ -31,7 +31,7 @@ BlackStack::Deployer::add_routine({
         :nomatches => [ # no output means success.
             { :nomatch => /.+/i, :error_description => 'An Error Occurred' },
         ],
-        :sudo => false,    
+        :sudo => true,    
 =end
     },
   ],
