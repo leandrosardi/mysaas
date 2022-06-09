@@ -100,12 +100,17 @@ parser = BlackStack::SimpleCommandLineParser.new(
   }]
 )
 
+#value = BlackStack::Deployer::NodeModule::eth0_ip(parser.value('laninterface'))
+#puts '....'+value.to_s
+#exit(0)
+
 # validation: check if ssh_password or ssh_private_key_file is specified
 raise 'Either ssh_password or ssh_private_key_file must be specified.' if parser.value('ssh_password').to_s=='-' && parser.value('ssh_private_key_file').to_s.size=='-'
 
 # TODO: fix this when the issue https://github.com/leandrosardi/simple_command_line_parser/issues/6 is fixed.
 ssh_password = parser.value('ssh_password').to_s=='-' ? nil : parser.value('ssh_password').to_s
 ssh_private_key_file = parser.value('ssh_private_key_file').to_s=='-' ? nil : parser.value('ssh_private_key_file').to_s
+crdb_hostname = parser.value('local') ? BlackStack::Deployer::NodeModule::eth0_ip(parser.value('laninterface')) : parser.value('ssh_hostname')
 
 # declare nodes
 BlackStack::Deployer::add_nodes([{
@@ -178,8 +183,8 @@ BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-envi
 
 if parser.value('db')
   l.logs 'Connecting the database... '
-#  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('local') ? parser.value('ssh_hostname') : BlackStack::Deployer::nodes.select { |n| n.name=='my-dev-environment' }.first.eth0_ip }:#{parser.value('crdb_database_port')}/blackstack")
-  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
+  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{crdb_hostname}:#{parser.value('crdb_database_port')}/blackstack")
+#  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
   l.done
 
   l.logs 'Loading checkpoint... '
