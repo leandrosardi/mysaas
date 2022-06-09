@@ -2,11 +2,14 @@
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
-require 'deployment-routines/all-routines'
 
+require_relative '../blackstack-deployer/lib/blackstack-deployer'
 require_relative '../blackstack-nodes/lib/blackstack-nodes'
 
+require 'deployment-routines/all-routines'
+
 l = BlackStack::BaseLogger.new(nil)
+commands = []
 
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
@@ -69,6 +72,13 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :type=>BlackStack::SimpleCommandLineParser::INT,
     :default => 80,
   }, {
+  # LAN interface
+    :name=>'laninterface', 
+    :mandatory=>false, 
+    :description=>'The name of the LAN interface. Some services like CockroachDB need the IP address of the LAN interface.', 
+    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :default => 'eth0',
+  }, {
   # installation options
     :name=>'web', 
     :mandatory=>false, 
@@ -81,8 +91,6 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Enable or disable the installation and running of the cockroachdb server, with the creation of the schema and seed of the tables.', 
     :type=>BlackStack::SimpleCommandLineParser::BOOL,
     :default => true,
-
-
   }]
 )
 
@@ -92,6 +100,9 @@ raise 'Either ssh_password or ssh_private_key_file must be specified.' if parser
 # TODO: fix this when the issue https://github.com/leandrosardi/simple_command_line_parser/issues/6 is fixed.
 ssh_password = parser.value('ssh_password').to_s=='-' ? nil : parser.value('ssh_password').to_s
 ssh_private_key_file = parser.value('ssh_private_key_file').to_s=='-' ? nil : parser.value('ssh_private_key_file').to_s
+
+# set the interface
+BlackStack::Deployer::set_interface(parser.value('laninterface'))
 
 # declare nodes
 BlackStack::Deployer::add_nodes([{
@@ -120,8 +131,8 @@ BlackStack::Deployer::add_nodes([{
     # default deployment routine for this node
     :deployment_routine => 'install-mysaas-dev-environment',
 }])
-
-commands = [
+=begin
+commands += [
     # update and upgrade apt
     { :command => :'upgrade-packages', }, 
     # install some required packages
@@ -138,7 +149,7 @@ if parser.value('web')
     { :command => :'setup-mysaas', },
   ]
 end # parser.value('web')
-
+=end
 if parser.value('db')
   commands += [
     # install cockroachdb node

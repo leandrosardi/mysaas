@@ -42,7 +42,16 @@ git clone https://github.com/leandrosardi/mysaas
 
 If you get a permissions error, prefix the command with sudo.
 
-**Step 2:** Install [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) and [simple_command_line_parser](https://github.com/leandrosardi/simple_command_line_parser) gems.
+**Step 2:** Add `~/code/mysaas` to the require path.
+
+**MySaaS** provides many CLI tools for automation of some repetitive tasks, like deployment or packages building.
+
+```bash
+export RUBYLIB=~/code/mysaas
+```
+
+
+**Step 3:** Install [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) and [simple_command_line_parser](https://github.com/leandrosardi/simple_command_line_parser) gems.
 
 Our [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) will help you to install the database engine, create the database schema, seed the database with initial data, install all required gems and run the webserver. All of them from one single line of code!
 
@@ -56,7 +65,7 @@ Our [simple_command_line_parser](https://github.com/leandrosardi/simple_command_
 gem install simple_command_line_parser
 ```
 
-**Step 3:** Install the Envionment.
+**Step 4:** Install the Envionment.
 
 As said above, our [blackstack-deployer](https://github.com/leandrosardi/blackstack-deployer) will help you to install the database engine, create the database schema, seed the database with initial data, install all required gems and run the webserver. All of them from one single line of code!
 
@@ -64,7 +73,7 @@ The command below performs many installation tasks:
 
 ```bash
 cd ~/code/mysaas
-ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
+ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem laninterface=eth0
 ```
 
 Such installation tasks are:
