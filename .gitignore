@@ -1,6 +1,6 @@
 # ignore SSL certificates, except development certificated stored on /ssl/_desa/
-/ssl
-!/ssl/_desa
+/ssl/*/*
+!/ssl/_desa/*
 
 # igonore the backups of the configuration files
 config.*.rb
