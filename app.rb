@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'lib/core.rb'
+require 'lib/core'
 require 'config'
 require 'version'
 DB = BlackStack::Core::CRDB::connect

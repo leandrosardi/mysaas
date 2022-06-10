@@ -2,7 +2,7 @@
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
-require_relative './deployment-routines/all-routines'
+require 'deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
 commands = []
@@ -42,12 +42,38 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => '-',
   }, {
-  # web server installation
-    :name=>'web_port', 
+  # database installation
+    :name=>'crdb_database_password', 
     :mandatory=>false, 
-    :description=>'Listening port for the Sinatra webserver.', 
+    :description=>'The password for the database user blackstack.', 
+    :type=>BlackStack::SimpleCommandLineParser::STRING,
+    :default => 'bsws2022',
+  }, {
+    :name=>'crdb_database_port', 
+    :mandatory=>false, 
+    :description=>'Listening port for the CockroachDB database.', 
     :type=>BlackStack::SimpleCommandLineParser::INT,
-    :default => 80,
+    :default => 26257,
+  }, {
+    :name=>'crdb_dashboard_port', 
+    :mandatory=>false, 
+    :description=>'Listening port for the CockroachDB dashboard.', 
+    :type=>BlackStack::SimpleCommandLineParser::INT,
+    :default => 8080,
+  }, {
+  # LAN interface
+    :name=>'laninterface', 
+    :mandatory=>false, 
+    :description=>'The name of the LAN interface. Some services like CockroachDB need the IP address of the LAN interface.', 
+    :type=>BlackStack::SimpleCommandLineParser::STRING,
+    :default => 'eth0',
+  }, {
+  # installation options
+    :name=>'local', 
+    :mandatory=>false, 
+    :description=>'Enable installing a server in your local machine for development. If this flag is activated, the connection to the database will be attempted to be to the lan IP of the computer. Otherwise, the connection will be attempted to `ssh_hostname`.', 
+    :type=>BlackStack::SimpleCommandLineParser::BOOL,
+    :default => false,
   }]
 )
 
@@ -61,6 +87,7 @@ raise 'Either ssh_password or ssh_private_key_file must be specified.' if parser
 # TODO: fix this when the issue https://github.com/leandrosardi/simple_command_line_parser/issues/6 is fixed.
 ssh_password = parser.value('ssh_password').to_s=='-' ? nil : parser.value('ssh_password').to_s
 ssh_private_key_file = parser.value('ssh_private_key_file').to_s=='-' ? nil : parser.value('ssh_private_key_file').to_s
+crdb_hostname = parser.value('local') ? BlackStack::Deployer::NodeModule::eth0_ip(parser.value('laninterface')) : parser.value('ssh_hostname')
 
 # declare nodes
 BlackStack::Deployer::add_nodes([{
@@ -74,14 +101,30 @@ BlackStack::Deployer::add_nodes([{
     :ssh_password => ssh_password,
     :ssh_private_key_file => ssh_private_key_file,
  
-    # sinatra
-    :web_port => parser.value('web_port'),
+    # name of the LAN interface
+    :laninterface => parser.value('laninterface'),
+
+    # cockroachdb
+    :crdb_hostname => crdb_hostname,
+    :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
+    :crdb_database_password => parser.value('crdb_database_password'),
+    :crdb_database_port => parser.value('crdb_database_port'),
+    :crdb_dashboard_port => parser.value('crdb_dashboard_port'),
 
     # default deployment routine for this node
     :deployment_routine => 'install-mysaas-dev-environment',
 }])
 
+commands += [
+  # start cockroachdb node
+  { :command => :'start-crdb-environment', },
+]
+
+# setup deploying rutine
+BlackStack::Deployer::add_routine({
+  :name => 'install-mysaas-dev-environment',
+  :commands => commands,
+})
+
 # deploy
-l.logs 'Starting web server... '
-BlackStack::Deployer::run_routine('my-dev-environment', 'start-mysaas')
-l.done
+BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
