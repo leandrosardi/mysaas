@@ -93,9 +93,16 @@ Some considerations:
 
 Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
 
-The `install.rb` command has many paremeters, as listed below:
+**Additional Readings:**
 
-_(pending)_
+1. Read documentation about our [Simple Command Line Parser](https://github.com/leandrosardi/simple_command_line_parser) in order to know how does the parsing of command line parameters work.
+
+2. The `install.rb` command has many paremeters. Find the definition of them [here](https://github.com/leandrosardi/mysaas/blob/0.0.1/install.rb#L11).
+
+3. Read documentation about our [Simple Cloud Logging](https://github.com/leandrosardi/simple_cloud_logging) in order to know more about how we write logs on all our processes and CLI tools.
+
+4. Read documentation about our [BlackStack Deployer](https://github.com/leandrosardi/blackstack-deployer) in order to know more about how do we automate the deploying of software to a large fleet of servers.
+
 
 ![login screen](./docu/thumbnails/login.png)
 
