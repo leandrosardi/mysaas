@@ -1,3 +1,7 @@
+# igonore the backups of the configuration files
+config.*.rb
+!config.template.rb
+
 # ignore private key files
 *.ppk
 *.pem
