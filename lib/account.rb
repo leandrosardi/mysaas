@@ -40,7 +40,8 @@ module BlackStack
             #
             raise "Username is required."
           end
-
+puts
+puts email
           if email.to_s.size==0
             # libero recursos
             DB.disconnect	
@@ -66,6 +67,8 @@ module BlackStack
           end
 
           # validar formato de la password
+puts
+puts password
           if !password.password?
             # libero recursos
             DB.disconnect	
@@ -74,7 +77,7 @@ module BlackStack
             raise "Password must be at least 6 characters long."
           end
 
-          if !h['email'].email?
+          if !email.email?
             # libero recursos
             DB.disconnect	
             GC.start
@@ -121,7 +124,7 @@ module BlackStack
             u.email = email
             u.name = username
             u.phone = phone
-            u.password = password
+            u.password = BCrypt::Password.create(password) # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
             u.create_time = now
             u.save
             

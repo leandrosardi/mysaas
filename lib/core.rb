@@ -3,6 +3,7 @@ require 'simple_command_line_parser'
 require 'simple_cloud_logging'
 require 'pg'
 require 'sequel'
+require 'bcrypt'
 
 # return a postgresql uuid
 def guid()

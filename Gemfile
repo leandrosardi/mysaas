@@ -14,7 +14,7 @@ gem 'pg', '~>1.3.5'
 gem 'sequel', '~>5.56.0'
 gem 'sinatra', '~>2.2.0'
 gem 'puma', '~>5.6.4'
-
+gem 'bcrypt', '~>3.1.18'
 #gem 'simple_host_monitoring', '~>1.1.9'
 #gem 'pampa_workers', '~>1.1.43'
 #gem 'pampa_dispatcher', '~>1.1.7'

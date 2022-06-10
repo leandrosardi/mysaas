@@ -3,10 +3,7 @@ require 'lib/core.rb'
 require 'config'
 require 'version'
 DB = BlackStack::Core::CRDB::connect
-require 'lib/account'
-require 'lib/user'
-require 'lib/login'
-require 'lib/timezone'
+require 'lib/orm'
 
 # map params key-values to session key-values.
 # for security: the keys `:password` and `:new_password` are not mapped.
