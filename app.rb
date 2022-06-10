@@ -13,6 +13,72 @@ def params_to_session
   end
 end
 
+# Helper: get the real user who is logged in.
+# If this account is accessded by an operator, return the [user] object of such an operator.
+# Otherwise, return the logged-in [user].
+def real_user
+  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
+  uid = !session['login.id_prisma_user'].nil? ? session['login.id_prisma_user'] : login.user.id
+  BlackStack::Core::User.where(:id=>uid).first
+end # def real_user
+
+# Helper: User preferences
+# Store/Retrieve a shadow parameter of a user.
+# If the accounts is accessed from PRISMA, by an operator, manage the shadow profile of such an operator.
+# Otherwise, manage the shadow profile of the logged in user.
+def shadow(name, params, x, verbose=false)
+  id_prisma_user = session['login.id_prisma_user']
+  if id_prisma_user.to_s.size == 0
+    return @login.user.shadow(name, params, x, verbose)
+  else
+    u = BlackStack::Core::User.where(:id => id_prisma_user).first
+    return u.shadow(name, params, x, verbose)
+  end
+end # def shadow
+
+# Helper: create file ./.maintenance if you want to disable internal pages in the member area
+def unavailable?
+  f = File.exist?(File.expand_path(__FILE__).gsub('/app.rb', '') + '/.maintenance')
+end
+
+# Helper: create file ./.notrial if you want to switch to another landing
+def notrial?
+  f = File.exist?(File.expand_path(__FILE__).gsub('/app.rb', '') + '/.notrial')
+end
+
+# Helper: return true if there is a user logged into
+def logged_in?
+    !session['login.id'].nil?
+end
+
+# Helper: return the user browser
+def browser?
+  agent = params[:agent]
+  user_agent = UserAgentParser.parse agent
+  
+  if (user_agent.family.to_s == "Chrome")
+    return true
+  elsif (user_agent.family.to_s == "Firefox" && user_agent.version.major.to_i>=4)
+    return true
+  elsif (user_agent.family.to_s == "Firefox" && user_agent.version.major.to_i<4)
+    return false
+  elsif (user_agent.family.to_s == "Safari" && user_agent.version.major.to_i>=5)
+    return true
+  elsif (user_agent.family.to_s == "Safari" && user_agent.version.major.to_i<5)
+    return false
+  elsif (user_agent.family.to_s == "Opera" && user_agent.version.major.to_i>=11)
+    return true
+  elsif (user_agent.family.to_s == "Opera" && user_agent.version.major.to_i<11)
+    return false
+  elsif (user_agent.family.to_s == "IE" && user_agent.version.major.to_i>=9)
+    return true
+  elsif (user_agent.family.to_s == "IE" && user_agent.version.major.to_i<9)
+    return false
+  else
+    return false
+  end
+end
+
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
@@ -57,49 +123,6 @@ error do
     i += 1 
   }
   redirect "/500?#{s}"
-end
-
-# Helper: create file ./.maintenance if you want to disable internal pages in the member area
-def unavailable?
-  f = File.exist?(File.expand_path(__FILE__).gsub('/app.rb', '') + '/.maintenance')
-end
-
-# Helper: create file ./.notrial if you want to switch to another landing
-def notrial?
-  f = File.exist?(File.expand_path(__FILE__).gsub('/app.rb', '') + '/.notrial')
-end
-
-# Helper: return true if there is a user logged into
-def logged_in?
-    !session['login.id'].nil?
-end
-
-# Helper: return the user browser
-def browser?
-  agent = params[:agent]
-  user_agent = UserAgentParser.parse agent
-  
-  if (user_agent.family.to_s == "Chrome")
-    return true
-  elsif (user_agent.family.to_s == "Firefox" && user_agent.version.major.to_i>=4)
-    return true
-  elsif (user_agent.family.to_s == "Firefox" && user_agent.version.major.to_i<4)
-    return false
-  elsif (user_agent.family.to_s == "Safari" && user_agent.version.major.to_i>=5)
-    return true
-  elsif (user_agent.family.to_s == "Safari" && user_agent.version.major.to_i<5)
-    return false
-  elsif (user_agent.family.to_s == "Opera" && user_agent.version.major.to_i>=11)
-    return true
-  elsif (user_agent.family.to_s == "Opera" && user_agent.version.major.to_i<11)
-    return false
-  elsif (user_agent.family.to_s == "IE" && user_agent.version.major.to_i>=9)
-    return true
-  elsif (user_agent.family.to_s == "IE" && user_agent.version.major.to_i<9)
-    return false
-  else
-    return false
-  end
 end
 
 # condition: if there is not authenticated user on the platform, then redirect to the signup page 
@@ -157,27 +180,6 @@ end
 =begin
 
 # TODO: develop these methods on the lib folder
-
-# If this account is accessde by an operator, return the [user] object of such an operator.
-# Otherwise, return the logged-in [user].
-def real_user()
-  login = BlackStack::Core::Login.where(:id=>session['login.id']).first
-  uid = !session['login.id_prisma_user'].nil? ? session['login.id_prisma_user'] : login.user.id
-  BlackStack::Core::User.where(:id=>uid).first
-end # def real_user
-
-# Store/Retrieve a shadow parameter of a user.
-# If the accounts is accessed from PRISMA, by an operator, manage the shadow profile of such an operator.
-# Otherwise, manage the shadow profile of the logged in user.
-def shadow(name, params, x, verbose=false)
-  id_prisma_user = session['login.id_prisma_user']
-  if id_prisma_user.to_s.size == 0
-    return @login.user.shadow(name, params, x, verbose)
-  else
-    u = BlackStack::Core::User.where(:id => id_prisma_user).first
-    return u.shadow(name, params, x, verbose)
-  end
-end # def shadow
 
 # si el cliente tiene configurada una cuenta reseller,
 # y un operador esta accediendo a esta cuenta,
