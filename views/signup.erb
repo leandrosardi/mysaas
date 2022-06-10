@@ -1,5 +1,8 @@
 <%
-companyname = session['companyname'].to_s
+puts
+puts session['companyname'].to_s
+
+companyname = session[:companyname].to_s
 username = session['username'].to_s
 email = session['email'].to_s
 phone = session['phone'].to_s
@@ -73,8 +76,8 @@ err = params[:err]
 					<p class='text-left btn-mini'>Company Name &ast;</p>
 					<input type="text" name="companyname" id="id_companyname" placeholder="Company Name" tabindex="3" value="<%=companyname.encode_html%>" onfocus="$(this).select();" />
 		
-					<p class='text-left btn-mini'>Full Name &ast;</p>
-					<input type="text" name="username" id="id_username" placeholder="Your Full Name" tabindex="4" value="<%=username.encode_html%>" onfocus="$(this).select();" />
+					<p class='text-left btn-mini'>User Name &ast;</p>
+					<input type="text" name="username" id="id_username" placeholder="Your User Name" tabindex="4" value="<%=username.encode_html%>" onfocus="$(this).select();" />
 
 					<p class='text-left btn-mini'>Email &ast;</p>	
 					<input type="text" name="email" id="id_email" placeholder="Your Primary Email Address" tabindex="5" value="<%=email.encode_html%>" onfocus="$(this).select();" />

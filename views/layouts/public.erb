@@ -1,7 +1,7 @@
 <%
 redirect = params[:redirect]
 if (redirect.to_s.size > 0)
-	session['redirect_after_login_or_signup'] = redirect
+	session['redirect_on_success'] = redirect
 end
 %>
 <!DOCTYPE html>

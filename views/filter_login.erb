@@ -1,127 +1,28 @@
-<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
 <% 
-email = params[:email]
-password = params[:password]
-redirect = session['redirect_after_login_or_signup']
+# map params key-values to session key-values 
+params_to_session
 
-if email.to_s.size>0
-	session['email'] = email.to_s
-else
-	session['email'] = ""
+# map some params who are specific for for the filter
+redirect_on_success = session['redirect_on_success']
+
+# setup default values
+redirect_on_success = "/dashboard" if redirect_on_success.to_s.size == 0
+
+# login
+begin
+	# guardar el ID de intento de l en una variable de sesion
+	session['login.id'] = BlackStack::Core::User.login(params)
+rescue => e
+	# libero recursos
+	DB.disconnect
+	GC.start
+	# redirect
+	redirect "/login?err="+ CGI::escape(e.message)
 end
 
-# validar que los parametros no esten vacios
-if (email.to_s.size==0 || password.to_s.size==0)
-	redirect '/login?err='+ERR_LOGIN_NULL_VALUE.to_s
-end
+# blanquo la variable de sesion de redirect
+session['redirect_on_success'] = nil
 
-# comparar contra la base de datos
-#
-# IMPORTANT: keep working with ORM in order to avoid SQL-Injection hacking.
-#
-user = BlackStack::Core::User.where(:email=>email, :password=>password).first
-
-# decidir si el intento de login es exitoso o no
-if (user != nil)	
-
-	c = BlackStack::UserDivision.where(:id_user=>user.id).count.to_i
-
-	if (c==0)
-		# libero recursos
-		DB.disconnect
-		GC.start
-		#
-		redirect '/login?err='+ERR_LOGIN_FATAL_USER_HAS_NOT_DIVISION.to_s
-		
-	elsif (c==1)
-		ud = BlackStack::UserDivision.where(:id_user=>user.id).first
-
-		# obtengo la division
-		d = BlackStack::Division.where(:id=>ud.id_division, :available=>1).first
-
-		if (d==nil)
-			# libero recursos
-			DB.disconnect
-			GC.start
-			# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-			redirect '/login?err='+ERR_LOGIN_SERVER_HAS_BEEN_DISABLED.to_s
-		else
-			# TODO: Atrapar el error en caso que el servidor este apagado
-			
-			# envio un request a la division para que se setee a este usuario como logueado
-			url = "#{BlackStack::Pampa::api_protocol}://#{d.app_url}:#{d.app_port}/api1.2/division/login.json"
-			res = BlackStack::Netting::call_post(url, {'api_key' => BlackStack::Pampa::api_key, 'email' => user.email})
-			#TODO: Validar que el estado de la respuesta sea igual a 'success' 
-			parsed = JSON.parse(res.body)
-			
-			if (parsed["status"]=="success")
-
-				id_login = parsed["id_login"].gsub("{", "").gsub("}", "").to_s
-
-				# registrar la sesion en servidor central
-				session['login.id'] = id_login 
-				session['division.app_url'] = d.app_url 
-				session['division.app_port'] = d.app_port
-
-				# libero recursos
-				DB.disconnect
-				GC.start
-
-				# blanquo la variable de sesion de redirect
-				session['redirect_after_login_or_signup'] = nil
-
-				# con el login ID, entro a la division
-				login_url = "#{BlackStack::Pampa::api_protocol}://#{d.app_url}:#{d.app_port}/api1.2/division/login2.json?api_key=#{BlackStack::Pampa::api_key}&id_login=#{id_login}&redirect=#{CGI.escape(redirect.to_s)}" 
-				redirect login_url
-			else
-				# libero recursos
-				DB.disconnect
-				GC.start
-				# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-				redirect '/login?msgerr='+parsed["status"].to_s
-			end
-		end
-		
-	elsif (c>1)		
-		# redirecciono
-		%><p>Your account is assigned to more that 1 server. You can login to only one server at time. Chose the server you want to login by click one of the links below.</p><%
-
-		BlackStack::UserDivision.where(:id_user=>user.id).all { |ud|
-			# obtengo la division
-			d = BlackStack::Division.where(:id=>ud.id_division).first
-
-			if (d.available==nil)
-				%><p><%=d.name%> (disabled)</p><%
-			else
-				# TODO: Atrapar el error en caso que el servidor este apagado
-
-				# envio un request a la division para que se setee a este usuario como logueado
-				url = "#{BlackStack::Pampa::api_protocol}://#{d.app_url}:#{d.app_port}/api1.2/division/login.json"
-				res = BlackStack::Netting::call_post(url, {'api_key' => BlackStack::Pampa::api_key, 'email' => user.email})
-				parsed = JSON.parse(res.body)
-				
-				#TODO: Validar que el estado de la respuesta sea igual a 'success' 
-	#			if (parsed[:status] != "success")
-	#				redirect '/login?err='+ERR_LOGIN_FATAL_INCOMPATIBLE_DIVISION.to_s
-	#			end # if
-	
-				if (parsed["id_login"] != nil)
-					id_login = parsed["id_login"].gsub("{", "").gsub("}", "").to_s			
-					login_url = "#{BlackStack::Pampa::api_protocol}://#{d.app_url}:#{d.app_port}/api1.2/division/login2.json?api_key=#{BlackStack::Pampa::api_key}&id_login=#{id_login}" 
-					%><p><a href='<%=login_url%>'><%=d.name%></a></p><%
-				else
-					%><p><%=d.name%> (offline)</p><%
-				end
-			end # if d.available
-		}
-
-	else # menor a 0
-		# Esto no debe ocurrir nunca, porque un select count nunca puede retornar un numero menor a 0
-		redirect '/login?err='+ERR_LOGIN_FATAL_CANNOT_GET_NUMBER_OF_DIVISIONS.to_s
-		
-	end # if c
-else
-	redirect '/login?err='+ERR_LOGIN_WRONG_USER_PASSWORD.to_s
-end
+# redirect
+redirect redirect_on_success
 %>
-<!-- ---------------------------------------- -->

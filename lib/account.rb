@@ -15,6 +15,7 @@ module BlackStack
         # return the id of the new login record.
         # raise an exception if the signup descriptor doesn't pass all the valdiations.
         def self.signup(h)
+          errors = []
           companyname = h[:companyname]
           username = h[:username]
           email = h[:email]
@@ -26,60 +27,29 @@ module BlackStack
 
           # validar que los parametros no esten vacios
           if companyname.to_s.size==0
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Company Name is required."
+            errors << "Company Name is required."
           end
 
           if username.to_s.size==0
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Username is required."
+            errors << "User Name is required."
           end
 
           if email.to_s.size==0
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Email is required."
+            errors << "Email is required."
           end
 
           if password.to_s.size==0
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Password is required."
+            errors << "Password is required."
           end
 
-          if phone.to_s.size==0
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Phone is required."
+          # validar requisitos de la password
+          if !password.password?            
+            errors << "Password must have letters and number, and 6 chars as minimum."
           end
 
-          # validar formato de la password
-          if !password.password?
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Password must be at least 6 characters long, with letters and numbers."
-          end
-
+          # validar formato del email
           if !email.email?
-            # libero recursos
-            DB.disconnect	
-            GC.start
-            #
-            raise "Email is not valid."
+            errors << "Email is not valid."
           end
 
           # comparar contra la base de datos
@@ -87,7 +57,7 @@ module BlackStack
 
           # decidir si el intento de l es exitoso o no
           if !u.nil?
-            raise "Email already exists."
+            errors << "Email already exists."
           end
 
           # TODO: Validar formato del email
@@ -99,8 +69,16 @@ module BlackStack
           # getting timezone
           t = BlackStack::Core::Timezone.where(:short_description=>DEFAULT_TIMEZONE_SHORT_DESCRIPTION).first
           if t.nil?
-            raise "Default timezone not found."
+            errors << "Default timezone not found."
           end # if t.nil?
+
+          # if there are errors, raise exception with errors
+          if errors.size > 0
+            # libero recursos
+            DB.disconnect	
+            GC.start
+            raise errors.join("\n") 
+          end
 
           DB.transaction do
             # crear el cliente

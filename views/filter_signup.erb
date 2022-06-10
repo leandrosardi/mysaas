@@ -3,17 +3,17 @@
 params_to_session
 
 # map some params who are specific for for the filter
-redirect = session['redirect_after_login_or_signup']
-redirect_on_error = params[:redirect_on_error]
+redirect_on_success = session['redirect_on_success']
+redirect_on_error = session['redirect_on_error']
 
 # setup default values
 redirect_on_error = "/signup" if redirect_on_error.to_s.size == 0
-redirect = "/dashboard" if redirect.to_s.size == 0
+redirect_on_success = "/dashboard" if redirect_on_success.to_s.size == 0
 
 # signup new account
 begin
 	# guardar el ID de intento de l en una variable de sesion
-	session['l.id'] = BlackStack::Core::Account.signup(params)
+	session['login.id'] = BlackStack::Core::Account.signup(params)
 rescue => e
 	# libero recursos
 	DB.disconnect
@@ -23,9 +23,8 @@ rescue => e
 end
 
 # blanquo la variable de sesion de redirect
-redirect_to = session['redirect_after_login_or_signup'] #"/settings/filter_create_invoice?item_number=SSM.2.Semi-Dedicated-Monthly.2&n=1"
-session['redirect_after_login_or_signup'] = nil
+session['redirect_on_success'] = nil
 
 # redirect
-redirect redirect_to
+redirect redirect_on_success
 %>
