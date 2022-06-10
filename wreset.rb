@@ -81,6 +81,11 @@ BlackStack::Deployer::add_nodes([{
     :deployment_routine => 'install-mysaas-dev-environment',
 }])
 
+commands += [
+  # start cockroachdb node
+  { :command => :'start-mysaas', },
+]
+
 # deploy
 l.logs 'Starting web server... '
 BlackStack::Deployer::run_routine('my-dev-environment', 'start-mysaas')

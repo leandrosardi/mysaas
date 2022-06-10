@@ -2,7 +2,7 @@
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
-require 'deployment-routines/all-routines'
+require_relative './deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
 commands = []
