@@ -8,10 +8,11 @@ require 'lib/user'
 require 'lib/login'
 require 'lib/timezone'
 
-# map params key-values to session key-values 
+# map params key-values to session key-values.
+# for security: the keys `:password` and `:new_password` are not mapped.
 def params_to_session
   params.each do |key, value|
-    session[key] = value
+    session[key] = value if key != :password && key != :new_password
   end
 end
 
@@ -108,9 +109,9 @@ end
 set(:auth1) do |*roles|
   condition do
     if !logged_in?
-      redirect "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{BlackStack::Pampa::api_port.to_s}/login?redirect=#{URI::encode(request.path_info.to_s)}%3F#{URI::encode(request.query_string)}"
+      redirect "/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
     elsif unavailable?
-      redirect "#{CS_HOME_WEBSITE}/unavailable"      
+      redirect "/unavailable"      
     else
       @login = BlackStack::Core::Login.where(:id=>session['login.id']).first
     end

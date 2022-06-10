@@ -34,22 +34,22 @@ end
 
 # validar que los parametros no esten vacios
 if (password_1.to_s.size==0 || password_1.to_s.size==0)
-	redirect URI::encode('/reset?err='+ERR_RESET_NULL_PASSWORD_1.to_s+'&nid='+nid)
+	redirect '/reset?err='+ERR_RESET_NULL_PASSWORD_1.to_s+'&nid='+nid
 end
 
 # validar que los parametros no esten vacios
 if (password_2.to_s.size==0 || password_2.to_s.size==0)
-	redirect URI::encode('/reset?err='+ERR_RESET_NULL_PASSWORD_2.to_s+'&nid='+nid)
+	redirect '/reset?err='+ERR_RESET_NULL_PASSWORD_2.to_s+'&nid='+nid
 end
 
 # validar que los parametros no esten vacios
 if (password_1.to_s != password_2.to_s)
-	redirect URI::encode('/reset?err='+ERR_RESET_PASSWORDS_NOT_MATCH.to_s+'&nid='+nid)
+	redirect '/reset?err='+ERR_RESET_PASSWORDS_NOT_MATCH.to_s+'&nid='+nid
 end
 
 # validar que la password cumpla las normas de sguridad
 if !password_2.password?
-	redirect URI::encode('/reset?err='+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s+'&nid='+nid)
+	redirect '/reset?err='+ERR_SIGNUP_PASSWORD_IS_WRONG.to_s+'&nid='+nid)
 end
 
 # Actualizo la password

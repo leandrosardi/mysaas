@@ -75,6 +75,11 @@ cd ~/code/mysaas
 ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem local=yes laninterface=eth0
 ```
 
+The command may take many hours to install the seed records on the database.
+
+Once the command have done, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
+
+
 Such installation tasks are:
 1. install CockrouchDB 22.1 in your server; 
 2. install required Ruby gems;
@@ -83,15 +88,20 @@ Such installation tasks are:
 5. run the webserver.
 
 
-Some considerations:
+**Some considerations:**
+
+- If you have not a private key to connect your computer via SSH, use the parameter `ssh_password` instead `ssh_private_key_file`.
 
 - Be sure that your `ssh_user` is in the list of sudoers.
+
 - Be sure your firewall is not blocking ports 80 (the SaaS website), 8080 (the CockroachDB dashboard) and 26257 (the CockroachDB database).
+
 - Use `ifconfig` to get the name of your LAN interface, and assign it to the `laninterface` parameter.
+
 - Use `local=yes` when you are installing your local environment for development. Remove that parameter if you are running the command for a remote computer.
+
 - After running the installer, you will probably have not grants for installing or uninstalling gems. You can get back such grants running `cd /usr/local/rvm/gems/ruby-3.1.2;sudo chown -R $USER:$USER .`.
 
-Finally, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
 
 **Additional Readings:**
 

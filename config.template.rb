@@ -5,6 +5,9 @@
 # many features below will be enabled or disabled based on this flag
 SANDBOX = true # ambiente de desarrollo? => conecta a un SQLEXPRESS
 
+# this is the timezone assigned to new users, by default.
+DEFAULT_TIMEZONE_SHORT_DESCRIPTION = 'Buenos Aires'
+
 # setting up breakpoints for backend processes.
 # enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
 BlackStack::Debugging::set({
