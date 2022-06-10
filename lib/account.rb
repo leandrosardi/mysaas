@@ -40,8 +40,7 @@ module BlackStack
             #
             raise "Username is required."
           end
-puts
-puts email
+
           if email.to_s.size==0
             # libero recursos
             DB.disconnect	
@@ -67,14 +66,12 @@ puts email
           end
 
           # validar formato de la password
-puts
-puts password
           if !password.password?
             # libero recursos
             DB.disconnect	
             GC.start
             #
-            raise "Password must be at least 6 characters long."
+            raise "Password must be at least 6 characters long, with letters and numbers."
           end
 
           if !email.email?
