@@ -8,7 +8,7 @@ BlackStack::Deployer::add_routine({
         :sudo => true,
     }, {
         :command => "cockroach sql --host %eth0_ip%:%crdb_database_port% --certs-dir %crdb_database_certs_path%/certs -e \"CREATE DATABASE blackstack 
-WITH stat
+WITH 
 ENCODING = UTF8 
 CONNECTION LIMIT = -1;\"",
         :matches => [/CREATE DATABASE/, /already exists/],
