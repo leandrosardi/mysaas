@@ -31,10 +31,13 @@ module BlackStack
                 end
 
                 # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
-                if BCrypt::Password.create(password) != u.password
+puts 
+puts 
+puts "BCrypt::Password.create(password):#{BCrypt::Password.create(password)}."
+puts "BCrypt::Password.new(u.password):#{BCrypt::Password.new(u.password)}."
+                if BCrypt::Password.create(password) != BCrypt::Password.new(u.password)
                     # TODO: register failed login attempt
                     # TODO: validate number of login attempts last hour
-
                     errors << "Wrong passsword."
                 end
 

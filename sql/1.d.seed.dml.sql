@@ -6,7 +6,7 @@ INSERT INTO "role" (id, name) VALUES ('d96a68b1-e8a9-41fe-8e2d-9af2f0e26016', 'c
 INSERT INTO account (id, name, id_account_owner, create_time, id_timezone, storage_total_kb, api_key) VALUES ('897b4c5e-692e-400f-bc97-8ee0e3e1f1cf', 'su', '897b4c5e-692e-400f-bc97-8ee0e3e1f1cf', current_timestamp, 'f85765c7-0fc0-4626-9ab2-c1ec81032683', 15*1024, '4db9d88c-dee9-4b5a-8d36-134d38e9f763') ON CONFLICT DO NOTHING; -- super user
 
 -- TRUNCATE TABLE "user"; -- no se puede truncar una tabla referida en una llave foranea
-INSERT INTO "user" (id, id_account, create_time, email, password, name) VALUES ('d5d6d614-2780-43c0-8e52-3ad412d2f0a7', '897b4c5e-692e-400f-bc97-8ee0e3e1f1cf', current_timestamp, 'su', 'su', 'su') ON CONFLICT DO NOTHING; -- super user
+INSERT INTO "user" (id, id_account, create_time, email, password, name) VALUES ('d5d6d614-2780-43c0-8e52-3ad412d2f0a7', '897b4c5e-692e-400f-bc97-8ee0e3e1f1cf', current_timestamp, 'su', '$2a$12$icd/nDKZR7X9Jm0LY0TKoe/E22Ww90rdnDcTykbpgBgXAqsMZqXRG', 'su') ON CONFLICT DO NOTHING; -- super user
 
 -- TRUNCATE TABLE user_role; -- no se puede truncar una tabla referida en una llave foranea
 

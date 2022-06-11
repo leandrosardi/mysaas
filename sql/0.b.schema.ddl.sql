@@ -13,9 +13,9 @@ CREATE TABLE IF NOT EXISTS preference_history (
 	delete_time timestamp NULL,
 	id_user uuid NOT NULL, -- REFERENCES "user" (id), -- hIstory tables should not have foreing keys, because they are huge tables and inserts must be done fast
 	create_time timestamp NOT NULL,
-	name char(500)  NOT NULL,
+	name varchar(500)  NOT NULL,
 	type int NOT NULL, -- which type of value is stored here: string (0), int (1), float(2), bool (3)
-	value_string char(500) NULL,
+	value_string varchar(500) NULL,
 	value_int int NULL,
 	value_float float NULL,
 	value_bool bool NULL,

@@ -77,7 +77,7 @@ ruby ./install.rb ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=ubuntu ssh_pri
 
 The command may take many hours to install the seed records on the database.
 
-Once the command have done, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su`.
+Once the command have done, open a new browser, go to [http://127.0.0.1:80/login](http://127.0.0.1:80/login) and access with default user `su` and password `su1234`.
 
 
 Such installation tasks are:
