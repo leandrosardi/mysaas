@@ -2,7 +2,7 @@ require 'lib/email'
 
 module BlackStack
   module Core
-    include EmailDeliveryModule
+    include BlackStack::Core::EmailDeliveryModule
 
     # email body configuration
     @@logo_url => 'https://connectionsphere.com/core/images/logo/logo-32-01.png',

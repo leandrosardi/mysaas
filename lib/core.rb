@@ -6,6 +6,7 @@ require 'sequel'
 require 'bcrypt'
 require 'mail'
 require 'pry'
+require 'lib/email'
 
 # return a postgresql uuid
 def guid()

@@ -1,4 +1,5 @@
 module BlackStack
+  module Core
     module EmailDeliveryModule
         # smtp request sender information
         @@sender_email = nil
@@ -126,4 +127,5 @@ module BlackStack
             mail.deliver
         end # def smtp
     end # module EmailModule
+  end # module Core
 end # module BlackStack
