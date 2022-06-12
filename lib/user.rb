@@ -16,11 +16,6 @@ module BlackStack
                     errors << "Password is required."
                 end
                 
-                # validar formato del email
-                if !email.email?
-                    errors << "Email is not valid."
-                end
-        
                 # comparar contra la base de datos
                 # TODO: getting the right owner when we develop domain aliasing
                 u = BlackStack::Core::User.where(:email=>email).first 
@@ -31,11 +26,7 @@ module BlackStack
                 end
 
                 # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
-puts 
-puts 
-puts "BCrypt::Password.create(password):#{BCrypt::Password.create(password)}."
-puts "BCrypt::Password.new(u.password):#{BCrypt::Password.new(u.password)}."
-                if BCrypt::Password.create(password) != BCrypt::Password.new(u.password)
+                if BCrypt::Password.new(u.password) != password
                     # TODO: register failed login attempt
                     # TODO: validate number of login attempts last hour
                     errors << "Wrong passsword."
