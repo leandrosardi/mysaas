@@ -9,6 +9,7 @@ gem 'blackstack-deployer', '~>1.2.11'
 gem 'simple_cloud_logging', '~>1.2.2'
 gem 'simple_command_line_parser', '~>1.1.2'
 # Other gems needed for running mysaas
+gem 'mail', '~>2.7.1'
 gem 'pry', '~>0.14.1'
 gem 'pg', '~>1.3.5'
 gem 'sequel', '~>5.56.0'

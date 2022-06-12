@@ -4,6 +4,8 @@ require 'simple_cloud_logging'
 require 'pg'
 require 'sequel'
 require 'bcrypt'
+require 'mail'
+require 'pry'
 
 # return a postgresql uuid
 def guid()
