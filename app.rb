@@ -271,20 +271,6 @@ get '/filter_login' do
   erb :filter_login, :layout => nil
 end
 
-get '/forgot', :agent => /(.*)/ do
-  erb :forgot, :layout => :'/layouts/public'
-end
-post '/forgot' do
-  erb :filter_forgot, :layout => nil
-end
-
-get '/reset', :agent => /(.*)/ do
-  erb :reset, :layout => :'/layouts/public'
-end
-post '/reset' do
-  erb :filter_reset
-end
-
 get '/signup', :agent => /(.*)/ do
   erb :signup, :layout => :'/layouts/public'
 end
@@ -298,6 +284,21 @@ end
 
 get '/logout' do
   erb :filter_logout
+end
+
+
+get '/recover', :agent => /(.*)/ do
+  erb :recover, :layout => :'/layouts/public'
+end
+post '/recover' do
+  erb :filter_recover, :layout => nil
+end
+
+get '/reset/:nid', :agent => /(.*)/ do
+  erb :reset, :layout => :'/layouts/public'
+end
+post '/reset' do
+  erb :filter_reset
 end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------

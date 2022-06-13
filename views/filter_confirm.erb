@@ -10,6 +10,13 @@ end
 
 # load objects
 notification = BlackStack::Core::NotificationConfirm.where(:id=>nid).first
+
+# verifico si la notificacion existe
+if notification.nil?
+	redirect "/login?err=#{CGI::escape("Notification ID Not Found.")}"
+end
+
+# load objects
 user = BlackStack::Core::User.where(:id=>notification.id_user).first
 
 # if the user is already verified, then redirect to the home page
@@ -17,12 +24,7 @@ if user.verified
 	redirect "/login?msg=#{CGI::escape("Email Was Already Verified.")}"
 end
 
-# verifico si la notificacion existe
-if notification.nil?
-	redirect "/login?err=#{CGI::escape("Notification ID Not Found.")}"
-end
-
-# verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
+# verifico que la notificacion no es anterior a NotificationConfirmation::LINK_TIMEOUT
 if notification.oldness > BlackStack::Core::NotificationConfirm::LINK_TIMEOUT
 	redirect "/login?err=#{CGI::escape("Link Expired.")}"
 end
@@ -39,4 +41,3 @@ user.save
 # redirecciono a la pagina de login
 redirect "/login?msg=#{CGI::escape("Email Verification Success!")}"
 %>
-<!-- ---------------------------------------- -->

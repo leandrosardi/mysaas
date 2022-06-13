@@ -21,7 +21,7 @@ module BlackStack
 
           <p><b>Click the link below to confirm your email address.</b></p>
           
-          <p>This link will be valid for #{LINK_TIMEOUT.to_s} minutes.</p>
+          <p>This link will be valid for #{BlackStack::Core::NotificationConfirm::LINK_TIMEOUT.to_s} minutes.</p>
           
           <p><a href='#{CS_HOME_WEBSITE}/confirm/#{self.id.to_guid}'><b>Click here and confirm your email address</b></a>.</p>
           
