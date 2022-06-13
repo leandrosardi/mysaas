@@ -342,22 +342,28 @@ post '/settings/filter_password', :auth1 => true do
   erb :'/settings/filter_password'
 end
 
-
-
-get '/settings/filter_add_user', :agent => /(.*)/ do
-  erb :'/settings/filter_add_user'
+# change password
+get '/settings/apikey', :auth1 => true, :agent => /(.*)/ do
+  erb :'/settings/apikey', :layout => :'/layouts/core'
 end
-get '/settings/filter_delete_user', :agent => /(.*)/ do
-  erb :'/settings/filter_delete_user'
+post '/settings/filter_apikey', :auth1 => true do
+  erb :'/settings/filter_apikey'
 end
 
 ## users management screen
 get '/settings/users', :auth1 => true, :agent => /(.*)/ do
   erb :'/settings/users', :layout => :'/layouts/core'
 end
-post '/settings/filter_update_user', :agent => /(.*)/ do
-  erb :'/settings/filter_update_user'
+post '/settings/filter_user_add', :auth1 => true do
+  erb :'/settings/filter_user_add'
 end
+post '/settings/filter_user_delete', :auth1 => true do
+  erb :'/settings/filter_user_delete'
+end
+post '/settings/filter_user_update', :auth1 => true do
+  erb :'/settings/filter_user_update'
+end
+
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
