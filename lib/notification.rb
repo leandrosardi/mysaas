@@ -4,14 +4,14 @@ module BlackStack
   module Core
     include BlackStack::Core::EmailDeliveryModule
 
-    # email body configuration
-    @@logo_url => 'https://connectionsphere.com/core/images/logo/logo-32-01.png',
-    @@signature_picture_url => 'https://connectionsphere.com/core/images/leandro_sardi.png',
-    @@signature_name => 'Leandro D. Sardi',
-    @@signature_position => 'Founder & CEO',
-
     class Notification < Sequel::Model(:notification)
       many_to_one :user, :class=>:'BlackStack::User', :key=>:id_user
+
+      # email body configuration
+      @@logo_url = 'https://connectionsphere.com/core/images/logo/logo-32-01.png'
+      @@signature_picture_url = 'https://connectionsphere.com/core/images/leandro_sardi.png'
+      @@signature_name = 'Leandro D. Sardi'
+      @@signature_position = 'Founder & CEO'
 
       # replace the merge-tag <CONTENT HERE> for the content of the email
       NOTIFICATION_CONTENT_MERGE_TAG = "<CONTENT HERE>"
@@ -66,7 +66,7 @@ module BlackStack
       '<section class="container">' +
       "<table style='background-color:rgb(255,255,255);width:75%;align:center;horizontal-align:center;padding:20px;' align='center'>" +
       "<!--logo-->" + 
-      "<tr><td align='center' style='text-align:center;'><img src='#{NOTIFICATIONS[:logo_url]}' width='75px' height='75px' /></td></tr>" + 
+      "<tr><td align='center' style='text-align:center;'><img src='#{@@logo_url}' width='75px' height='75px' /></td></tr>" + 
       "<tr>" +
       "<td>" +
       NOTIFICATION_CONTENT_MERGE_TAG +
@@ -75,9 +75,9 @@ module BlackStack
       "<tr><td height='5px'><br/></td></tr>" +
       "<!--signature-->" + 
       "<tr><td>" +
-      " <p>Warmest Regards.<br/>#{NOTIFICATIONS[:signature_name]}.<br/>#{NOTIFICATIONS[:signature_position]}, <a href='#{COMPANY_URL}'>#{COMPANY_NAME}</a></p>" + 
+      " <p>Warmest Regards.<br/>#{@@signature_name}.<br/>#{@@signature_position}, <a href='#{COMPANY_URL}'>#{COMPANY_NAME}</a></p>" + 
       "</td></tr>" +
-      "<tr><td><img src='#{NOTIFICATIONS[:signature_picture_url]}' width='100px' height='100px' /></td></tr>" + 
+      "<tr><td><img src='#{@@signature_picture_url}' width='100px' height='100px' /></td></tr>" + 
       "</table>" +  
       '</section>' +   
       '</body>' +
@@ -87,7 +87,8 @@ module BlackStack
         raise "This is an abstract class"
       end
 
-      def smtp()    
+      def smtp()
+=begin
         BlackStack::Core::Notification::delivery (
           NOTIFICATIONS[:smtp_url], 
           NOTIFICATIONS[:smtp_port],
@@ -100,7 +101,8 @@ module BlackStack
           self.name_from,
           self.email_from
         ) 
-      end # smtp      
-    end # module Email
+=end
+      end # def smtp     
+    end # class Notification
   end # module Core
 end # module BlackStack
