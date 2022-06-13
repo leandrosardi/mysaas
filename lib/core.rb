@@ -1,12 +1,12 @@
 require 'blackstack-core'
 require 'simple_command_line_parser'
 require 'simple_cloud_logging'
+require 'blackstack-deployer'
 require 'pg'
 require 'sequel'
 require 'bcrypt'
 require 'mail'
 require 'pry'
-require 'lib/email'
 
 # return a postgresql uuid
 def guid()

@@ -1,0 +1,6 @@
+require 'lib/stub'
+require 'lib/skeleton/account'
+require 'lib/skeleton/user'
+require 'lib/skeleton/login'
+require 'lib/skeleton/timezone'
+require 'lib/skeleton/notification'

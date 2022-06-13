@@ -87,7 +87,8 @@ CS_HOME_WEBSITE = "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{CS_HOME_P
 POSTMARK_API_TOKEN = '@postmark_api_token@'
 
 # parameters for email notifications
-NOTIFICATIONS = {
+# how to get Postmark SMTP parameters: https://postmarkapp.com/developer/user-guide/send-email-with-smtp
+BlackStack::Core::EmailDeliveryModule.set (
   # smtp request sender information
   :sender_email => '@sender_email@',
   :from_email => '@from_email@', # reply-to field in the SMTP request
@@ -104,7 +105,7 @@ NOTIFICATIONS = {
   :signature_picture_url => 'https://connectionsphere.com/core/images/leandro_sardi.png',
   :signature_name => 'Leandro D. Sardi',
   :signature_position => 'Founder & CEO',
-}
+)
 
 # setting up extensions
 BlackStack::Extensions.set({
