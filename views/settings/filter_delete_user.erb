@@ -26,7 +26,7 @@
 		# libero recursos
 		DB.disconnect
 		GC.start
-		redirect '/settings/users?errdesc=' + CGI.escape(parsed['status'].to_s)
+		redirect '/settings/users?err=' + CGI.escape(parsed['status'].to_s)
 	end
 
 	# actualizo el registro
@@ -46,5 +46,5 @@
     GC.start
 
  	# redireccionar al dashboard
- 	redirect '/settings/users?msgdesc=Account%20Deleted.'
+ 	redirect '/settings/users?msg=Account%20Deleted.'
 %>

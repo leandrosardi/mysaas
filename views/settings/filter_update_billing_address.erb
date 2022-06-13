@@ -36,7 +36,7 @@ if (
 	GC.start
 	
 	# redireccionar al dashboard
-	redirect "/settings/clientinformation?errdesc=#{CGI.escape('All fields in the Billing Information are Mandatry.')}"
+	redirect "/settings/clientinformation?err=#{CGI.escape('All fields in the Billing Information are Mandatry.')}"
 end
   
 # Actualizo la password

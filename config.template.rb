@@ -70,6 +70,9 @@ BlackStack::Core::Storage::set_storage(
 APP_DOMAIN = "127.0.0.1" 
 APP_NAME = "@app_name@"
 
+# Email to contact support
+HELPDESK_EMAIL = 'tickets@expandedventure.com'
+
 # Company Information
 COMPANY_NAME = "@company_name@"
 COMPANY_ADDRESS = "@company_address@"

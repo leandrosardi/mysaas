@@ -1,205 +1,49 @@
-	<nav id="left-panel">
-		<div id="left-panel-content">
-			<ul>
-				<%
-				if @program == PRODUCT_SSM
-				%>
-				<li>
-					<a href="/prospecting/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
+<nav id="left-panel">
+	<div id="left-panel-content">
+		<ul>
+			<li>
+				<a href="/prospecting/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
+			</li>
+			<li class="lp-dropdown">
+				<a href='#' class="lp-dropdown-toggle" id="new-dropdown"><span class="icon-plus"></span>New</a>
+			</li>
+			<ul class="lp-dropdown-menu simple" data-dropdown-owner="new-dropdown" style="width: 150px;">
+				<li style="display: block; width: 100%;">
+					<span style='position:absolute; right:5px;top:5px;'>
+						<span class='badge badge-mini badge-green'>premium</span>
+					</span>
 				</li>
-
-				<li class="lp-dropdown">
-					<a href='#' class="lp-dropdown-toggle" id="new-dropdown"><span class="icon-plus"></span>New</a>
-				</li>
-				<ul class="lp-dropdown-menu simple" data-dropdown-owner="new-dropdown" style="width: 150px;">
-					<!--
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/prospecting/campaign/new/" style="display: block; width: 100%;"><i class="<%=Pipeline.icon_class(Pipeline::TYPE_CAMPAIGN)%>"></i>&nbsp;&nbsp;Campaign</a>
-					</li>
-					-->
-					<li style="display: block; width: 100%;">
-						<span style='position:absolute; right:5px;top:5px;'>
-							<span class='badge badge-mini badge-green'>premium</span>
-						</span>
-						<a tabindex="-1" href="/prospecting/pipeline/new/" style="display: block; width: 100%;"><i class="<%=Pipeline.icon_class(Pipeline::TYPE_PIPELINE)%>"></i>&nbsp;&nbsp;Pipeline</a>
-					</li>
-				</ul>
-
-				<li>
-					<a href="/prospecting/responses"><span class="icon-comments"></span>Responses</a>
-				</li>
-				<li>
-					<a href="/farming/accounts"><span class="icon-user"></span>Accounts</a>
-				</li>
-				<!--
-				<li>
-					<div style='position:relative;left:0;left:0;'>
-						<a href="/prospecting/analytics"><span class="icon-bar-chart"></span>Analytics</a>
-						<div style='position:absolute;top:10px;right:0;'>
-							<span class='badge badge-green'>new!</span>
-						</div>
-					</div>
-				</li>
-				-->
-
-				<%
-				elsif @program == PRODUCT_AFF
-				%>
-				<!--
-				<li>
-					<a href="/affiliatestrackingservice/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				-->
-
-				<li class="lp-dropdown">
-					<a href='#' class="lp-dropdown-toggle" id="new-dropdown"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				<ul class="lp-dropdown-menu simple" data-dropdown-owner="new-dropdown" style="width: 150px;">
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/affiliatestrackingservice/dashboard/merchant" style="display: block; width: 100%;"><i class="icon-user"></i>&nbsp;&nbsp;For Merchants</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/affiliatestrackingservice/dashboard/reseller" style="display: block; width: 100%;"><i class="icon-user"></i>&nbsp;&nbsp;For Resellers</a>
-					</li>
-				</ul>
-
-				<li>
-					<a href="/affiliatestrackingservice/pixels"><span class="icon-tag"></span>Tracking<br/>Pixels</a>
-				</li>
-				<li>
-					<a href="/affiliatestrackingservice/links"><span class="icon-link"></span>Affiliate<br/>Links</a>
-				</li>
-				<li>
-					<a href="/affiliatestrackingservice/embeddeds"><span class="icon-beaker"></span>Embedded<br/>Links</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_CRD
-				%>
-				<li>
-					<a href="/crowdtrust/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				<li>
-					<a href="/crowdtrust/uploads"><span class="icon-cloud-upload"></span>Uploads</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_MAC
-				%>
-				<li>
-					<a href="/farming/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				<li>
-					<a href="/farming/pictures"><span class="icon-picture"></span>Pictures</a>
-				</li>
-				<li>
-					<a href="/farming/lnusertemplates"><span class="icon-edit"></span>Templates</a>
-				</li>
-				<li>
-					<a href="/farming/accounts"><span class="icon-user"></span>Accounts</a>
-				</li>
-				<li>
-					<a href="/farming/proxies"><span class="icon-random"></span>Proxies</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_FLD
-				%>
-				<li>
-					<a href="/freeleads/results"><span class="icon-search"></span>Search</a>
-				</li>
-				<li>
-					<a href="/freeleads/searches"><span class="icon-th-list"></span>Searches</a>
-				</li>
-				<li>
-					<a href="/freeleads/upload"><span class="icon-upload"></span>Upload</a>
-				</li>
-				<li>
-					<a href="/freeleads/dashboard"><span class="icon-cog"></span>Settings</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_PVA
-				%>
-				<li>
-					<a href="/pva/results"><span class="icon-th-list"></span>Store</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_THR
-				%>
-				<!--
-				<li>
-					<a href="/threads/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				-->
-				<li>
-					<a href="/threads/threads"><span class="icon-cogs"></span>Threads</a>
-				</li>
-				<!--
-				<li>
-					<a href="/threads/screens"><span class="icon-desktop"></span>Screens</a>
-				</li>
-				-->
-				<%
-				elsif @program == PRODUCT_SCL
-				%>
-				<li>
-					<a href="/scl/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				<%
-				elsif @program == PRODUCT_SHM
-				%>
-				<li>
-					<a href="/hostsmonitoring/dashboard"><span class="icon-dashboard"></span>Dashboard</a>
-				</li>
-				<!--
-				<li>
-					<a href="/hostsmonitoring/notifications"><span class="icon-envelope"></span>Notification<br/>Profiles</a>
-				</li>
-				-->
-				<%
-				elsif @program == PRODUCT_EF
-				%>
-				<li>
-					<a href="/emailaddresses/add_alias"><span class="icon-plus"></span>Add</a>
-				</li>
-				<li>
-					<a href="/emailaddresses/domains"><span class="icon-flag"></span>Domains</a>
-				</li>
-				<li>
-					<a href="/emailaddresses/emails"><span class="icon-envelope-alt"></span>Emails</a>
-				</li>
-				<%
-				end
-				%>
-
-				<li class="lp-dropdown">
-					<a href="/settings/dashboard" class="lp-dropdown-toggle" id="settings-dropdown"><span class="icon-cog"></span>Settings</a>
-				</li>
-				<ul class="lp-dropdown-menu simple" data-dropdown-owner="settings-dropdown" style="width: 150px;">
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/clientinformation" style="display: block; width: 100%;"><i class="icon-heart"></i>&nbsp;&nbsp;Company</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/password" style="display: block; width: 100%;"><i class="icon-key"></i>&nbsp;&nbsp;Password</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/users" style="display: block; width: 100%;"><i class="icon-group"></i>&nbsp;&nbsp;Users</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/filejobs" style="display: block; width: 100%;"><i class="icon-cloud-download"></i>&nbsp;&nbsp;Download</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/credit" style="display: block; width: 100%;"><i class="icon-money"></i>&nbsp;&nbsp;Credits</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/invoices" style="display: block; width: 100%;"><i class="icon-money"></i>&nbsp;&nbsp;Invoices</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/subscriptions" style="display: block; width: 100%;"><i class="icon-credit-card"></i>&nbsp;&nbsp;Subscriptions</a>
-					</li>
-					<li style="display: block; width: 100%;">
-						<a tabindex="-1" href="/settings/statements" style="display: block; width: 100%;"><i class="icon-list-alt"></i>&nbsp;&nbsp;Financial</a>
-					</li>
-				</ul>
 			</ul>
-		</div>
-		<div class="icon-caret-down"></div>
-		<div class="icon-caret-up"></div>
-	</nav>
+
+			<li class="lp-dropdown">
+				<a href="/settings/dashboard" class="lp-dropdown-toggle" id="settings-dropdown"><span class="icon-cog"></span>Settings</a>
+			</li>
+			<ul class="lp-dropdown-menu simple" data-dropdown-owner="settings-dropdown" style="width: 150px;">
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/clientinformation" style="display: block; width: 100%;"><i class="icon-heart"></i>&nbsp;&nbsp;Company</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/password" style="display: block; width: 100%;"><i class="icon-key"></i>&nbsp;&nbsp;Password</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/users" style="display: block; width: 100%;"><i class="icon-group"></i>&nbsp;&nbsp;Users</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/filejobs" style="display: block; width: 100%;"><i class="icon-cloud-download"></i>&nbsp;&nbsp;Download</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/credit" style="display: block; width: 100%;"><i class="icon-money"></i>&nbsp;&nbsp;Credits</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/invoices" style="display: block; width: 100%;"><i class="icon-money"></i>&nbsp;&nbsp;Invoices</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/subscriptions" style="display: block; width: 100%;"><i class="icon-credit-card"></i>&nbsp;&nbsp;Subscriptions</a>
+				</li>
+				<li style="display: block; width: 100%;">
+					<a tabindex="-1" href="/settings/statements" style="display: block; width: 100%;"><i class="icon-list-alt"></i>&nbsp;&nbsp;Financial</a>
+				</li>
+			</ul>
+		</ul>
+	</div>
+</nav>

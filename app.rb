@@ -188,10 +188,10 @@ end
 #
 # No puede ser un metodo de la clase User, porque accede a las variables de sesion del webserver.
 def getEmailToShow(user)
-  if user.client.resellerSignature? && session['login.id_prisma_user'].to_s.size > 0
-    if user.client.user_to_contect == nil
+  if user.account.resellerSignature? && session['login.id_prisma_user'].to_s.size > 0
+    if user.account.user_to_contect == nil
       return "****@****.***"
-    elsif user.client.user_to_contect.id != user.id
+    elsif user.account.user_to_contect.id != user.id
       return "****@****.***"
     end
   end
@@ -205,7 +205,7 @@ def nav1(name1, beta=false)
 
   ret = 
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{CGI.escapeHTML(user.client.name.encode_html)}</b></a>" + 
+  "<a class='simple' href='/settings/clientinformation'><b>#{CGI.escapeHTML(user.account.name.encode_html)}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   CGI.escapeHTML(name1)
 
@@ -219,7 +219,7 @@ def nav2(name1, url1, name2)
   user = BlackStack::Core::User.where(:id=>login.id_user).first  
 
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{user.client.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/settings/clientinformation'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 
@@ -231,7 +231,7 @@ def nav3(name1, url1, name2, url2, name3)
   login = BlackStack::Core::Login.where(:id=>session['login.id']).first
   user = BlackStack::Core::User.where(:id=>login.id_user).first  
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{user.client.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/settings/clientinformation'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 

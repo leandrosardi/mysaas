@@ -2,36 +2,17 @@
 require "digest/md5"
 login = @login
 user = login.user
-client = user.client
-operator = nil
+account = user.account
 
-@program = @program || PRODUCT_SSM
+err = params[:err]
+msg = params[:msg]
 
-h = BlackStack::InvoicingPaymentsProcessing.products_descriptor.select { |o| o[:code].upcase == @program.upcase }.first
+@program = 'FreeLeadsData' #@program || PRODUCT_SSM
 
-if h.nil?
-	program_name = '(unknown program)'
-	credits = '-'
-	unit_name = '(unknown)'
-else
-	program_name = h[:name]
-	if @program == PRODUCT_SSM
-		credits = (0.0-BlackStack::Balance.new(client.id, PRODUCT_DRX).credits).to_i.to_label
-		unit_name = 'connection requests'
-	else
-		credits = (0.0-BlackStack::Balance.new(client.id, @program).credits).to_i.to_label
-		unit_name = h[:unit_name]
-	end
-end
-
-# gct_on_introduction_message?
-form_gct_on_introduction_message = '' 
-if !client.gct_on_introduction_message.nil?
-	form_gct_on_introduction_message = client.gct_on_introduction_message ? 'yes' : 'no'
-end
+#h = BlackStack::InvoicingPaymentsProcessing.products_descriptor.select { |o| o[:code].upcase == @program.upcase }.first
 
 %>
-	<div id='wait' name='wait' style='display: none; position: fixed; z-index: 1000000; top: 0; left: 0; height: 100%; width: 100%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;'>
+<div id='wait' name='wait' style='display: none; position: fixed; z-index: 1000000; top: 0; left: 0; height: 100%; width: 100%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;'>
 	<br/>
 	<br/>
 	<br/>
@@ -42,305 +23,125 @@ end
 	<br/>
 	<br/>
 	<center><span id='wait-caption' name='wait-caption' style='font-size: 24;text-align: center;'></span></center>
-	</div>
+</div>
 
-	<div class='ajax_status_badge ajax-status-banner-blue'>
-		Saving...
-	</div>	
-
-	<div class='ajax_status_badge ajax-status-banner-green'>
-		Success!
-	</div>
-
-	<div class='ajax_status_badge ajax-status-banner-red'>
-		Error
-	</div>
-
-	<div id="gct-setup-modal" class='popup' tabindex="-1" style="color: rgb(60,60,60); background-color: white; opacity: 1.0; z-index:999999; display:none; position:fixed; text-align: left; top: 40px; left: 0px; width: 100%; height:100%;">
-		<div class='top-right-buttons'>
-			<button class='cancel-button btn btn-link btn-large simple menu-link' style='font-size: 32px; text-decoration: none;'><i class='icon-remove'> </i></button>
-		</div>
-		<div class='area'>
-			<section class='row-fluid'>
-				<h3>
-				<span style='font-size:24px; padding: 10px;' class="badge badge-success">Free Bonus</span> Connect With Your Leads on LinkedIn, Automatically.
-				</h3>
-
-				<span style="display: inline-block; font-size: 18px; line-height: 34px; padding-bottom: 15px;">Our <b>Accounts</b> put <b>You</b> and the <b>Lead</b> in a Group Chat on <b>LinkedIn</b>.</span>
-
-				<span style="display: inline-block; font-size: 16px; line-height: 24px; padding-bottom: 10px; font-weight: normal;">In addition to sending you an email notification, we create a Group Chat on LinkedIn, with You and the Lead.</span>
-
-				<span style="display: inline-block; font-size: 16px; line-height: 24px; padding-bottom: 10px; font-weight: bold;">What are the benfits of this?</span>
-
-				<div class="row-fluid">
-					<div class="span6">
-						<ol>
-							<li style="display: inline-block; font-size: 16px; line-height: 24px; padding-bottom: 10px;"><b>1.</b> The leads keeps warmed during the transfer.</li>
-							<li style="display: inline-block; font-size: 16px; line-height: 24px; padding-bottom: 10px;"><b>2.</b> The transfer is made with 0-disconnection.</li>
-							<li style="display: inline-block; font-size: 16px; line-height: 24px; padding-bottom: 10px;"><b>3.</b> You can push a voice message in the LinkedIn chat.</li>
-						</ol>
-						<div class='linkedin-url-input'> 
-							<h4>Write your LinkedIn Profile URL here:</h4>
-							<input id='pid' name='pid' type='hidden' value />							
-							<input onFocus="this.select();" placeholder="Linkedin url" id='linkedin-url' name='linkedin-url' type='text' style="width: 95%;" value='<%=user.linkedin_profile_url.to_s%>'/>							
-							<span><i class='icon-info-sign'></i> Our accounts create a <b>group chat</b> between You and the Leads.</span>
-							<br/>	
-							<div>
-								<div class="btn-group">
-									<a id="form-gct-on-intros" data-on="<%=form_gct_on_introduction_message.to_s%>" class="btn dropdown-toggle btn-filter" style="width: 200px;" data-toggle="dropdown" href="#" title="">
-										<span class="caret"></span>
-										<b>When? </b>
-										<span class="name"></span>
+<header class="navbar navbar-fixed-top" id="main-navbar">
+	<div class="navbar-inner">
+		<div class="container">
+			<table width='100%'>
+				<tr>
+					<td width='50px'><a class="logo" href="/services" title='Web Services'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
+					<td width='50px'>
+						<!-- TODO: badge if this user has any role -->
+					</td>
+					<td width='250px'>
+						<span style='color: White;font-family: Arial;font-size: 12px;'>
+							<ul class="nav">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+									<i class='icon-coffee'></i> <%=@program%> <i class="icon-chevron-down"></i>  
 									</a>
-									<ul class="dropdown-menu btn-filter-list" style="z-index: 9999; width: 460px; height: 75px;">
-										<li class="text-left item">
-											<a id='form-enable-gct-on-intro' class="form-choose-when-do-gct" style='cursor:pointer;' data-on="yes" data-name="First Follow-Up">When Sending First Follow-Up to Each New Connection <i>(quantity)</i></a>
-										</li>
-										
-										<li class="text-left item">
-											<a id='form-disable-gct-on-intro' class="form-choose-when-do-gct" style='cursor:pointer;' data-on="no" data-name="Transfer a Warm Lead">When Transfer a Warm Leads Only <i>(quality)</i></a>
-										</li>								
+									<ul class="dropdown-menu" style='width:250px;'>
+										<li class="nav-header"><i class="icon-desktop"></i> For Marketers</li>
+										<li><a href="/prospecting/?program=drx">Prospecting</a></li>
+										<li><a href="/affiliatestrackingservice/?program=aff">Affiliates Tracking Service</a></li>
 									</ul>
-								</div>
-							</div>
-							<p id="invalid-input" style='color:red'></p>
-							<!--
-							<span><b>Remember:</b> You are logged in as <b><%=user.name.to_s%></b> (<%=user.email.to_s%>)</span>
-							-->
-						</div>
-					</div>
-					<div class="span6">
-						<img src='/core/images/gct.png' width='100%' alt='Group Chat Transfer' style="display: inline-block;width: 300px;" />
-					</div>
-				</div>
-			</section>
-			<br/>
-			<section class="modal-footer" style='background-color: #ffffff; padding: 0px 15px 15px; border-top: none;'>
-				<button id="activate-btn" class="btn btn-blue btn-large btn-disabled btn-block" onclick="enableGCT()" disabled>Activate</button>
-				<button class="btn btn-red btn-large btn-block" id="close-modal" data-dismiss="modal">I Have Not a LinkedIn Account</button>
-			</section>
-			<br/>
-			<br/>
+								</li>
+							</ul>
+						</span>					
+					</td>
+					<td width='auto' style='padding-top:0px;'>
+					<%
+					if !account.api_key.nil?
+						if BlackStack::Core::API::api_key.to_guid == account.api_key.to_guid
+						%>
+						<span class='badge badge-blue' title='You Are Running the Webserver using this API-KEY for validating the API-CALLs.'>Website Owner</span>
+						<%
+						end # if BlackStack::Core::api_key.to_guid == account.api_key.to_guid
+					end # if !account.api_key.nil?
+					%>
+					</td>
+
+					<td></td>
+					<td align='right' style='text-align: right:'>
+						<a class="btn nav-button collapsed" data-toggle="collapse" data-target=".nav-collapse">
+							<span class="icon-reorder"></span>
+						</a>
+			
+						<div class="nav-collapse collapse">
+							<ul class="nav pull-right">
+								<li>
+									<a href="mailto:<%=HELPDESK_EMAIL%>?subject=I Need Help" style='color:white;'>
+										<span>
+											<span class='badge badge-blue'><i class="icon-question-sign"></i> Email Support</span>
+										</span>
+									</a>
+								</li>
+																		
+								<li>
+									<a href="/settings/credit"> 
+										<span>
+											<span class='label label-blue'>500</span> records
+										</span>
+									</a>
+								</li>
+
+								<!--
+								<li class="separator"></li>
+								-->
+
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle usermenu" data-toggle="dropdown">
+										<img alt="Avatar" src="<%=("https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(user.email.strip.downcase)).encode_html%>">
+										<!--
+										<span>&nbsp;&nbsp;<%=login.user.account.name.encode_html%></span>
+										-->
+									</a>
+									<ul class="dropdown-menu">
+										<li class="nav-header">User Details</li>
+										<li><a><b>Email:</b> <%=user.email.encode_html%></a></li>
+										<li><a><b>Company:</b> <%=account.name.to_s.encode_html%></a></li>								
+										<li class="divider"></li>
+										<li class="nav-header">Options</li>
+										<li>
+											<a href="/settings/dashboard"><i class='icon-cog'></i> Settings</a>
+										</li>
+										<li>
+											<a href="/logout"><i class='icon-signout'></i>Sign Out</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>							
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
-
-	<header class="navbar navbar-fixed-top" id="main-navbar">
-		<%
-		id_prisma_user = session['login.id_prisma_user']
-		if id_prisma_user.to_s.size > 0 && false # TODO: reactivate this when it the CSS problem is fixed
-			operator = BlackStack::Core::User.where(:id=>id_prisma_user).first
-		%>
-		<div class="row-fluid" style='background: red;'>
-			<div class='span1'></div>
-			<div class='span10'>
-				<span style='color: White;font-family: Arial;'>You are logged into the account of <b><%=client.name.encode_html%></b> from the Prisma account <b><%=operator.email.to_s.encode_html%></b>. You have not access to see the email address of all users, except the <b>contact user</b>.</span>
-			</div>
-			<div class='span1'></div>
-		</div>
-		<%
-		end # prisma user
-		%>
-
-		<div class="navbar-inner">
-			<div class="container">
-				<table width='100%'>
-					<tr>
-						<td width='50px'><a class="logo" href="<%=getDivisionURL%>/services" title='Web Services'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
-						<td width='50px'>
-						<%
-						if client.isDivisionAdmin?
-							%>
-							<span class='badge badge-pink' title='Customer Success Manager. Some features are unloked.'>csm</span>.
-							<%
-						end
-						%>
-						</td>
-						<td width='250px'>
-							<span style='color: White;font-family: Arial;font-size: 12px;'>
-								<ul class="nav">
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-										<i class='icon-coffee'></i> <%=program_name%> <i class="icon-chevron-down"></i>  
-										</a>
-										<ul class="dropdown-menu" style='width:250px;'>
-
-											<li class="nav-header"><i class="icon-desktop"></i> For Marketers</li>
-											<li><a href="/prospecting/?program=<%=PRODUCT_SSM%>">Prospecting</a></li>
-											<li><a href="/affiliatestrackingservice/?program=<%=PRODUCT_AFF%>">Affiliates Tracking Service</a></li>
-											<%
-											if client.isDivisionAdmin?
-											%>
-											<li><a href="/farming/?program=<%=PRODUCT_MAC%>">Farming <%=internalWidget%></a></li>
-											<li><a href="/emailaddresses/?program=<%=PRODUCT_EF%>">Email Addresses <%=internalWidget%></a></li>
-											<%
-											end
-											%>
-											<!--
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Stealth Browsers</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Residential Proxies</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Virgin Datacenter Proxies</a></li>
-											<li><a href="/crowdtrust/?program=<%=PRODUCT_EF%>">CrowdTrust</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Invoicing & Payments Processing</a></li>
-											-->
-											<li class="divider"></li>
-											<li class="nav-header"><i class="icon-hdd"></i> For Developers</li>
-											<li><a href="/threads/?program=<%=PRODUCT_THR%>">Working Threads</a></li>
-											<%
-											if client.isDivisionAdmin?
-											%>
-											<li><a href="/hostsmonitoring/?program=<%=PRODUCT_SHM%>">Simple Hosts Monitoring <%=internalWidget%></a></li>
-											<%
-											end
-											%>
-											<!--
-											<li><a href="/proxiesmonitoringservice/?program=<%=PRODUCT_PMS%>">Proxies Monitoring Service</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Bots Development Framework</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">Datacenter Proxies Deployer</a></li>
-											<li><a href="/bots/?program=<%=PRODUCT_EF%>">4G Proxies Deployer</a></li>
-											-->
-
-											<%
-											if false # other product that we are evaluating
-											%>
-											<li class="divider"></li>
-											<li class="nav-header"><i class="icon-cloud"></i> Warehouse</li>
-											<li><a href="/freeleads/?program=<%=PRODUCT_FLD%>">Leads Database</a></li>
-
-											<li><a href="/listbuilder/searches?program=<%=PRODUCT_EDB%>">ListBuilder <span class='label label-green'>new</span></a></li>
-											<li><a href="/filehosting/temporal_upload?program=">Automation</a></li>
-
-											<li><a style='color:gray;'>PVA</i> <span class='label label-blue'>soon</span></a></li>
-											<li><a style='color:gray;'>Proxies <span class='label label-blue'>soon</span></a></li>
-
-											<li class="nav-header"><i class="icon-hdd"></i> Infrastructure</a></li>
-											<li><a style='color:gray;'>Stealth Browsers <span class='label label-blue'>soon</span></a></li>
-											<li><a style='color:gray;'>Farming Servers <span class='label label-blue'>soon</span></a></li>
-											<%
-											end # if client.isDivisionAdmin?
-											%>
-										</ul>
-									</li>
-								</ul>
-							</span>					
-						</td>
-						<td width='auto' style='padding-top:0px;'>
-						<%
-						if !client.api_key.nil?
-							if BlackStack::Pampa::api_key.to_guid == client.api_key.to_guid
-							%>
-							<span class='badge badge-blue' title='You Are Running the Webserver using this API-KEY for validating the API-CALLs.'>Website Owner</span>
-							<%
-							end # if BlackStack::Pampa::api_key.to_guid == client.api_key.to_guid
-						end # if !client.api_key.nil?
-						%>
-						</td>
-
-						<td></td>
-						<td align='right' style='text-align: right:'>
-							<a class="btn nav-button collapsed" data-toggle="collapse" data-target=".nav-collapse">
-								<span class="icon-reorder"></span>
-							</a>
-			
-							<div class="nav-collapse collapse">
-								<ul class="nav pull-right">
-									<li>
-										<a href="mailto:<%=HELPDESK_EMAIL%>?subject=I Need Help" style='color:white;'>
-											<span>
-												<span class='badge badge-blue'><i class="icon-question-sign"></i> Email Support</span>
-											</span>
-										</a>
-									</li>
-																		
-									<li>
-										<a href="/settings/credit"> 
-											<span>
-												<span class='label label-blue'><%=credits.to_s%></span> <%=unit_name%>
-											</span>
-										</a>
-									</li>
-
-									<!--
-									<li class="separator"></li>
-									-->
-
-
-									<li class="dropdown">
-										<a href="#" class="dropdown-toggle usermenu" data-toggle="dropdown">
-											<img alt="Avatar" src="<%=("https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(user.email.strip.downcase)).encode_html%>">
-											<!--
-											<span>&nbsp;&nbsp;<%=login.user.client.name.encode_html%></span>
-											-->
-										</a>
-										<ul class="dropdown-menu">
-											<li class="nav-header">User Details</li>
-											<li><a><b>Email:</b> <%=getEmailToShow(user).encode_html%></a></li>
-											<li><a><b>Company:</b> <%=client.name.to_s.encode_html%></a></li>								
-											<li class="divider"></li>
-											<li class="nav-header">Options</li>
-											<li>
-												<a href="/settings/dashboard"><i class='icon-cog'></i> Settings</a>
-											</li>
-											<li>
-												<a href="/logout"><i class='icon-signout'></i>Sign Out</a>
-											</li>
-											<!--
-											<li class="nav-header"><i class="icon-money"></i> Credits</li>
-											<li>
-												<a>lalal</a>
-											</li>
-											-->
-										</ul>
-									</li>
-								</ul>
-							</div>							
-						</td>
-					</tr>
-				</table>
-			</div>
-		</div>
-	</header>
+</header>
 
 
 	<section class="row-fluid">
 	<div class='span12'>
 	<%
-	if err!=nil
+	if !err.nil?
 	%>
 	<div class="alert alert-error">
-	<%=err.to_s.encode_html%>
+		<%=err.to_s.encode_html%>
 	</div>
 	<%
 	end # err
 	%>
 					
 	<%
-	if params[:msg]!=nil
+	if !msg.nil?
 	%>
 		<div class="alert alert-success">
-			<a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=getMsgDescription(params[:msg].to_i)%>
+			<%=msg.to_s%>
 		</div>
 	<%
 	end # msg
 	%>
-
-	<%
-	if params[:errdesc]!=nil
-	%>
-		<div class="alert alert-error">
-			<a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=params[:errdesc]%>
-		</div>
-	<%
-	end # msgdesc
-	%>
-
-	<%
-	if params[:msgdesc]!=nil
-	%>
-		<div class="alert alert-success">
-			<a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=params[:msgdesc]%>
-		</div>
-	<%
-	end # msgdesc
-	%>
-	</div>
 	</section>
+	
+</div>

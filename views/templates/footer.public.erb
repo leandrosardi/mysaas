@@ -20,24 +20,6 @@
 			<b><a href='<%=CS_HOME_WEBSITE%>/services#marketers' target='_window'>Services for Marketers</a></b><br/>
 			<a href='<%=CS_HOME_WEBSITE%>/prospecting' target='_window'>Prospecting</a><br/>
 			<a href='<%=CS_HOME_WEBSITE%>/affiliatestrackingservice' target='_window'>Affiliates Tracking Service</a><br/>
-			<%
-			if !@login.nil? && @login.user.client.isDivisionAdmin?
-			%>
-			<a href='<%=CS_HOME_WEBSITE%>/farming' target='_window'>Farming</a> <%=internalWidget%><br/>
-			<a href='<%=CS_HOME_WEBSITE%>/emailaddresses' target='_window'>Email Addresses</a> <%=internalWidget%><br/>
-			<%
-			end
-			%>
-			<br/>
-			<b><a href='<%=CS_HOME_WEBSITE%>/services#developers' target='_window'>Services for Developers</a></b><br/>
-			<a href='<%=CS_HOME_WEBSITE%>/threads' target='_window'>Working Threads</a><br/>
-			<%
-			if !@login.nil? && @login.user.client.isDivisionAdmin?
-			%>
-			<a href='<%=CS_HOME_WEBSITE%>/hostsmonitoring' target='_window'>Simple Hosts Monitoring</a> <%=internalWidget%><br/>
-			<%
-			end
-			%>
 		</div>
 
 		<div class='span3 text-left'>

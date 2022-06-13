@@ -4,6 +4,8 @@ require_relative './user'
 module BlackStack
   module Core
     class Account < Sequel::Model(:account)
+        many_to_one :users, :class=>:'BlackStack::Core::User', :key=>:id_account
+
         # attributes
         one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_client
         many_to_one :timezone, :class=>:'BlackStack::Core::Timezone', :key=>:id_timezone
@@ -124,8 +126,8 @@ module BlackStack
           DB.disconnect
           GC.start
 
-          # retornar el id del login
-          l.id
+          # retornar el nuevo objeto login
+          l
         end # def self.signup(h)
 
         # return the user to contact for any communication.

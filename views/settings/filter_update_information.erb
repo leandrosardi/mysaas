@@ -31,7 +31,7 @@
 		DB.disconnect
 		GC.start
 		# redireccionar al dashboard
-		redirect "/settings/clientinformation?errdesc=#{CGI.escape(parsed['status'].to_s)}"
+		redirect "/settings/clientinformation?err=#{CGI.escape(parsed['status'].to_s)}"
 	end
 	
 	# libero recursos

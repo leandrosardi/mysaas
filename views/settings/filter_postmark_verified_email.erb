@@ -6,7 +6,7 @@
     if id_postmark.nil? || id_postmark.to_s.size == 0
         DB.disconnect
 		GC.start
-		redirect "/settings/clientinformation?errdesc=ID%20Postmark%20parameter%20expected."
+		redirect "/settings/clientinformation?err=ID%20Postmark%20parameter%20expected."
     end
 
     begin
@@ -14,7 +14,7 @@
 	rescue => exception
 		DB.disconnect
 		GC.start
-		redirect "/settings/clientinformation?errdesc=#{URI.encode(exception.message)}"
+		redirect "/settings/clientinformation?err=#{URI.encode(exception.message)}"
     end
 
     begin
@@ -28,6 +28,6 @@
     rescue => exception
         DB.disconnect
         GC.start
-        redirect "/settings/clientinformation?errdesc=#{URI.encode(exception.message)}"
+        redirect "/settings/clientinformation?err=#{URI.encode(exception.message)}"
     end
 %>

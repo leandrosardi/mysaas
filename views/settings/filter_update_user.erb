@@ -23,19 +23,19 @@ params[:uid].each { |uid|
 		DB.disconnect
 		GC.start
 		msg = 'Username is Required.'
-		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?err=#{CGI.escape(msg)}"
 		break
 	elsif linkedin_url.size > 0 && !(linkedin_url =~ linkedin_url_pattern)
 		DB.disconnect
 		GC.start
 		msg = 'Valid Linkedin url is Required.'
-		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?err=#{CGI.escape(msg)}"
 		break
 	elsif linkedin_url.size <= 0 && gtc == "true"
 		DB.disconnect
 		GC.start
 		msg = 'Linkedin url is Required to Allow Group Transfer Chat.'
-		redirect "/settings/users?errdesc=#{CGI.escape(msg)}"
+		redirect "/settings/users?err=#{CGI.escape(msg)}"
 		break
 	else
 		DB.execute("UPDATE [user] SET name='#{user}', phone='#{phone}', linkedin_profile_url='#{linkedin_url}', allowed_for_linkedin_group_chat_transfers='#{gtc}' WHERE id='#{uid}'")
@@ -45,6 +45,6 @@ params[:uid].each { |uid|
 } 
 
 # redireccionar al dashboard
-redirect "/settings/users?msgdesc=Done!"
+redirect "/settings/users?msg=Done!"
 %>
 <!-- ---------------------------------------- -->

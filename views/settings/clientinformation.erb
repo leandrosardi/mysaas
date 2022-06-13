@@ -376,7 +376,7 @@
 						<br/>
 						<label align='left' style='horizontal-align:left;'>
 							Your access point URL is:<br/>
-							<a href='<%=@login.user.client.api_url%>' target='_window'><%=@login.user.client.api_url%></a>
+							<a href='<%=@login.user.account.api_url%>' target='_window'><%=@login.user.account.api_url%></a>
 						</label>
 						<%
 						disabled = ''
@@ -562,7 +562,7 @@
 					$('#form_client_info').show();
 					$('#form_reseller_info').show();
 				} else {
-					window.location.replace(`./clientinformation?errdesc=${encodeURIComponent(json.status)}`)
+					window.location.replace(`./clientinformation?err=${encodeURIComponent(json.status)}`)
 				}
 			})
 		}
@@ -581,7 +581,7 @@
 			}).done(function(response) {
 				json = JSON.parse(response);
 				if (json.value != '0') {
-					window.location.replace(`./clientinformation?errdesc=${encodeURIComponent(json.status)}`)
+					window.location.replace(`./clientinformation?err=${encodeURIComponent(json.status)}`)
 				} else {
 					window.location.replace(`./clientinformation?msg=${encodeURIComponent(json.status)}`)
 				}
@@ -601,7 +601,7 @@
 				method: 'GET',
 				url: '/api1.2/division/set_api_key.json',
 				data: {
-					id_client: '<%=user.client.id.to_guid%>',
+					id_client: '<%=user.account.id.to_guid%>',
 					api_key: '<%=BlackStack::Pampa::api_key%>',
 				},
 			}).done(function(response) {

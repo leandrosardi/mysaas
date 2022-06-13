@@ -11,7 +11,8 @@ redirect_on_success = "/dashboard" if redirect_on_success.to_s.size == 0
 # login
 begin
 	# guardar el ID de intento de l en una variable de sesion
-	session['login.id'] = BlackStack::Core::User.login(params)
+	@login = BlackStack::Core::User.login(params)
+	session['login.id'] = @login.id
 rescue => e
 	# libero recursos
 	DB.disconnect

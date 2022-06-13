@@ -13,7 +13,7 @@
 	if id_client.nil? || id_client.to_s.size == 0
 		DB.disconnect
 		GC.start
-		redirect "/settings/clientinformation?errdesc=Client%20parameter%20expected."
+		redirect "/settings/clientinformation?err=Client%20parameter%20expected."
 	else
 		c = BlackStack::Client.where(:id => id_client).first
 	end
@@ -22,7 +22,7 @@
 		if c.nil? || c.to_s.size == 0
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Client%20parameter%20expected."
+			redirect "/settings/clientinformation?err=Client%20parameter%20expected."
 		else
 			c.domain_for_ssm = nil
 			c.from_email_for_ssm = nil
@@ -39,43 +39,43 @@
 		if sender_name.nil? || sender_name.to_s.size == 0
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Name%20parameter%20expected."
+			redirect "/settings/clientinformation?err=Sender%20Name%20parameter%20expected."
 		end
 
 		if sender_email.nil? || sender_email.to_s.size == 0
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Email%20parameter%20expected."
+			redirect "/settings/clientinformation?err=Sender%20Email%20parameter%20expected."
 		end
 
 		if sender_name.to_s.size > 50 
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Name%20too%20long."
+			redirect "/settings/clientinformation?err=Sender%20Name%20too%20long."
 		end
 
 		if sender_email.to_s.size > 50
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Email%20too%20long."
+			redirect "/settings/clientinformation?err=Sender%20Email%20too%20long."
 		end
 
 		if !BlackStack::Append.verifyDataFormat(BlackStack::Append::TYPE_EMAIL, sender_email)
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Email%20wrong%20format."
+			redirect "/settings/clientinformation?err=Sender%20Email%20wrong%20format."
 		end
 
 		if p_sender_contact_user.to_s.size == 0
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Contact%20User%20parameter%20expected."
+			redirect "/settings/clientinformation?err=Sender%20Contact%20User%20parameter%20expected."
 		end
 
 		if !p_sender_contact_user.guid?
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=Sender%20Contact%20User%20wrong%20format."
+			redirect "/settings/clientinformation?err=Sender%20Contact%20User%20wrong%20format."
 		end
 	
 
@@ -86,7 +86,7 @@
 		rescue => exception
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=#{URI.encode(exception.message)}"
+			redirect "/settings/clientinformation?err=#{URI.encode(exception.message)}"
 		end
 
 		begin
@@ -160,12 +160,12 @@ puts "sign[:email_address]:#{sign[:email_address]}"
 			else
 				DB.disconnect
 				GC.start
-				redirect "/settings/clientinformation?errdesc=#{URI.encode(exception.message)}"	
+				redirect "/settings/clientinformation?err=#{URI.encode(exception.message)}"	
 			end
 		rescue => exception
 			DB.disconnect
 			GC.start
-			redirect "/settings/clientinformation?errdesc=#{URI.encode(exception.message)}"
+			redirect "/settings/clientinformation?err=#{URI.encode(exception.message)}"
 		end
 	end
 %>

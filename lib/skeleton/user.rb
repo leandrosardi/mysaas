@@ -3,6 +3,8 @@ require 'sequel'
 module BlackStack
     module Core
         class User < Sequel::Model(:user)
+            many_to_one :account, :class=>:'BlackStack::Core::Account', :key=>:id_account
+
             def self.login(h)
                 errors = []
                 email = h[:email]
@@ -39,8 +41,20 @@ module BlackStack
                     GC.start
                     raise errors.join("\n") 
                 end
-                  
                 
+                # registro el login
+                l = BlackStack::Core::Login.new
+                l.id = guid
+                l.id_user = u.id
+                l.create_time = now
+                l.save
+
+                # libero recursos
+                DB.disconnect
+                GC.start
+
+                # return the new login object
+                l
             end # def login
 
             # get the value of a preference parameter for this user
