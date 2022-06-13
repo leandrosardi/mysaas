@@ -42,8 +42,9 @@ account = user.account
 		navigator.clipboard.writeText(api_key);
 		$('#copy-icon').removeClass('icon-copy');
 		$('#copy-icon').addClass('icon-ok');
-		$('#copy-button').attr('title', 'Copied to Clipboard.');
 		$('#copy-button').removeClass('btn-link');
 		$('#copy-button').removeAttr('href');
+		$('#copy-button').attr('title', 'Copied to Clipboard.');
+		applyToolTips();
 	});
 </script>
