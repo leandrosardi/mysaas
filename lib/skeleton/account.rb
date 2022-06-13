@@ -117,7 +117,7 @@ module BlackStack
 
           # notificar al usuario, if the notif flag is true
           if notif
-            BlackStack::Core::WelcomeNotification.new(u).do
+            BlackStack::Core::NotificationWelcome.new(u).do
           end
 
           # libero recursos
