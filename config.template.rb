@@ -10,23 +10,23 @@ DEFAULT_TIMEZONE_SHORT_DESCRIPTION = 'Buenos Aires'
 
 # setting up breakpoints for backend processes.
 # enabling/disabling the flag `:alloow_brakpoints` will enable/disable the function `binding.pry`
-BlackStack::Debugging::set({
+BlackStack::Debugging::set(
   :allow_breakpoints => SANDBOX,
-})
+)
 
 # DB ACCESS - KEEP IT SECRET
-BlackStack::Core::CRDB::set_db_params({
+BlackStack::Core::CRDB::set_db_params(
   :db_url => '@db_url@',
   :db_port => '@db_port@',
   :db_name => '@db_name@',
   :db_user => '@db_user@',
   :db_password => '@db_password@',
-})
+)
 
 # Setup connection to the API, in order get bots requesting and pushing data to the database.
 # TODO: write your API-Key here. Refer to this article about how to create your API key:
 # https://sites.google.com/expandedventure.com/knowledge/
-BlackStack::Core::API::set_api_url({
+BlackStack::Core::API::set_api_url(
   # IMPORTANT: It is strongly recommended that you 
   # use the api_key of an account with prisma role, 
   # and assigned to the central division too.
@@ -39,7 +39,7 @@ BlackStack::Core::API::set_api_url({
   # run anywhere worldwide.
   :api_domain => '127.0.0.1', 
   :api_port => '80',
-})
+)
 
 # storage configuration of new accounts
 # 
@@ -56,13 +56,13 @@ BlackStack::Core::API::set_api_url({
 # By now, to update the storage forder of an account, you should use
 # the method `Account::update_storage_folder`. 
 #
-BlackStack::Core::Storage::set_storage({
+BlackStack::Core::Storage::set_storage(
   :storage_folder => './public/clients',
   :storage_default_max_allowed_kilobytes => 15 * 1024,
   :storage_sub_folders => [
     'downloads', 'uploads', 'logs'
   ],
-})
+)
 
 # IMPORTANT NOTE: This value should have a format like FOO.COM. 
 # => Other formats can generate bugs in the piece of codes where 
