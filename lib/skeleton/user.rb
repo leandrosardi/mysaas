@@ -68,13 +68,6 @@ module BlackStack
                 end
 
                 # validate: current_password matches with the password of the user
-puts
-puts
-puts
-puts "current_password: #{current_password}"
-puts "password: #{password}"
-puts
-puts
                 if BCrypt::Password.new(self.password) != current_password && self.password != current_password
                     errors << "Current password is wrong."
                 end
