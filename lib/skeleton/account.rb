@@ -14,7 +14,7 @@ module BlackStack
         # create new records on tables account, user and login.
         # return the id of the new login record.
         # raise an exception if the signup descriptor doesn't pass all the valdiations.
-        def self.signup(h)
+        def self.signup(h, notif=true)
           errors = []
           companyname = h[:companyname]
           username = h[:username]
@@ -114,6 +114,11 @@ module BlackStack
             l.create_time = now
             l.save
           end # transaction
+
+          # notificar al usuario, if the notif flag is true
+          if notif
+            BlackStack::Core::WelcomeNotification.new(u).do
+          end
 
           # libero recursos
           DB.disconnect

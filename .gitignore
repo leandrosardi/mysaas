@@ -1,4 +1,7 @@
-# ignode ./deploy.sh because I use this script to shorten the ./install.rb script with all its commands  
+# ignore any output file
+*.out
+
+# ignore ./deploy.sh because I use this script to shorten the ./install.rb script with all its commands  
 /deploy.sh
 
 # ignore SSL certificates, except development certificated stored on /ssl/_desa/

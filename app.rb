@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'lib/core'
-require 'lib/core'
 require 'lib/stub'
 require 'config'
 require 'version'

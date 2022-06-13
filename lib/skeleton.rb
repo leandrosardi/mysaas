@@ -4,3 +4,5 @@ require 'lib/skeleton/user'
 require 'lib/skeleton/login'
 require 'lib/skeleton/timezone'
 require 'lib/skeleton/notification'
+
+require 'notifications/welcome'
