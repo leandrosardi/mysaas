@@ -2,7 +2,7 @@
 module BlackStack
   module Core
     class NotificationConfirm < BlackStack::Core::Notification 
-      LINK_TIMEOUT = 180
+      LINK_TIMEOUT = 18
 
       def initialize(i_user)
         super(i_user)
