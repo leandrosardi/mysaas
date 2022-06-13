@@ -1,9 +1,11 @@
 require 'sinatra'
 require 'lib/core'
+require 'lib/core'
+require 'lib/stub'
 require 'config'
 require 'version'
 DB = BlackStack::Core::CRDB::connect
-require 'lib/orm'
+require 'lib/skeleton'
 
 # map params key-values to session key-values.
 # for security: the keys `:password` and `:new_password` are not mapped.
