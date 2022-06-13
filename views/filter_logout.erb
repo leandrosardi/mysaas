@@ -1,11 +1,4 @@
 <% 
-if (DIVISION_CENTRAL==true)
-	session['login.id'] = nil 
-	session['division.app_url'] = nil 
-	session['division.app_port'] = nil 
-	redirect '/login'
-else
-	session['login.id'] = nil 
-	redirect "#{CS_HOME_WEBSITE}/logout" # luego de desloguearme en la division, debo desloguearme en la central	
-end
+session['login.id'] = nil 
+redirect '/' # luego de desloguearme en la division, debo desloguearme en la central	
 %>
