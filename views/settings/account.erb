@@ -1,0 +1,45 @@
+<%
+user = @login.user
+account = user.account
+%>
+
+<section class="row-fluid">	
+	<section class='span6'>
+		<%=nav2("Settings", '/settings/dashboard', 'Account Information')%>
+	</section>
+</section>
+
+<section class="container box">
+	<form class="form-horizontal" action="filter_account" method="post">
+		<div class="control-group span12">
+			<label class="control-label" for="inputKeywords">Company Name</label>
+			<div class="controls">
+				<input type="text" class="input-xlarge" name="company_name" id="company_name" placeholder="Write your Company to be used for the invoicing" value="<%=account.name.encode_html%>">
+			</div>
+			<br/>
+							
+			<label class="control-label" for="inputKeywords">Time Zone</label>
+			<div class="controls">
+				<select class="input-xlarge" name="id_timezone" id="id_timezone">
+					<%
+					BlackStack::Core::Timezone.order(:offset, :large_description).all { |t|
+						sSelected = ""
+						if t.id.to_guid == account.id_timezone.to_guid
+							sSelected = "selected"
+						end
+						%>
+						<option value='<%=t.id.to_guid%>' <%=sSelected%>><%=t.short_description.encode_html%> (GMT <%=t.offset.to_s.encode_html%>)</option>
+						<%
+					}
+					%>
+				</select>
+			</div>
+			<br/>
+							
+			<div class="controls">
+				<button type="submit" id="update" class="btn btn-blue">Update</button>
+				<a id="cancel" class="btn btn-default" href='/settings'>Cancel</a>
+			</div>
+		</div>
+	</form>
+</section>

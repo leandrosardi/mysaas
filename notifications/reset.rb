@@ -1,7 +1,7 @@
 module BlackStack
   module Core
     class NotificationReset < BlackStack::Core::Notification
-      LINK_TIMEOUT = 120 # minutes
+      LINK_TIMEOUT = 18 # minutes
       
       def initialize(i_user)
         super(i_user)

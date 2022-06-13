@@ -1,5 +1,3 @@
-<!--#include virtual = "./lgi/commons.asp"-->
-
 <%
 	redirect = params[:redirect]
 	if (redirect.to_s.size > 0)
@@ -118,7 +116,7 @@
 
 				<div class="span6">
 	
-					<form class="form-horizontal" id="form_client_info" action="/settings/filter_update_information" method="get">
+					<form class="form-horizontal" id="form_client_info" action="/settings/filter_account" method="get">
 						<h4>
 							<%
 							if c.name.to_s.size > 0
@@ -562,7 +560,7 @@
 					$('#form_client_info').show();
 					$('#form_reseller_info').show();
 				} else {
-					window.location.replace(`./clientinformation?err=${encodeURIComponent(json.status)}`)
+					window.location.replace(`./account?err=${encodeURIComponent(json.status)}`)
 				}
 			})
 		}
@@ -581,9 +579,9 @@
 			}).done(function(response) {
 				json = JSON.parse(response);
 				if (json.value != '0') {
-					window.location.replace(`./clientinformation?err=${encodeURIComponent(json.status)}`)
+					window.location.replace(`./account?err=${encodeURIComponent(json.status)}`)
 				} else {
-					window.location.replace(`./clientinformation?msg=${encodeURIComponent(json.status)}`)
+					window.location.replace(`./account?msg=${encodeURIComponent(json.status)}`)
 				}
 			});
 		}

@@ -205,7 +205,7 @@ def nav1(name1, beta=false)
 
   ret = 
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{CGI.escapeHTML(user.account.name.encode_html)}</b></a>" + 
+  "<a class='simple' href='/settings/account'><b>#{CGI.escapeHTML(user.account.name.encode_html)}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   CGI.escapeHTML(name1)
 
@@ -219,7 +219,7 @@ def nav2(name1, url1, name2)
   user = BlackStack::Core::User.where(:id=>login.id_user).first  
 
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{user.account.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/settings/account'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 
@@ -231,7 +231,7 @@ def nav3(name1, url1, name2, url2, name3)
   login = BlackStack::Core::Login.where(:id=>session['login.id']).first
   user = BlackStack::Core::User.where(:id=>login.id_user).first  
   "<p>" + 
-  "<a class='simple' href='/settings/clientinformation'><b>#{user.account.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/settings/account'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 
@@ -265,10 +265,10 @@ get '/login', :agent => /(.*)/ do
   erb :login, :layout => :'/layouts/public'
 end
 post '/login' do
-  erb :filter_login, :layout => nil
+  erb :filter_login
 end
 get '/filter_login' do
-  erb :filter_login, :layout => nil
+  erb :filter_login
 end
 
 get '/signup', :agent => /(.*)/ do
@@ -291,7 +291,7 @@ get '/recover', :agent => /(.*)/ do
   erb :recover, :layout => :'/layouts/public'
 end
 post '/recover' do
-  erb :filter_recover, :layout => nil
+  erb :filter_recover
 end
 
 get '/reset/:nid', :agent => /(.*)/ do
@@ -327,32 +327,17 @@ get '/settings/dashboard', :auth1 => true, :agent => /(.*)/ do
 end
 
 # account configuration screen
-get '/settings/clientinformation', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/clientinformation', :layout => :'/layouts/core'
+get '/settings/account', :auth1 => true, :agent => /(.*)/ do
+  erb :'/settings/account', :layout => :'/layouts/core'
 end
-post '/settings/filter_update_billing_address' do
-  erb :'/settings/filter_update_billing_address'
+post '/settings/filter_account', :auth1 => true do
+  erb :'/settings/filter_account'
 end
-post '/settings/filter_update_information' do
-  erb :'/settings/filter_update_information'
-end
-post '/settings/filter_add_user', :agent => /(.*)/ do
+get '/settings/filter_add_user', :agent => /(.*)/ do
   erb :'/settings/filter_add_user'
 end
-post '/settings/filter_delete_user', :agent => /(.*)/ do
+get '/settings/filter_delete_user', :agent => /(.*)/ do
   erb :'/settings/filter_delete_user'
-end
-post '/settings/filter_update_reseller_signature', :agent => /(.*)/ do
-  erb :'/settings/filter_update_reseller_signature'
-end
-post '/settings/filter_postmark_check_domain', :agent => /(.*)/ do
-  erb :'/settings/filter_postmark_check_domain'
-end
-post '/settings/filter_postmark_verified_email', :agent => /(.*)/ do
-  erb :'/settings/filter_postmark_verified_email'
-end
-post '/settings/filter_postmark_verified_dkim', :agent => /(.*)/ do
-  erb :'/settings/filter_postmark_verified_dkim'
 end
 
 ## users management screen
