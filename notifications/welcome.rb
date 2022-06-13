@@ -1,9 +1,10 @@
+# Notification to deliver when a new user signups, and his/her account is created.
 module BlackStack
   module Core
     class NotificationWelcome < BlackStack::Core::Notification
       def initialize(i_user)
         super(i_user)
-        self.type = 1    
+        self.type = 1
       end
       
       def subject_template
@@ -12,8 +13,9 @@ module BlackStack
 
       def body_template()        
         " 
-          <p>Dear #{self.user.name.encode_html}, <br>
-          Welcome to <b>#{APP_NAME.encode_html}</b>!</p>
+          <p>Dear #{self.user.name.encode_html},</p>
+
+          Welcome to <b>#{APP_NAME.encode_html}</b>!</p>          
           
           <p>
           <b>Whitelist all emails from #{BlackStack::Core::EmailDeliveryModule::sender_email.encode_html}.</b><br/>
@@ -26,6 +28,6 @@ module BlackStack
           </p> 
         "
       end
-    end
+    end # class NotificationWelcome
   end # module Core
 end # module BlackStack

@@ -13,7 +13,7 @@ redirect_on_success = "/dashboard" if redirect_on_success.to_s.size == 0
 # signup new account
 begin
 	# guardar el ID de intento de l en una variable de sesion
-	@login = BlackStack::Core::User.login(params)
+	@login = BlackStack::Core::Account.signup(params)
 	session['login.id'] = @login.id
 rescue => e
 	# libero recursos

@@ -292,7 +292,7 @@ post '/signup' do
   erb :filter_signup
 end
 
-get '/confirm' do
+get '/confirm/:nid' do
   erb :filter_confirm
 end
 

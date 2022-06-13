@@ -6,3 +6,4 @@ require 'lib/skeleton/timezone'
 require 'lib/skeleton/notification'
 
 require 'notifications/welcome'
+require 'notifications/confirm'

@@ -1,53 +1,43 @@
-<!-- HERE IS HOW TO CATCH POST/GET PARAMETERS -->
 <% 
 nid = params[:nid]
 
 # validar que los parametros no esten vacios
 if (nid.to_s.size==0 || nid.to_s.size==0)
-	redirect '/error?err='+ERR_CONFIRM_NOTIFICATION_ID_EXPECTED.to_s
+	redirect "/login?err=#{CGI::escape("Notification ID is Required.")}"
 end
 
 # TODO: Validar que nid tenga el formato de un GUID
 
 # 
-notification = Notification.where(:id=>nid, :type=>Notification::NOTIFICATION_CONFIRM).first
+notification = BlackStack::Core::NotificationConfirm.where(:id=>nid).first
 
 # verifico si la notificacion existe
-if (notification == nil)
-	redirect '/error?err='+ERR_CONFIRM_NOTIFICATION_NOT_FOUND.to_s
+if notification.nil?
+	redirect "/login?err=#{CGI::escape("Notification ID Not Found.")}"
 end
 
+puts
+puts notification.oldness
+puts BlackStack::Core::NotificationConfirm::LINK_TIMEOUT
+
 # verifico que la notificacion no es anterior a NotificationConfirmation::NOTIFICATION_CONFIRMATION_LINK_TIMEOUT
-if (notification.old()>NotificationConfirm::NOTIFICATION_CONFIRM_LINK_TIMEOUT)
-	redirect '/error?err='+ERR_CONFIRM_NOTIFICATION_EXPIRED.to_s
+if notification.oldness > BlackStack::Core::NotificationConfirm::LINK_TIMEOUT
+	redirect "/login?err=#{CGI::escape("Notification Expired.")}"
 end
 
 # 
 user = BlackStack::Core::User.where(:id=>notification.id_user).first
 
 # verifico que el usuario exista
-if (user == nil)
-	redirect '/error?err='+ERR_CONFIRM_USER_NOT_FOUND.to_s
+if user.nil?
+	redirect "/login?err=#{CGI::escape("User Not Found.")}"
 end
 
 # activar la cuenta
-DB.execute("UPDATE [user] SET verified=1 WHERE [id]='#{user.id}'")
-
-# envio un request a las divisiones para que confirmen el email de este usuario
-BlackStack::UserDivision.where(:id_user=>user.id).all { |ud|
-	division = BlackStack::Division.where(:id=>ud.id_division).first
-
-	url = "#{BlackStack::Pampa::api_protocol}://#{division.app_url}:#{division.app_port}/api1.2/division/confirm.json"
-	res = BlackStack::Netting::call_post(
-		url, 
-		{'api_key' => BlackStack::Pampa::api_key, 
-		'uid' => user.id}
-		)
-	#TODO: Validar que el estado de la respuesta sea igual a 'success' 
-	parsed = JSON.parse(res.body)
-}
+user.verified = true
+user.save
 
 # redirecciono a la pagina de login
-redirect "/login?msg=Account%20Verified."
+redirect "/login?msg=#{CGI::escape("Email Verification Success!")}"
 %>
 <!-- ---------------------------------------- -->

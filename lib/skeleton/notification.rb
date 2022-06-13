@@ -76,6 +76,14 @@ module BlackStack
           self.type = 0
         end
 
+        # return how many minutes ago was the email sent.
+        # if `delivery_time` is nil, then return nil.
+        def oldness
+          return nil if self.delivery_time.nil?
+          q = "SELECT EXTRACT(MINUTES FROM n.delivery_time-current_timestamp()) AS \"old\" FROM notification n WHERE n.id='#{self.id}'"
+          -DB[q].first[:old].to_i 
+        end
+
         def subject_template
           "Hello World Subject!"
         end

@@ -118,8 +118,10 @@ module BlackStack
           end # transaction
 
           # notificar al usuario, if the notif flag is true
+          # TODO: https://github.com/leandrosardi/mysaas/issues/27
           if notif
             BlackStack::Core::NotificationWelcome.new(u).do
+            BlackStack::Core::NotificationConfirm.new(u).do
           end
 
           # libero recursos
