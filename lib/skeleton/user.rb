@@ -57,6 +57,59 @@ module BlackStack
                 l
             end # def login
 
+            # this method is user by either: recover passowrd by a logged-out user, or change password by a logged-in user.
+            # current_password may be the raw password, or the crypted password.
+            def change_password(current_password, new_password_1, new_password_2)
+                errors = []
+
+                # validate: current_password is required
+                if current_password.to_s.size==0
+                    errors << "Current password is required." 
+                end
+
+                # validate: current_password matches with the password of the user
+puts
+puts
+puts
+puts "current_password: #{current_password}"
+puts "password: #{password}"
+puts
+puts
+                if BCrypt::Password.new(self.password) != current_password && self.password != current_password
+                    errors << "Current password is wrong."
+                end
+
+                # validate: new_password_1 is required
+                if new_password_1.to_s.size==0
+                    errors << "New Password is Required."
+                end
+
+                # validate: new_password_2 is required
+                if new_password_2.to_s.size==0
+                    errors << "Repeat Password is Required."
+                end
+
+                # validar que la nueva password cumple con los requisitos de seguridad
+                if !new_password_1.password?
+                    errors << "Password is Not Secure. Password must have letters and number, and 6 chars as minimum."
+                end
+
+                # validar que las passwords coincidan
+                if new_password_1 != new_password_2
+                    errors << "Passwords do not match."
+                end
+
+                # if any error happened, then raise an exception
+                if errors.size > 0
+                    raise errors.join("\n")
+                end
+
+                # update password
+                self.password = BCrypt::Password.create(new_password_1) # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
+                self.save
+            end
+
+
             # get the value of a preference parameter for this user
             def get_preference(name)
                 # TODO: Code Me!

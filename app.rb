@@ -326,13 +326,24 @@ get '/settings/dashboard', :auth1 => true, :agent => /(.*)/ do
   erb :'/settings/dashboard', :layout => :'/layouts/core'
 end
 
-# account configuration screen
+# account information
 get '/settings/account', :auth1 => true, :agent => /(.*)/ do
   erb :'/settings/account', :layout => :'/layouts/core'
 end
 post '/settings/filter_account', :auth1 => true do
   erb :'/settings/filter_account'
 end
+
+# change password
+get '/settings/password', :auth1 => true, :agent => /(.*)/ do
+  erb :'/settings/password', :layout => :'/layouts/core'
+end
+post '/settings/filter_password', :auth1 => true do
+  erb :'/settings/filter_password'
+end
+
+
+
 get '/settings/filter_add_user', :agent => /(.*)/ do
   erb :'/settings/filter_add_user'
 end
@@ -348,13 +359,6 @@ post '/settings/filter_update_user', :agent => /(.*)/ do
   erb :'/settings/filter_update_user'
 end
 
-# change password screen
-get '/settings/password', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/password', :layout => :'/layouts/core'
-end
-post '/settings/filter_update_password' do
-  erb :'/settings/filter_update_password'
-end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # API access points

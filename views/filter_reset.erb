@@ -26,29 +26,11 @@ if user.nil?
 	redirect "/recover?err=#{CGI::escape("User Not Found.")}"
 end
 
-# validate: new_password_1 is required
-if new_password_1.to_s.size==0
-	redirect "/reset/#{nid}?err=#{CGI::escape("New Password is Required.")}"
+begin
+	user.change_password(BCrypt::Password.new(user.password), new_password_1, new_password_2)
+rescue => e
+	redirect "/recover?err=#{CGI::escape(e.message)}"
 end
-
-# validate: new_password_2 is required
-if new_password_2.to_s.size==0
-	redirect "/reset/#{nid}?err=#{CGI::escape("Repeat Password is Required.")}"
-end
-
-# validar que la nueva password cumple con los requisitos de seguridad
-if !new_password_1.password?
-	redirect "/reset/#{nid}?err=#{CGI::escape("Password is Not Secure. Password must have letters and number, and 6 chars as minimum.")}"
-end
-
-# validar que las passwords coincidan
-if new_password_1 != new_password_2
-	redirect "/reset/#{nid}?err=#{CGI::escape("Passwords do not match.")}"
-end
-
-# update password
-user.password = BCrypt::Password.create(new_password_1) # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
-user.save
 
 # redirecciono a la pagina de login
 redirect "/login?msg=#{CGI::escape("Password Changed Successfully.")}"
