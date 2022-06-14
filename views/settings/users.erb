@@ -13,9 +13,13 @@ phone = session['settings.users.phone'].to_s
 			<%=nav2("Settings", "/settings/dashboard", "Users")%>
 		</div>
 		<div class='span6' align='right' style='text-align: right;alignment-adjust: right; margin-left: 0;'>
-			<button id='save' name='save' class="btn btn-blue btn-medium" type="button" title='Save Changes On Selected Users'>
+			<button id='update' name='update' class="btn btn-blue btn-medium" type="button" title='Save Fields of Selected Users'>
 				<i class="icon-ok"></i>
-				Save
+				Update
+			</button>
+			<button id='remove' name='remove' class="btn btn-default btn-medium" type="button" title='Delete Selected Users'>
+				<i class="icon-remove"></i>
+				Ramove
 			</button>
 		</div>
 	</section>
@@ -40,7 +44,10 @@ phone = session['settings.users.phone'].to_s
 				Phone
 			</th>
 			<th style='width:36px;'>
-				Verified
+				Confirmed
+			</th>
+			<th style='width:36px;'>
+				<!-- remove button -->
 			</th>
 		</thead>
 
@@ -57,7 +64,7 @@ phone = session['settings.users.phone'].to_s
 				</td>
 				<td>
 					<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=user.name.to_s.encode_html%>'>
-				</td>						
+				</td>
 				<td>
 					<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=user.email.to_s.encode_html%>'>
 				</td>						
@@ -68,8 +75,11 @@ phone = session['settings.users.phone'].to_s
 					<% if user.verified %>
 						<span style='color:green;'><i class="icon-ok"></i></span>
 					<% else %>
-						<span style='color:gray;'><i class="icon-remove"></i></span>
+						<a class='btn btn-link' title='Send Confirmation Email' href='/settings/'><i class="icon-envelope-alt"></i></a>
 					<% end %>
+				</td>
+				<td style='text-align: center; vertical-align: middle;'>
+					<a class='btn btn-link' style='color:red;' title='Remove User' href='/settings/'><i class="icon-remove"></i></a>
 				</td>
 			</tr>
 			<%
@@ -84,16 +94,16 @@ phone = session['settings.users.phone'].to_s
 					<span class='badge badge-green'>Add user</span>
 				</td>
 				<td>
-					<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=name.to_s.encode_html%>'>
+					<input class='input-block-level select-all-on-focus' type='text' value='<%=name.to_s.encode_html%>'>
 				</td>						
 				<td>
-					<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=email.to_s.encode_html%>'>
+					<input class='input-block-level select-all-on-focus' type='text' value='<%=email.to_s.encode_html%>'>
 				</td>						
 				<td>
-					<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=phone.to_s.encode_html%>'>
+					<input class='input-block-level select-all-on-focus' type='text' value='<%=phone.to_s.encode_html%>'>
 				</td>
 				<td style='text-align: center; vertical-align: middle;'>
-					<button class='btn btn-link'><i class='icon-plus'></i></button>
+					<button class='btn btn-link' title='Add User'><i class='icon-plus'></i></button>
 				</td>
 			</tr>
 

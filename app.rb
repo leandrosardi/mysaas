@@ -354,17 +354,18 @@ end
 get '/settings/users', :auth1 => true, :agent => /(.*)/ do
   erb :'/settings/users', :layout => :'/layouts/core'
 end
-post '/settings/filter_user_add', :auth1 => true do
-  erb :'/settings/filter_user_add'
+post '/settings/filter_users_add', :auth1 => true do
+  erb :'/settings/filter_users_add'
 end
-post '/settings/filter_user_delete', :auth1 => true do
-  erb :'/settings/filter_user_delete'
+post '/settings/filter_users_delete', :auth1 => true do
+  erb :'/settings/filter_users_delete'
 end
-post '/settings/filter_user_update', :auth1 => true do
-  erb :'/settings/filter_user_update'
+post '/settings/filter_users_update', :auth1 => true do
+  erb :'/settings/filter_users_update'
 end
-
-
+post '/settings/filter_users_send_confirmation_email', :auth1 => true do
+  erb :'/settings/filter_users_send_confirmation_email'
+end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # API access points
