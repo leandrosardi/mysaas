@@ -4,13 +4,10 @@ require_relative './user'
 module BlackStack
   module Core
     class Account < Sequel::Model(:account)
-        many_to_one :users, :class=>:'BlackStack::Core::User', :key=>:id_account
-
-        # attributes
-        one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_client
+        one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_account
         many_to_one :timezone, :class=>:'BlackStack::Core::Timezone', :key=>:id_timezone
-        many_to_one :billingCountry, :class=>:'BlackStack::LnCountry', :key=>:billing_id_lncountry
-        many_to_one :user_to_contect, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
+        many_to_one :user_owner, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
+        many_to_one :account_owner, :class=>'BlackStack::Core::Account', :key=>:id_account_owner
 
         # validate the parameters in the signup descriptor `h``.
         # create new records on tables account, user and login.
