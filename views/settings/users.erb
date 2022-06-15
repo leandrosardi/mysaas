@@ -18,10 +18,9 @@ filter_email = @login.user.preference('settings.users.filter.email', '', params[
 filter_phone = @login.user.preference('settings.users.filter.phone', '', params[:phone])
 
 # user preferences regarding the pagination
-page_number = @login.user.preference('settings.users.pagination.page', 1, params[:number])
-page_size = @login.user.preference('settings.users.pagination.size', 25, params[:size])
-
-page_size = 3
+#raise "`#{params[:number]}`"
+page_number = @login.user.preference('settings.users.pagination.page', 1, params[:number].nil? ? nil : params[:number].to_i)
+page_size = @login.user.preference('settings.users.pagination.size', 25, params[:size].nil? ? nil : params[:size].to_i)
 
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
@@ -41,13 +40,15 @@ q0 = "
 
 # gathering pagination info
 total_rows = DB[q0].count
-from_row = (page_number.to_i-1) * page_size.to_i + 1
-to_row = [page_number*page_size, total_rows].min
 total_pages = (total_rows.to_f/page_size.to_f).ceil
 
 # pagination correction
-#page_number = 1 if page_number < 1
-#page_number = 1 if page_number * page_size > total_rows
+page_number = 1 if page_number < 1
+page_number = total_pages if page_number > total_pages
+
+# gathering pagination info
+from_row = (page_number.to_i-1) * page_size.to_i + 1
+to_row = [page_number*page_size, total_rows].min
 
 # query to bring page rows
 q = "
@@ -56,8 +57,6 @@ q = "
 	LIMIT #{page_number*page_size}
 	OFFSET #{(page_number.to_i - 1) * page_size.to_i}
 "
-
-raise q
 
 # build the array of objects
 users = []
