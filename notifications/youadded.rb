@@ -11,7 +11,7 @@ module BlackStack
       end
       
       def subject_template
-        "#{added_by.to_s} Added to his/her #{APP_NAME} account!"
+        "#{added_by.name.to_s} Added to his/her #{APP_NAME} account!"
       end
 
       def body_template()        
