@@ -8,6 +8,9 @@ ids = session['settings.users.ids'].to_s
 order_column = @login.user.preference('settings.users.order.column', 'name', params[:column])
 order_direction = @login.user.preference('settings.users.order.direction', 'asc', params[:direction])
 
+new_order_direction = order_direction == 'asc' ? 'desc' : 'asc'
+order_icon = order_direction == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down'
+
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
 email = session['settings.users.email'].to_s
@@ -24,8 +27,6 @@ q = "
 q += "
 	ORDER BY #{order_column} #{order_direction}
 "
-
-raise q
 
 # build the array of objects
 users = []
@@ -71,16 +72,16 @@ DB[q].each { |row|
 				<!-- you badge -->
 			</th>
 			<th style ='width:auto;'>
-				Name
+				<a href='/settings/users?column=name&direction=<%=new_order_direction%>'>Name</a> <%= order_column == 'name' ? "<i class='#{order_icon}'></i>" : "" %>
 			</th>
 			<th style ='width:auto;'>
-				Email
+				<a href='/settings/users?column=email&direction=<%=new_order_direction%>'>Email</a> <%= order_column == 'email' ? "<i class='#{order_icon}'></i>" : "" %>
 			</th>
 			<th style ='width:auto;'>
-				Phone
+				<a href='/settings/users?column=phone&direction=<%=new_order_direction%>'>Phone</a> <%= order_column == 'phone' ? "<i class='#{order_icon}'></i>" : "" %>
 			</th>
 			<th style='width:36px;'>
-				Confirmed
+				<a href='/settings/users?column=verified&direction=<%=new_order_direction%>'>Verified</a> <%= order_column == 'verified' ? "<i class='#{order_icon}'></i>" : "" %>
 			</th>
 			<th style='width:36px;'>
 				<!-- remove button -->

@@ -41,7 +41,9 @@ module BlackStack
                     p.set_value(x)
                     p.save
                 end
-                
+
+                # return the value of the preference
+                p.get_value
             end # def preference 
 
             def self.login(h)
