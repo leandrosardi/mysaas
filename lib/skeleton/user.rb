@@ -232,6 +232,45 @@ module BlackStack
                 self.account.save
             end
 
+            # send a confirmation email to a user of this account
+            def send_confirmation_email(h)
+                errors = []
+                user = nil
+
+                # validate: h[:id_user] is required
+                if h[:id_user].to_s.size==0
+                    errors << "User ID is required."
+                end
+
+                # validate: h[:id_user] is a valid guid
+                if !h[:id_user].to_s.guid?
+                    errors << "User ID is not a valid guid."
+                end
+
+                if errors.size == 0                                
+                    # validate: h[:id_user] is a valid user
+                    user = BlackStack::Core::User.where(:id=>h[:id_user]).first
+                    if user.nil?
+                        errors << "User #{h[:id_user]} not found."
+                    end
+
+                    # security validation: both users must be in the same account
+                    if !user.nil?
+                        if self.account.id.to_guid != user.account.id.to_guid
+                            errors << "Both users must be in the same account."
+                        end
+                    end
+                end
+
+                # if any error happened, then raise an exception
+                if errors.size > 0
+                    raise errors.join("\n")
+                end
+
+                # perform the operation
+                BlackStack::Core::NotificationConfirm.new(user).do
+            end
+
             # return true if this user is the owner of its account.
             # return false if this user is not the owner of its account.
             def account_owner?
