@@ -54,7 +54,7 @@ module BlackStack
         errors << ":signature_position must be a string" if h[:signature_position].class!=String
 
         # if errors, raise exception
-        raise errors.join(', ') if errors.size>0
+        raise errors.join("\n") if errors.size>0
 
         # set values
         @@logo_url = h[:logo_url]

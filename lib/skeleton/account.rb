@@ -187,7 +187,7 @@ module BlackStack
 
         # signup a new user to this account.
         # return the new user object.
-        def add_user(h)
+        def remove_users(h)
           errors = []
 
           # validate: h[:ids] is required
@@ -219,45 +219,10 @@ module BlackStack
           end
 
           # perform operation
-          users do |u|
+          users.each do |u|
             u.remove
           end
 
-        end
-
-        # 
-        def remove_users(h)
-          errors = []
-
-          # validate: h[:ids] is required
-          if h[:ids].to_s.size==0
-            errors << "Ids is required."
-          end
-
-          # TODO: validate: h[:ids] is a list of comma separated guids
-
-          # split ids by comma
-          ids = h[:ids].split(",")
-
-          # validate: each id is a user belonging to this account
-          ids.each do |id|
-            t = BlackStack::Core::User.where(:id=>id).first
-            if t.nil?
-              errors << "User #{id} not found."
-            elsif t.id_account.to_guid != self.id.to_guid
-              errors << "User #{id} is not belonging to this account."
-            end
-          end
-
-          # if there are errors, raise exception with errors
-          if errors.size > 0
-            raise errors.join("\n")
-          end
-
-          # perform operation
-          users do |u|
-            u.remove
-          end
         end
 
         # return the user to contact for any communication.

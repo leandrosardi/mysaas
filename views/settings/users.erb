@@ -60,7 +60,7 @@ phone = session['settings.users.phone'].to_s
 
 		<tbody>
 			<form id='edit_users' name='edit_users' method='post' action='/settings/filter_users_update'>
-				<input type='text' name='ids' id='ids' value='<%=ids%>' />
+				<input type='hidden' name='ids' id='ids' value='<%=ids%>' />
 				<%
 				account.users.select { |u| u.delete_time.nil? }.each { |u|
 					# only account owner can edit any user

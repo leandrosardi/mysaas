@@ -122,7 +122,7 @@ module BlackStack
 
             # signup a new user to the same account of this user.
             # return the new user object.
-            def remove_users(h, notif=true)
+            def remove_users(h) 
                 # security validation: this user must be the owner of the account
                 if !self.account_owner?
                     raise "You are not the owner of this account. Only account owner can remove users."
@@ -131,8 +131,8 @@ module BlackStack
                 # add the user to the account
                 u = self.account.remove_users(h)
                 
-                # send notification to the new user
-                #BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+                # TODO: add parameter notif=true
+                # TODO: send notification to the old user
     
                 # return
                 u
@@ -144,6 +144,50 @@ module BlackStack
                 self.delete_time = now
                 self.email = self.email + "-deleted-" + guid
                 self.save
+            end
+
+            # assign another user as the owner of this user's account
+            def set_account_owner(h)
+                errors = []
+
+                # validate: h[:id_user] is required
+                if h[:id_user].to_s.size==0
+                    errors << "User ID is required."
+                end
+
+                # validate: h[:id_user] is a valid guid
+                if errors.size > 0
+                    if !h[:id_user].to_s.to_guid.valid?
+                        errors << "User ID is not a valid guid."
+                    end
+                end
+
+                # security validation: this user must be the owner of the account
+                if errors.size > 0
+                    if !self.account_owner?
+                        errors << "You are not the owner of this account. Only account owner can assign account owner."
+                    end
+                                
+                    # validate: h[:id_user] is a valid user
+                    u = BlackStack::Core::User.where(:id=>h[:id_user]).first
+                    if u.nil?
+                        errors << "User #{h[:id_user]} not found."
+                    end
+
+                    # security validation: both users must be in the same account
+                    if self.account.id.to_guid != user.account.id.to_guid
+                        errors << "Both users must be in the same account."
+                    end
+                end
+
+                # if any error happened, then raise an exception
+                if errors.size > 0
+                    raise errors.join("\n")
+                end
+
+                # perform the operation
+                self.account.id_user_to_contact = user.id
+                self.account.save
             end
 
             # return true if this user is the owner of its account.
