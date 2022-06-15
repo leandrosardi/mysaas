@@ -37,6 +37,10 @@ phone = session['settings.users.phone'].to_s
 			<th style ='width:36px;'>
 				<!-- picture -->
 			</th>
+			<th style ='width:115px;'>
+				<!-- account owner badge -->
+				<!-- you badge -->
+			</th>
 			<th style ='width:auto;'>
 				Name
 			</th>
@@ -58,33 +62,71 @@ phone = session['settings.users.phone'].to_s
 			<form id='edit_users' name='edit_users' method='post' action='/settings/filter_users_update'>
 				<input type='text' name='ids' id='ids' value='<%=ids%>' />
 				<%
-				account.users.select { |user| user.delete_time.nil? }.each { |user|
+				account.users.select { |u| u.delete_time.nil? }.each { |u|
+					# only account owner can edit any user
+					# other users can edit only themselves
+					allow_update = @login.user.account_owner? || u.id.to_guid == @login.user.id.to_guid
+					disabled = !allow_update ? 'disabled' : ''
 				%>
 				<tr>
 					<td style='text-align: center; vertical-align: middle;'>
-						<input class="checkbox select-row" data-rows-group-id='users' data-id="<%=user.id.to_guid%>" type="checkbox" id="<%=user.id.to_guid%>">
+						<input class="checkbox select-row" data-rows-group-id='users' data-id="<%=u.id.to_guid%>" type="checkbox" id="<%=u.id.to_guid%>" />
 					</td>
 					<td>
-						<img class='avatar' src="<%="https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(user.email.strip.downcase)%>" alt="<%=user.name.to_s.encode_html%>" />
-					</td>
-					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=user.name.to_s.encode_html%>' />
-					</td>
-					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=user.email.to_s.encode_html%>' />
-					</td>						
-					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=user.phone.to_s.encode_html%>' />
+						<img class='avatar' src="<%="https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(u.email.strip.downcase)%>" alt="<%=u.name.to_s.encode_html%>" />
 					</td>
 					<td style='text-align: center; vertical-align: middle;'>
-						<% if user.verified %>
+						<%
+						# show badge if user is account owner
+						if u.account_owner?
+						%>
+							<span class='badge badge-success'>Owner</span>
+						<%
+						end
+						%>
+
+						<%
+						# show badge if user is the logged in user
+						if u.id.to_guid == @login.user.id.to_guid
+						%>
+							<span class='badge badge-blue'>You</span>
+						<%
+						end
+						%>
+
+						<%
+						# if logged in user is account owner, and user is not account owner, show make-owner button
+						if @login.user.account_owner? && !u.account_owner?
+						%>
+							<a class="btn btn-link make-owner semi-transparent-link" data-id="<%=u.id.to_guid%>" title='Make Owner'>Make Owner</a>
+						<%
+						end
+						%>
+					</td>
+					<td>
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.name.to_s.encode_html%>' <%=disabled%> />
+					</td>
+					<td>
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.email.to_s.encode_html%>' <%=disabled%> />
+					</td>						
+					<td>
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.phone.to_s.encode_html%>' <%=disabled%> />
+					</td>
+					<td style='text-align: center; vertical-align: middle;'>
+						<% if u.verified %>
 							<span style='color:green;'><i class="icon-ok"></i></span>
 						<% else %>
 							<a class='btn btn-link' title='Send Confirmation Email' href='/settings/'><i class="icon-envelope-alt"></i></a>
 						<% end %>
 					</td>
 					<td style='text-align: center; vertical-align: middle;'>
-						<a class='btn btn-link' style='color:red;' title='Remove User' href='/settings/'><i class="icon-remove"></i></a>
+						<% 
+						# even if it is allowed for update, don't allow delete if user is the logged in user
+						allowed_for_delete = allow_update && u.id.to_guid != @login.user.id.to_guid
+						disabled_for_delete = !allowed_for_delete ? 'disabled' : ''
+						color_for_delete = !allowed_for_delete ? 'gray' : 'red'
+						%>
+						<a class='btn btn-link' style='color:<%=color_for_delete%>;' title='Remove User' href='/settings/filter_users_delete?ids=<%=u.id.to_guid%>' <%=disabled_for_delete%>><i class="icon-remove"></i></a>
 					</td>
 				</tr>
 				<%
@@ -96,21 +138,31 @@ phone = session['settings.users.phone'].to_s
 			</form>
 
 			<form id='add_user' name='add_user' method='post' action='/settings/filter_users_add'>
+				<%
+				# only account owner can add users
+				allow_update = @login.user.account_owner?
+				disabled = !allow_update ? 'disabled' : ''
+				color = allow_update ? 'green' : 'gray'
+				%>
 				<tr>
 					<td colspan=2>
-						<span class='badge badge-green'>Add user</span>
+						<span class='badge badge-<%=color%>'>Add user</span>
 					</td>
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=name.to_s.encode_html%>' id='name' name='name' />
+						<!-- account owner badge -->
+						<!-- you badge -->
+					</td>	
+					<td>
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=name.to_s.encode_html%>' id='name' name='name' <%=disabled%> />
 					</td>						
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=email.to_s.encode_html%>' id='email' name='email' />
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=email.to_s.encode_html%>' id='email' name='email' <%=disabled%> />
 					</td>						
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=phone.to_s.encode_html%>' id='phone' name='phone' />
+						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=phone.to_s.encode_html%>' id='phone' name='phone' <%=disabled%> />
 					</td>
 					<td style='text-align: center; vertical-align: middle;'>
-						<button type='submit' class='btn btn-link' title='Add User'><i class='icon-plus'></i></button>
+						<button type='submit' class='btn btn-link' title='Add User' <%=disabled%>><i class='icon-plus'></i></button>
 					</td>
 					<td style='text-align: center; vertical-align: middle;'>
 						<!-- remove button -->
@@ -217,6 +269,10 @@ var tablesJs = {
     },
 } // var tablesJs
 
+
+semiTransparentLinks();
+
+formatLinks();
 
 // call the function init when the page is loaded.
 tablesJs.init();

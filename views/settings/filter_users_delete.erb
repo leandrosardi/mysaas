@@ -1,50 +1,18 @@
 <%
-	random_id = guid()
+# map params key-values to session key-values 
+params_to_session('settings.users')
 
-	if (params.has_key?('uid') == false)
-		return_message[:status] = 'uid (user id) expected.'
-		return_message[:value] = ""
-		DB.disconnect
-		GC.start
-		return return_message.to_json
-	end
+# login
+begin
+	# guardar el ID de intento de l en una variable de sesion
+	@login.user.remove_users(params)
+rescue => e
+	# libero recursos
+	DB.disconnect
+	GC.start
+	# redirect
+	redirect "/settings/users?err="+CGI::escape(e.message)
+end
 
-	user = BlackStack::Core::User.where(:id=>params['uid']).first
-	if ( user == nil )
-		return_message[:status] = 'User ID not found in the central database. Call support for assistance.'
-		return_message[:value] = ""
-		DB.disconnect
-		GC.start
-		return return_message.to_json
-	end
-
-	# envio la informacion a la division central
-	url = "#{BlackStack::Pampa::api_url}/api1.2/central/delete_user.json"
-	res = BlackStack::Netting::call_post(url, {'api_key' => BlackStack::Pampa::api_key, 'uid' => params['uid'], 'random_id' => random_id})
-	parsed = JSON.parse(res.body)
-	if parsed["status"]!="success"
-		# libero recursos
-		DB.disconnect
-		GC.start
-		redirect '/settings/users?err=' + CGI.escape(parsed['status'].to_s)
-	end
-
-	# actualizo el registro
-	user.delete_time = now()
-	user.email += '-' + random_id.to_guid
-	user.save
-
-	# delete links to pipelines
-	PipelineUser.where(:id_user=>user.id).each { |o|
-		o.delete
-		DB.disconnect
-		GC.start
-	}
-
-	# 
-    DB.disconnect
-    GC.start
-
- 	# redireccionar al dashboard
- 	redirect '/settings/users?msg=Account%20Deleted.'
+redirect "/settings/users?msg=#{CGI::escape("User Added.")}"
 %>

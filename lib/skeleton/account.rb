@@ -6,7 +6,7 @@ module BlackStack
     class Account < Sequel::Model(:account)
         one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_account
         many_to_one :timezone, :class=>:'BlackStack::Core::Timezone', :key=>:id_timezone
-        many_to_one :user_owner, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
+        many_to_one :user_to_contact, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
         many_to_one :account_owner, :class=>'BlackStack::Core::Account', :key=>:id_account_owner
 
         # validate the parameters in the signup descriptor `h``.
@@ -185,11 +185,89 @@ module BlackStack
           u
         end
 
+        # signup a new user to this account.
+        # return the new user object.
+        def add_user(h)
+          errors = []
+
+          # validate: h[:ids] is required
+          if h[:ids].to_s.size==0
+            errors << "Ids is required."
+          end
+
+          # TODO: validate: h[:ids] is a list of comma separated guids
+
+          # split ids by comma
+          ids = h[:ids].split(",")
+          users = []
+
+          # validate: each id is a user belonging to this account
+          ids.each do |id|
+            t = BlackStack::Core::User.where(:id=>id).first
+            if t.nil?
+              errors << "User #{id} not found."
+            elsif t.id_account.to_guid != self.id.to_guid
+              errors << "User #{id} is not belonging to this account."
+            else
+              users << t
+            end
+          end
+
+          # if there are errors, raise exception with errors
+          if errors.size > 0
+            raise errors.join("\n")
+          end
+
+          # perform operation
+          users do |u|
+            u.remove
+          end
+
+        end
+
+        # 
+        def remove_users(h)
+          errors = []
+
+          # validate: h[:ids] is required
+          if h[:ids].to_s.size==0
+            errors << "Ids is required."
+          end
+
+          # TODO: validate: h[:ids] is a list of comma separated guids
+
+          # split ids by comma
+          ids = h[:ids].split(",")
+
+          # validate: each id is a user belonging to this account
+          ids.each do |id|
+            t = BlackStack::Core::User.where(:id=>id).first
+            if t.nil?
+              errors << "User #{id} not found."
+            elsif t.id_account.to_guid != self.id.to_guid
+              errors << "User #{id} is not belonging to this account."
+            end
+          end
+
+          # if there are errors, raise exception with errors
+          if errors.size > 0
+            raise errors.join("\n")
+          end
+
+          # perform operation
+          users do |u|
+            u.remove
+          end
+        end
+
         # return the user to contact for any communication.
-        # if the client configured the user_to_contact field, this method returns such user.
-        # if the client didn't configure the user_to_contact field, this method returns first user signed up that is not deleted.
+        # if the client configured the contact field, this method returns such user.
+        # if the client didn't configure the contact field, this method returns first user signed up that is not deleted.
         def contact
-          !self.user_to_contect.nil? ? self.user_to_contect : self.users.select { |u| u.delete_time.nil? }.sort_by { |u| u.create_time }.first
+          !self.user_to_contact.nil? ? self.user_to_contact : self.users.select { |u| u.delete_time.nil? }.sort_by { |u| u.create_time }.first
+        end
+        def user_owner
+          self.contact
         end
         
         # return true if the self.delete_time.nil? == false

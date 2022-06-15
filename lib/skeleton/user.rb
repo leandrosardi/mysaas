@@ -105,16 +105,52 @@ module BlackStack
             # signup a new user to the same account of this user.
             # return the new user object.
             def add_user(h, notif=true)
+                # security validation: this user must be the owner of the account
+                if !self.account_owner?
+                    raise "You are not the owner of this account. Only account owner can add users."
+                end
+
                 # add the user to the account
                 u = self.account.add_user(h)
-    
+                
                 # send notification to the new user
                 BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
     
                 # return
                 u
             end
-  
+
+            # signup a new user to the same account of this user.
+            # return the new user object.
+            def remove_users(h, notif=true)
+                # security validation: this user must be the owner of the account
+                if !self.account_owner?
+                    raise "You are not the owner of this account. Only account owner can remove users."
+                end
+
+                # add the user to the account
+                u = self.account.remove_users(h)
+                
+                # send notification to the new user
+                #BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+    
+                # return
+                u
+            end
+
+            # set the current time to self.delete_time.
+            # append a guid to the email address, in order to allow the user to create a new account using the old email.
+            def remove
+                self.delete_time = now
+                self.email = self.email + "-deleted-" + guid
+                self.save
+            end
+
+            # return true if this user is the owner of its account.
+            # return false if this user is not the owner of its account.
+            def account_owner?
+                self.account.user_owner.id.to_guid == self.id.to_guid
+            end
 
             # get the value of a preference parameter for this user
             def get_preference(name)

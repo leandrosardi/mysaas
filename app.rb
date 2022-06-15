@@ -193,9 +193,9 @@ end
 # No puede ser un metodo de la clase User, porque accede a las variables de sesion del webserver.
 def getEmailToShow(user)
   if user.account.resellerSignature? && session['login.id_prisma_user'].to_s.size > 0
-    if user.account.user_to_contect == nil
+    if user.account.contact == nil
       return "****@****.***"
-    elsif user.account.user_to_contect.id != user.id
+    elsif user.account.contact.id != user.id
       return "****@****.***"
     end
   end
@@ -364,10 +364,13 @@ end
 post '/settings/filter_users_delete', :auth1 => true do
   erb :'/settings/filter_users_delete'
 end
+get '/settings/filter_users_delete', :auth1 => true do
+  erb :'/settings/filter_users_delete'
+end
 post '/settings/filter_users_update', :auth1 => true do
   erb :'/settings/filter_users_update'
 end
-post '/settings/filter_users_send_confirmation_email', :auth1 => true do
+get '/settings/filter_users_send_confirmation_email', :auth1 => true do
   erb :'/settings/filter_users_send_confirmation_email'
 end
 
