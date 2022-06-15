@@ -4,6 +4,45 @@ module BlackStack
     module Core
         class User < Sequel::Model(:user)
             many_to_one :account, :class=>:'BlackStack::Core::Account', :key=>:id_account
+            one_to_many :preferences, :class=>:'BlackStack::Core::Preference', :key=>:id_user
+
+            # get the type of the default parameter (string, integer, boolean, or float).
+            # lookup for the name in the preference table.
+            # if the name is not found, create a new record. 
+            def preference(name, default, params={})
+                type = nil
+                
+                # get the type of the default value
+                type = BlackStack::Core::Preference::type_of(default)
+                if type.nil?
+                    raise "Invalid default value for preference. Expected String, Integer, Float, or Boolean."
+                end
+
+                # get the preference
+                p = self.preferences.where(:name=>name, :id_user=>self.id).first
+                if p.nil?
+                    p = BlackStack::Core::Preference.new
+                    p.id = guid
+                    p.id_user = self.id
+                    p.create_time = now
+                    p.name = name
+                    p.type = type
+                    p.set_value(default)
+                    p.save
+                end
+
+                # validate: the type of the preference is the same than the default value
+                if p.type != type
+                    raise "Invalid default value for preference. Expected #{BlackStack::Core::Preference.type_name(p.type)}."
+                end
+
+                # if exists params[name], then update the value of the preference
+                if params.has_key?(name)
+                    p.set_value(params[name])
+                    p.save
+                end
+                
+            end # def preference 
 
             def self.login(h)
                 errors = []

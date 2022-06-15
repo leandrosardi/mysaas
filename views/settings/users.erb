@@ -4,6 +4,9 @@ account = @login.user.account
 # variables de sesion para recordar los usuuarios seleccionados
 ids = session['settings.users.ids'].to_s
 
+order_column = @login.user.preference('settings.users.order_column', '', params)
+order_direction = @login.user.preference('settings.users.order_direction', '', params)
+
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
 email = session['settings.users.email'].to_s
@@ -176,9 +179,9 @@ phone = session['settings.users.phone'].to_s
 
 
 <script>
-var tablesJs = {
+var selectRowsJs = {
 
-	// return the version if this tablesJs library.
+	// return the version if this selectRowsJs library.
     version: function() {
         return '1.0.1';
     },
@@ -239,8 +242,8 @@ var tablesJs = {
 			} else {
 				$('input.select-row[data-rows-group-id="'+group_id+'"]').prop('checked', false);
 			}
-			tablesJs.update_input_ids(group_id);
-			tablesJs.enable_disable_buttons(group_id);
+			selectRowsJs.update_input_ids(group_id);
+			selectRowsJs.enable_disable_buttons(group_id);
 		});
 	
 		// when check .select-row is checked, update the input box .ids with the data-id of all the selected .select-row with the same data-rows-group-id.
@@ -248,8 +251,8 @@ var tablesJs = {
 		// call the function enable_disable_buttons with the data-rows-group-id attribute of the checkbox .select-row.
 		$('.select-row').click(function() {
 			var group_id = $(this).data('rows-group-id');
-			tablesJs.update_input_ids(group_id);
-			tablesJs.enable_disable_buttons(group_id);
+			selectRowsJs.update_input_ids(group_id);
+			selectRowsJs.enable_disable_buttons(group_id);
 		});
 
 		// call the function initialize_checkboxes with the data-rows-group-id attribute of the checkbox .select-all.
@@ -257,8 +260,8 @@ var tablesJs = {
         window.onload = function () {
 			$('.select-all').each(function() {
 				var group_id = $(this).data('rows-group-id');
-				tablesJs.initialize_checkboxes(group_id);
-				tablesJs.enable_disable_buttons(group_id);
+				selectRowsJs.initialize_checkboxes(group_id);
+				selectRowsJs.enable_disable_buttons(group_id);
 			});
 			
             // call the original onload function
@@ -267,7 +270,7 @@ var tablesJs = {
             }
         }
     },
-} // var tablesJs
+} // var selectRowsJs
 
 
 semiTransparentLinks();
@@ -275,6 +278,6 @@ semiTransparentLinks();
 formatLinks();
 
 // call the function init when the page is loaded.
-tablesJs.init();
+selectRowsJs.init();
 
 </script>
