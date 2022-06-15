@@ -13,9 +13,9 @@ new_order_direction = order_direction == 'asc' ? 'desc' : 'asc'
 order_icon = order_direction == 'asc' ? 'icon-arrow-up' : 'icon-arrow-down'
 
 # user preferences regarding the filtering
-filter_name = @login.user.preference('settings.users.filter.name', '', params[:filter_name])
-filter_email = @login.user.preference('settings.users.filter.email', '', params[:filter_email])
-filter_phone = @login.user.preference('settings.users.filter.phone', '', params[:filter_phone])
+filter_name = @login.user.preference('settings.users.filter.name', '', params[:name])
+filter_email = @login.user.preference('settings.users.filter.email', '', params[:email])
+filter_phone = @login.user.preference('settings.users.filter.phone', '', params[:phone])
 
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
@@ -28,6 +28,12 @@ q = "
 	FROM \"user\" u
 	WHERE u.delete_time IS NULL
 	AND u.id_account = '#{account.id}'
+"
+
+q += "
+	AND u.name LIKE '%#{filter_name.to_s.to_sql}%'
+	AND u.email LIKE '%#{filter_email.to_s.to_sql}%'
+	AND COALESCE(u.phone, '') LIKE '%#{filter_phone.to_s.to_sql}%'
 "
 
 q += "
@@ -96,7 +102,7 @@ DB[q].each { |row|
 
 		<thead>
 			<form action='/settings/users' method='get'>
-				<th colspan=2 style='text-align: center; vertical-align: top;'>
+				<th colspan=2 style='text-align: left; vertical-align: top;'>
 					<!-- checkbox -->
 					<!-- picture -->
 					<span class='badge badge-green'>Filters</span>
@@ -207,7 +213,7 @@ DB[q].each { |row|
 				color = allow_update ? 'green' : 'gray'
 				%>
 				<tr>
-					<td colspan=2>
+					<td colspan=2 style='text-align: left; vertical-align: top;'>
 						<span class='badge badge-<%=color%>'>Add user</span>
 					</td>
 					<td>
