@@ -149,6 +149,12 @@ module BlackStack
             # assign another user as the owner of this user's account
             def set_account_owner(h)
                 errors = []
+                user = nil
+
+                # security validation: this user must be the owner of the account
+                if !self.account_owner?
+                    errors << "You are not the owner of this account. Only account owner can assign account owner."
+                end
 
                 # validate: h[:id_user] is required
                 if h[:id_user].to_s.size==0
@@ -156,27 +162,22 @@ module BlackStack
                 end
 
                 # validate: h[:id_user] is a valid guid
-                if errors.size > 0
-                    if !h[:id_user].to_s.to_guid.valid?
-                        errors << "User ID is not a valid guid."
-                    end
+                if !h[:id_user].to_s.guid?
+                    errors << "User ID is not a valid guid."
                 end
 
-                # security validation: this user must be the owner of the account
-                if errors.size > 0
-                    if !self.account_owner?
-                        errors << "You are not the owner of this account. Only account owner can assign account owner."
-                    end
-                                
+                if errors.size == 0                                
                     # validate: h[:id_user] is a valid user
-                    u = BlackStack::Core::User.where(:id=>h[:id_user]).first
-                    if u.nil?
+                    user = BlackStack::Core::User.where(:id=>h[:id_user]).first
+                    if user.nil?
                         errors << "User #{h[:id_user]} not found."
                     end
 
                     # security validation: both users must be in the same account
-                    if self.account.id.to_guid != user.account.id.to_guid
-                        errors << "Both users must be in the same account."
+                    if !user.nil?
+                        if self.account.id.to_guid != user.account.id.to_guid
+                            errors << "Both users must be in the same account."
+                        end
                     end
                 end
 
