@@ -9,7 +9,7 @@ module BlackStack
             # get the type of the default parameter (string, integer, boolean, or float).
             # lookup for the name in the preference table.
             # if the name is not found, create a new record. 
-            def preference(name, default, params={})
+            def preference(name, default, x)
                 type = nil
                 
                 # get the type of the default value
@@ -37,8 +37,8 @@ module BlackStack
                 end
 
                 # if exists params[name], then update the value of the preference
-                if params.has_key?(name)
-                    p.set_value(params[name])
+                if !x.nil?
+                    p.set_value(x)
                     p.save
                 end
                 
