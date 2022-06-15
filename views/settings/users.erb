@@ -98,7 +98,7 @@ phone = session['settings.users.phone'].to_s
 						# if logged in user is account owner, and user is not account owner, show make-owner button
 						if @login.user.account_owner? && !u.account_owner?
 						%>
-							<a class="btn btn-link make-owner semi-transparent-link" data-id="<%=u.id.to_guid%>" title='Make Owner'>Make Owner</a>
+							<a class="btn btn-link make-owner semi-transparent-link" href='/settings/filter_users_set_account_owner?ids=<%=u.id.to_guid%>'>Make Owner</a>
 						<%
 						end
 						%>
@@ -116,7 +116,7 @@ phone = session['settings.users.phone'].to_s
 						<% if u.verified %>
 							<span style='color:green;'><i class="icon-ok"></i></span>
 						<% else %>
-							<a class='btn btn-link' title='Send Confirmation Email' href='/settings/'><i class="icon-envelope-alt"></i></a>
+							<a class='btn btn-link' title='Send Confirmation Email' href='/settings/filter_users_send_confirmation_email?ids=<%=u.id.to_guid%>'><i class="icon-envelope-alt"></i></a>
 						<% end %>
 					</td>
 					<td style='text-align: center; vertical-align: middle;'>
