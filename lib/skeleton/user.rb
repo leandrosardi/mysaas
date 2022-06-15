@@ -102,6 +102,19 @@ module BlackStack
                 self.save
             end
 
+            # signup a new user to the same account of this user.
+            # return the new user object.
+            def add_user(h, notif=true)
+                # add the user to the account
+                u = self.account.add_user(h)
+    
+                # send notification to the new user
+                BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+    
+                # return
+                u
+            end
+  
 
             # get the value of a preference parameter for this user
             def get_preference(name)

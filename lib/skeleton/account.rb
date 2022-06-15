@@ -129,10 +129,66 @@ module BlackStack
           l
         end # def self.signup(h)
 
+        # signup a new user to this account.
+        # return the new user object.
+        def add_user(h)
+          errors = []
+
+          # validate: h[:email] is required
+          if h[:email].to_s.size==0
+            errors << "Email is required."
+          end
+
+          # validate: h[:email] is valid
+          if !h[:email].email?
+            errors << "Email is not valid."
+          end
+
+          # validate: h[:name] is required
+          if h[:name].to_s.size==0
+            errors << "Name is required."
+          end
+
+          # validate: h[:name] is not longer then 50 chars
+          if h[:name].to_s.size>50
+            errors << "Name is too long."
+          end
+
+          # validate: h[:email] is not already registered
+          t = BlackStack::Core::User.where(:email=>h[:email]).first 
+          if !t.nil?
+            # if the user exists under this account
+            if t.id_account.to_guid == self.id.to_guid
+              errors << "Email already exists."
+            else
+              errors << "Email already exists under another account."
+            end
+          end
+
+          # if there are errors, raise exception with errors
+          if errors.size > 0
+            raise errors.join("\n")
+          end
+
+          # perform operation
+          u = BlackStack::Core::User.new
+          u.id = guid
+          u.id_account = self.id
+          u.create_time = now
+          u.email = h[:email]
+          u.name = h[:name]
+          u.phone = h[:phone]
+          u.password = BCrypt::Password.create(guid) # generate a random password
+          u.save
+
+          # return
+          u
+        end
+
         # return the user to contact for any communication.
         # if the client configured the user_to_contact field, this method returns such user.
         # if the client didn't configure the user_to_contact field, this method returns first user signed up that is not deleted.
-        def contact()
+        def contact
           !self.user_to_contect.nil? ? self.user_to_contect : self.users.select { |u| u.delete_time.nil? }.sort_by { |u| u.create_time }.first
         end
         

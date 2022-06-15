@@ -8,9 +8,13 @@ require 'lib/skeleton'
 
 # map params key-values to session key-values.
 # for security: the keys `:password` and `:new_password` are not mapped.
-def params_to_session
+def params_to_session(path=nil)
   params.each do |key, value|
-    session[key] = value if key != :password && key != :new_password
+    if path.nil?
+      session[key.to_s] = value if key != :password && key != :new_password
+    else
+      session[path + '.' + key] = value if key != :password && key != :new_password
+    end
   end
 end
 

@@ -8,3 +8,5 @@ require 'lib/skeleton/notification'
 require 'notifications/welcome'
 require 'notifications/confirm'
 require 'notifications/reset'
+require 'notifications/youadded'
+

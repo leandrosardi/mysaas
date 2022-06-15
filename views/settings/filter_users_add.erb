@@ -1,68 +1,18 @@
 <%
-  cid = params[:cid]
-  username = params[:username]
-  email = params[:email]
-  linkedin_url = params[:linkedin_url]
-  gtc = params[:gtc]
-  parsed = nil
+# map params key-values to session key-values 
+params_to_session('settings.users')
 
-  session['member.users.username'] = username
-  session['member.users.email'] = email
-
-  nTries = 0
-  bSuccess = false
-  sError = ""
-
-  linkedin_url_pattern = /((https?:\/\/)?(www\.)?linkedin\.com\/in\/)(([-A-Za-z0-9](\/?))+$)/
-
-  if username.to_s.size == 0
+# login
+begin
+	# guardar el ID de intento de l en una variable de sesion
+	@login.user.add_user(params)
+rescue => e
 	# libero recursos
 	DB.disconnect
 	GC.start
-	msg = 'Username is Required.'
-    redirect "/settings/users?err=#{CGI.escape(msg)}"  	
-  end
-  
-  if email.to_s.size == 0
-	# libero recursos
-	DB.disconnect
-	GC.start
-	msg = 'Email is Required.'
-    redirect "/settings/users?err=#{CGI.escape(msg)}"  	
-  end
+	# redirect
+	redirect "/settings/users?err="+ CGI::escape(e.message)
+end
 
-  if !email.email?
-	# libero recursos
-	DB.disconnect
-	GC.start
-	msg = 'Wrong email format. <b>Note:</b> You must write one, and only one, valid email address.'
-    redirect "/settings/users?err=#{CGI.escape(msg)}"  	
-  end
-
-  if (bSuccess==false)
-	# libero recursos
-	DB.disconnect
-	GC.start
-    redirect "/settings/users?err=Failed+to+signup"
-  end
-
-  if (parsed['status'] != "success")
-	# libero recursos
-	DB.disconnect
-	GC.start
-    redirect "/settings/users?err=Signup+Error+#{CGI.escape(': ' + parsed['status'])}"  	
-  end
-
-  # libero recursos
-  DB.disconnect
-  GC.start
-
-  # limpio las variables de sesion, para que el fomulario quede en blanco
-  session['member.users.username'] = nil
-  session['member.users.email'] = nil
-
-
-  # redireccionar al dashboard
-  redirect '/settings/users?msg=Account%20Created.'
+redirect "/settings/users?msg=#{CGI::escape("User Added.")}"
 %>
-<!-- ---------------------------------------- -->
