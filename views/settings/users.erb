@@ -5,8 +5,8 @@ account = @login.user.account
 ids = session['settings.users.ids'].to_s
 
 # user preferences regarding the sorting of the table
-order_column = @login.user.preference('settings.users.order.column', '', params[:column])
-order_direction = @login.user.preference('settings.users.order.direction', '', params[:direction])
+order_column = @login.user.preference('settings.users.order.column', 'name', params[:column])
+order_direction = @login.user.preference('settings.users.order.direction', 'asc', params[:direction])
 
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
@@ -21,10 +21,18 @@ q = "
 	AND u.id_account = '#{account.id}'
 "
 
+q += "
+	ORDER BY #{order_column} #{order_direction}
+"
+
+raise q
+
 # build the array of objects
 users = []
-DB[q].all { |row| 
-	users << BlackStack::Core::User.where(:id=>row['id']).first 
+DB[q].each { |row| 
+	user = BlackStack::Core::User.where(:id=>row[:id]).first 
+	raise "User `#{row[:id]}` not found" if user.nil?
+	users << user
 	# release resources on each iteration
 	GC.start
 	DB.disconnect

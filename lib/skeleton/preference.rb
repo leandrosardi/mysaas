@@ -55,13 +55,13 @@ module BlackStack
             end
 
             def get_value
-                if self.value_string
+                if self.type == BlackStack::Core::Preference::TYPE_STRING
                     return self.value_string
-                elsif self.value_int
+                elsif self.type == BlackStack::Core::Preference::TYPE_INT 
                     return self.value_int
-                elsif self.value_float
+                elsif self.type == BlackStack::Core::Preference::TYPE_FLOAT
                     return self.value_float
-                elsif self.value_bool
+                elsif self.type == BlackStack::Core::Preference::TYPE_BOOL
                     return self.value_bool
                 else
                     return nil
