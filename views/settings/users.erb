@@ -17,28 +17,46 @@ filter_name = @login.user.preference('settings.users.filter.name', '', params[:n
 filter_email = @login.user.preference('settings.users.filter.email', '', params[:email])
 filter_phone = @login.user.preference('settings.users.filter.phone', '', params[:phone])
 
+# user preferences regarding the pagination
+page_number = @login.user.preference('settings.users.pagination.page', 1, params[:number])
+page_size = @login.user.preference('settings.users.pagination.size', 25, params[:size])
+
+page_size = 3
+
 # variables de sesion para recordar datos de un nuevo usuario a crear
 name = session['settings.users.name'].to_s 
 email = session['settings.users.email'].to_s
 phone = session['settings.users.phone'].to_s
 
-# query to bring rows
-q = "
+# query to bring all rows
+q0 = "
 	SELECT u.id as id
 	FROM \"user\" u
 	WHERE u.delete_time IS NULL
 	AND u.id_account = '#{account.id}'
-"
-
-q += "
 	AND u.name LIKE '%#{filter_name.to_s.to_sql}%'
 	AND u.email LIKE '%#{filter_email.to_s.to_sql}%'
 	AND COALESCE(u.phone, '') LIKE '%#{filter_phone.to_s.to_sql}%'
 "
 
-q += "
+# gathering pagination info
+total_rows = DB[q0].count
+from_row = (page_number.to_i-1) * page_size.to_i + 1
+to_row = [page_number*page_size, total_rows].min
+total_pages = (total_rows.to_f/page_size.to_f).ceil
+
+# pagination correction
+#page_number = 1 if page_number < 1
+#page_number = 1 if page_number * page_size > total_rows
+
+# query to bring page rows
+q = "
+	#{q0}
 	ORDER BY #{order_column} #{order_direction}
+	LIMIT #{page_number*page_size}
+	OFFSET #{(page_number.to_i - 1) * page_size.to_i}
 "
+
 
 # build the array of objects
 users = []
@@ -238,6 +256,16 @@ DB[q].each { |row|
 				</tr>
 			</form>
 
+			<! current page information -->
+			<tr>
+				<td colspan='3' style='text-align: left;'>
+					<b>Records:</b> <%=from_row.to_label%> to <%=to_row.to_label%> <b>of</b> <%=total_rows.to_label%>
+				</td>
+				<td colspan='5' style='text-align: right;'>
+					<div class='pagination'></div>
+				</td>
+			</tr>
+
 		</tbody>
 	</table>
 </section>
@@ -251,7 +279,7 @@ var selectRowsJs = {
         return '1.0.1';
     },
 
-	// get the value of data-input-id from the checkbox with class 'select-all' and data-rows-group-id equal to the parameter group_id.
+	// get the value of data-input-id from_row the checkbox with class 'select-all' and data-rows-group-id equal to the parameter group_id.
 	// uncheck all the checkboxes with class 'select-row' and data-rows-group-id equal to the parameter group_id.
 	// check all the checkboxes with class 'select-row' and data-rows-group-id equal to the parameter group_id, and data-id included in the value of the input with class 'select-all' and data-input-id equal to the parameter input_id.
 	initialize_checkboxes: function(group_id) {
@@ -278,7 +306,7 @@ var selectRowsJs = {
 		}
 	},
 
-	// get the value of data-input-id from the checkbox with class 'select-all' and data-rows-group-id equal to the parameter group_id.
+	// get the value of data-input-id from_row the checkbox with class 'select-all' and data-rows-group-id equal to the parameter group_id.
 	// update the input box .ids with the data-id of all the selected .select-row with data-rows-group-id equal to the parameter group_id.
 	update_input_ids: function(group_id) {
 		var input_id = $('input.select-all[data-rows-group-id="'+group_id+'"]').data('input-id');
@@ -344,5 +372,55 @@ formatLinks();
 
 // call the function init when the page is loaded.
 selectRowsJs.init();
+
+// draw pagination
+// 
+function drawPagination(o, current_page, total_pages)
+{
+console.log(current_page);
+console.log(total_pages);
+
+	url = '?number='; // url to get the next page	
+	
+	o.html("");
+	u = $("<ul></ul>");
+	o.append(u);
+
+	if (current_page>1) {
+		li = $('<li><a href="'+url+(current_page-1).toString()+'">Prev</a></li>');
+	} else {
+		li = $('<li class="disabled"><a href="#">Prev</a></li>')
+	}
+	u.append(li);
+
+	i=1
+	i_prev = 1
+	while (i<=total_pages) {
+		if (i==current_page) {
+			sClassActive="class='active'"
+		} else {
+			sClassActive=""
+		}
+		if ( i==1 || i==total_pages || (i>=current_page-2 && i<=current_page+2) ) {
+			if (i>i_prev+1) {
+				li = $('<li><span>...</span></li>')
+				u.append(li)
+			}
+			li = $('<li '+sClassActive+'><a href="'+url+i.toString()+'">'+i.toString()+'</a></li>')
+			u.append(li)
+			i_prev=i
+		}
+		i=i+1
+	}
+
+	if (current_page<total_pages) {
+		i = $('<li><a href="./'+url+(current_page+1).toString()+'">Next</a></li>');
+	} else {
+		i = $('<li class="disabled"><a href="#">Next</a></li>')
+	}
+	u.append(i);
+}
+
+drawPagination($(".pagination"), <%=page_number%>, <%=total_pages%>);
 
 </script>
