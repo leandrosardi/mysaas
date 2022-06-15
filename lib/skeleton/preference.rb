@@ -50,7 +50,7 @@ module BlackStack
                 elsif x.is_a?(TrueClass) || x.is_a?(FalseClass)
                     self.value_bool = x
                 else
-                    raise "Invalid x value for preference. Expected String, Integer, Float, or Boolean."
+                    raise "Invalid `#{x.to_s}` value for preference #{self.name}. Expected String, Integer, Float, or Boolean."
                 end
             end
 

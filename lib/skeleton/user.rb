@@ -19,7 +19,7 @@ module BlackStack
                 end
 
                 # get the preference
-                p = self.preferences.where(:name=>name, :id_user=>self.id).first
+                p = BlackStack::Core::Preference.where(:name=>name, :id_user=>self.id).first
                 if p.nil?
                     p = BlackStack::Core::Preference.new
                     p.id = guid
