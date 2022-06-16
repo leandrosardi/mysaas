@@ -11,9 +11,9 @@
 # ignore the folders imported from extensions.
 # reference: for more information, read #33
 #
-# ignore subfolders inside /views, except api1.0, layouts, settings, and templates 
-# ignore subfolders inside /public, except core
-# ignore subfolders inside /lib, except skeleton and stub 
+# ignore subfolders inside /views, except api1.0, layouts, settings, and templates, and any file named *.rb in the root.
+# ignore subfolders inside /public, except the core subfolder, and any file named *.rb in the root.
+# ignore subfolders inside /lib, except skeleton and stub subfolders 
 # ignore subfolders inside /notifications, except any file named *.rb in the root
 # ignore subfolders inside /p, except any file named *.rb in the root
 # ignore subfolders inside /dispatchers, except any file named *.rb in the root
@@ -29,6 +29,8 @@
 !/views/layouts
 !/views/settings
 !/views/templates
+!/views/*.rb
+!/views/*.md
 
 /public/*
 !/public/core/*
@@ -36,9 +38,15 @@
 /lib/*
 !/lib/skeleton/*
 !/lib/stub/*
+!/lib/*.rb
+!/lib/*.md
 
 /notifications/*
 !/notifications/*.rb
+!/notifications/*.md
+
+/p/*
+!/p/*.rb
 
 /dispatchers/*
 !/dispatchers/*.rb
