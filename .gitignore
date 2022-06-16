@@ -11,42 +11,55 @@
 # ignore the folders imported from extensions.
 # reference: for more information, read #33
 #
-# ignore subfolders inside /views, except api*, layouts, settings, and templates 
+# ignore subfolders inside /views, except api1.0, layouts, settings, and templates 
 # ignore subfolders inside /public, except core
 # ignore subfolders inside /lib, except skeleton and stub 
-# ignore subfolders inside /notifications
-# ignore subfolders inside /p 
-# ignore subfolders inside /dispatchers
-# ignore subfolders inside /cli
-# ignore subfolders inside /deployment-routines
-# ignore subfolders inside /sql
-# ignore subfolders inside /gems
-# ignore subfolders inside /examples, except the /core folder
-# ignore subfolders inside /docu, extept the /thumbnails folder
+# ignore subfolders inside /notifications, except any file named *.rb in the root
+# ignore subfolders inside /p, except any file named *.rb in the root
+# ignore subfolders inside /dispatchers, except any file named *.rb in the root
+# ignore subfolders inside /cli, except any file named *.rb in the root
+# ignore subfolders inside /sql, except any file named *.sql in the root
+# ignore subfolders inside /gems, except any file named *.gem in the root
+# ignore subfolders inside /examples, except the /core subfolder
+# ignore subfolders inside /docu, extept the /thumbnails subfolder and any file named *.md in the root
 # ignore subfolders inside /.extensions
 #
-/views/*/*
-!/views/api*
+/views/*
+!/views/api1.0
 !/views/layouts
 !/views/settings
 !/views/templates
-/public/*/*
-!/public/core
-/lib/*/*
-!/lib/skeleton
-!/lib/stub
-/notifications/*/*
-/projects/*/*
-/dispatchers/*/*
-/cli/*/*
-/deployment-routines/*/*
-/sql/*/*
-/gems/*/*
-/examples/*/*
-!/examples/core
-/docu/*/*
-!/docu/thumbnails
-/.extensions/*/*
+
+/public/*
+!/public/core/*
+
+/lib/*
+!/lib/skeleton/*
+!/lib/stub/*
+
+/notifications/*
+!/notifications/*.rb
+
+/dispatchers/*
+!/dispatchers/*.rb
+
+/cli/*
+!/cli/*.rb
+
+/sql/*
+!/sql/*.sql
+
+/gems/*
+!/gems/*.gem
+
+/examples/*
+!/examples/core/*
+
+/docu/*
+!/docu/thumbnails/*
+!/docu/*.md
+
+/.extensions/*
 
 # igonore the backups of the configuration files
 config.*.rb
