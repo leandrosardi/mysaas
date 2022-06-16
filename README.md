@@ -25,7 +25,7 @@ If you have skills in any of: design, Ruby, PostgreSQL or Bootstrap and would li
 
 **Step 1:** Install the Environment
 
-**free-memembership-sites** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
+**MySaaS** has been tested with Ubuntu 20.04 and Ruby 3.1.2.
 Other configurations may not be stable.
 
 If you are trying to install **MySaaS** on other configuration, and our automation scripts are not working; please refer to this [tutorial for manual installation](https://github.com/leandrosardi/mysaas/issues/16#issuecomment-1137154114). 
