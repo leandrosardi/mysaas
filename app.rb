@@ -245,6 +245,32 @@ def nav3(name1, url1, name2, url2, name3)
   "</p>"
 end
 
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# FreeLeadsData Extension
+# TODO: move this as an extension
+
+# define extensions path
+path = '/home/leandro/code'
+
+# name of the extension
+name = 'leads'
+
+# remove any from the project folder
+FileUtils.rm_rf("./views/#{name}")
+
+# copy leads extension to MySaaS folder
+# ruby copy folder with subfolders to a target location
+# reference: https://stackoverflow.com/questions/17469095/ruby-copy-folder-with-subfolders-to-a-target-location
+FileUtils.copy_entry "#{path}/#{name}/views", "./views/#{name}"
+
+#exit(0)
+
+# define screens
+get "/#{name}/exports", :auth1 => true do
+  erb :"/#{name}/exports", :layout => :"/#{name}/views/layout"
+end
+
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # External pages: pages that don't require login
 

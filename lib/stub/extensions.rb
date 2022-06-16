@@ -81,7 +81,7 @@ module BlackStack
             end            
         end
 
-        def self.appened(:helpdesk)
+        def self.appened(name)
         end
 
         def self.push()

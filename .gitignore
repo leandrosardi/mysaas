@@ -8,6 +8,46 @@
 /ssl/*/*
 !/ssl/_desa/*
 
+# ignore the folders imported from extensions.
+# reference: for more information, read #33
+#
+# ignore subfolders inside /views, except api*, layouts, settings, and templates 
+# ignore subfolders inside /public, except core
+# ignore subfolders inside /lib, except skeleton and stub 
+# ignore subfolders inside /notifications
+# ignore subfolders inside /p 
+# ignore subfolders inside /dispatchers
+# ignore subfolders inside /cli
+# ignore subfolders inside /deployment-routines
+# ignore subfolders inside /sql
+# ignore subfolders inside /gems
+# ignore subfolders inside /examples, except the /core folder
+# ignore subfolders inside /docu, extept the /thumbnails folder
+# ignore subfolders inside /.extensions
+#
+/views/*/*
+!/views/api*
+!/views/layouts
+!/views/settings
+!/views/templates
+/public/*/*
+!/public/core
+/lib/*/*
+!/lib/skeleton
+!/lib/stub
+/notifications/*/*
+/projects/*/*
+/dispatchers/*/*
+/cli/*/*
+/deployment-routines/*/*
+/sql/*/*
+/gems/*/*
+/examples/*/*
+!/examples/core
+/docu/*/*
+!/docu/thumbnails
+/.extensions/*/*
+
 # igonore the backups of the configuration files
 config.*.rb
 !config.template.rb

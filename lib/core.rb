@@ -8,6 +8,7 @@ require 'bcrypt'
 require 'mail'
 require 'pry'
 require 'cgi'
+require 'fileutils'
 
 # return a postgresql uuid
 def guid()
