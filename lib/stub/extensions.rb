@@ -6,7 +6,8 @@ module BlackStack
         @@dependencies = []
         @@app = {}
         @@setting_screens = []
-
+        @@storage_folders = []
+        
         module StorageFolderModule
         end # module StorageFoldersModule
 
@@ -79,6 +80,9 @@ module BlackStack
             if h.has_key?('setting_screens')
                 errors += BlackStack::Extensions::SettingScreenModule.validate_descriptor(h['setting_screens'])
             end            
+        end
+
+        def self.add(h)
         end
 
         def self.appened(name)
