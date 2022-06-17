@@ -68,6 +68,3 @@ config.backup*.rb
 
 # clients' storage folder
 /public/clients/*/
-
-# extensions folder
-/extensions/
