@@ -8,67 +8,6 @@
 /ssl/*/*
 !/ssl/_desa/*
 
-# ignore the folders imported from extensions.
-# reference: for more information, read #33
-#
-# ignore subfolders inside /views, except api1.0, layouts, settings, and templates, and any file named *.rb in the root.
-# ignore subfolders inside /public, except the core subfolder, and any file named *.rb in the root.
-# ignore subfolders inside /lib, except skeleton and stub subfolders 
-# ignore subfolders inside /notifications, except any file named *.rb in the root
-# ignore subfolders inside /p, except any file named *.rb in the root
-# ignore subfolders inside /dispatchers, except any file named *.rb in the root
-# ignore subfolders inside /cli, except any file named *.rb in the root
-# ignore subfolders inside /sql, except any file named *.sql in the root
-# ignore subfolders inside /gems, except any file named *.gem in the root
-# ignore subfolders inside /examples, except the /core subfolder
-# ignore subfolders inside /docu, extept the /thumbnails subfolder and any file named *.md in the root
-# ignore subfolders inside /.extensions
-#
-/views/*
-!/views/api1.0
-!/views/layouts
-!/views/settings
-!/views/templates
-!/views/*.erb
-!/views/*.md
-
-/public/*
-!/public/core/*
-
-/lib/*
-!/lib/skeleton/*
-!/lib/stub/*
-!/lib/*.rb
-!/lib/*.md
-
-/notifications/*
-!/notifications/*.rb
-!/notifications/*.md
-
-/p/*
-!/p/*.rb
-
-/dispatchers/*
-!/dispatchers/*.rb
-
-/cli/*
-!/cli/*.rb
-
-/sql/*
-!/sql/*.sql
-
-/gems/*
-!/gems/*.gem
-
-/examples/*
-!/examples/core/*
-
-/docu/*
-!/docu/thumbnails/*
-!/docu/*.md
-
-/.extensions/*
-
 # igonore the backups of the configuration files
 config.*.rb
 !config.template.rb
