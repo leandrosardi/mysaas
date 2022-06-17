@@ -282,58 +282,58 @@ end
 # TODO: here where you have to develop notrial? feature
 get '/', :agent => /(.*)/ do
   if !notrial?
-    erb :'views/waiting' #, :layout => :'/layouts/public'
+    erb :'views/waiting' #, :layout => :'/views/layouts/public'
   else
-    erb :'views/waiting' #, :layout => :'/layouts/public'
+    erb :'views/waiting' #, :layout => :'/views/layouts/public'
   end
 end
 
 get '/404', :agent => /(.*)/ do
-  erb :'404', :layout => :'/layouts/public'
+  erb :'views/404', :layout => :'/views/layouts/public'
 end
 
 get '/500', :agent => /(.*)/ do
-  erb :'500', :layout => :'/layouts/public'
+  erb :'views/500', :layout => :'/views/layouts/public'
 end
 
 get '/login', :agent => /(.*)/ do
-  erb :login, :layout => :'/layouts/public'
+  erb :'views/login', :layout => :'/views/layouts/public'
 end
 post '/login' do
-  erb :filter_login
+  erb :'views/filter_login'
 end
 get '/filter_login' do
-  erb :filter_login
+  erb :'views/filter_login'
 end
 
 get '/signup', :agent => /(.*)/ do
-  erb :signup, :layout => :'/layouts/public'
+  erb :'views/signup', :layout => :'/views/layouts/public'
 end
 post '/signup' do
-  erb :filter_signup
+  erb :'views/filter_signup'
 end
 
 get '/confirm/:nid' do
-  erb :filter_confirm
+  erb :'views/filter_confirm'
 end
 
 get '/logout' do
-  erb :filter_logout
+  erb :'views/filter_logout'
 end
 
 
 get '/recover', :agent => /(.*)/ do
-  erb :recover, :layout => :'/layouts/public'
+  erb :'views/recover', :layout => :'/views/layouts/public'
 end
 post '/recover' do
-  erb :filter_recover
+  erb :'views/filter_recover'
 end
 
 get '/reset/:nid', :agent => /(.*)/ do
-  erb :reset, :layout => :'/layouts/public'
+  erb :'views/reset', :layout => :'/views/layouts/public'
 end
 post '/reset' do
-  erb :filter_reset
+  erb :'views/filter_reset'
 end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -343,7 +343,7 @@ get '/', :auth1 => true do
   redirect '/dashboard'
 end
 get '/dashboard', :auth1 => true, :agent => /(.*)/ do
-  erb :'/dashboard', :layout => :'/layouts/core'
+  erb :'views/dashboard', :layout => :'/views/layouts/core'
 end
 
 
@@ -358,71 +358,71 @@ get '/settings/', :auth1 => true do
   redirect '/settings/dashboard'
 end
 get '/settings/dashboard', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/dashboard', :layout => :'/layouts/core'
+  erb :'views/settings/dashboard', :layout => :'/views/layouts/core'
 end
 
 # account information
 get '/settings/account', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/account', :layout => :'/layouts/core'
+  erb :'views/settings/account', :layout => :'/views/layouts/core'
 end
 post '/settings/filter_account', :auth1 => true do
-  erb :'/settings/filter_account'
+  erb :'views/settings/filter_account'
 end
 
 # change password
 get '/settings/password', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/password', :layout => :'/layouts/core'
+  erb :'views/settings/password', :layout => :'/views/layouts/core'
 end
 post '/settings/filter_password', :auth1 => true do
-  erb :'/settings/filter_password'
+  erb :'views/settings/filter_password'
 end
 
 # change password
 get '/settings/apikey', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/apikey', :layout => :'/layouts/core'
+  erb :'views/settings/apikey', :layout => :'/views/layouts/core'
 end
 post '/settings/filter_apikey', :auth1 => true do
-  erb :'/settings/filter_apikey'
+  erb :'views/settings/filter_apikey'
 end
 
 ## users management screen
 get '/settings/users', :auth1 => true, :agent => /(.*)/ do
-  erb :'/settings/users', :layout => :'/layouts/core'
+  erb :'views/settings/users', :layout => :'/views/layouts/core'
 end
 
 get '/settings/filter_users_add', :auth1 => true do
-  erb :'/settings/filter_users_add'
+  erb :'views/settings/filter_users_add'
 end
 post '/settings/filter_users_add', :auth1 => true do
-  erb :'/settings/filter_users_add'
+  erb :'views/settings/filter_users_add'
 end
 
 get '/settings/filter_users_delete', :auth1 => true do
-  erb :'/settings/filter_users_delete'
+  erb :'views/settings/filter_users_delete'
 end
 post '/settings/filter_users_delete', :auth1 => true do
-  erb :'/settings/filter_users_delete'
+  erb :'views/settings/filter_users_delete'
 end
 
 get '/settings/filter_users_update', :auth1 => true do
-  erb :'/settings/filter_users_update'
+  erb :'views/settings/filter_users_update'
 end
 post '/settings/filter_users_update', :auth1 => true do
-  erb :'/settings/filter_users_update'
+  erb :'views/settings/filter_users_update'
 end
 
 get '/settings/filter_users_send_confirmation_email', :auth1 => true do
-  erb :'/settings/filter_users_send_confirmation_email'
+  erb :'views/settings/filter_users_send_confirmation_email'
 end
 post '/settings/filter_users_send_confirmation_email', :auth1 => true do
-  erb :'/settings/filter_users_send_confirmation_email'
+  erb :'views/settings/filter_users_send_confirmation_email'
 end
 
 get '/settings/filter_users_set_account_owner', :auth1 => true do
-  erb :'/settings/filter_users_set_account_owner'
+  erb :'views/settings/filter_users_set_account_owner'
 end
 post '/settings/filter_users_set_account_owner', :auth1 => true do
-  erb :'/settings/filter_users_set_account_owner'
+  erb :'views/settings/filter_users_set_account_owner'
 end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -438,8 +438,8 @@ end
 
 # ping
 get '/api1.0/ping.json', :api_key => true do
-  erb :'/api1.0/ping'
+  erb :'views/api1.0/ping'
 end
 post '/api1.0/ping.json', :api_key => true do
-  erb :'/api1.0/ping'
+  erb :'views/api1.0/ping'
 end
