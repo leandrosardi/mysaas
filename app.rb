@@ -108,7 +108,14 @@ enable :static
 # reference: https://stackoverflow.com/questions/69028408/change-sinatra-views-directory-location
 set :root,  File.dirname(__FILE__)
 set :views, Proc.new { File.join(root) }
-set :public_folder, File.dirname(__FILE__)
+
+# Setting the public directories
+# Public folder is where we store the files who are referenced from HTML (images, CSS, JS, fonts).
+# reference: https://stackoverflow.com/questions/18966318/sinatra-multiple-public-directories
+#set :public_folder, Proc.new { File.join(root, 'public2') }
+use Rack::TryStatic, :root => 'public2', :urls => %w[/]
+
+use Rack::TryStatic, :root => 'extensions/leads/public', :urls => %w[/]
 
 # page not found redirection
 not_found do

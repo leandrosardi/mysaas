@@ -9,6 +9,7 @@ require 'mail'
 require 'pry'
 require 'cgi'
 require 'fileutils'
+require 'rack/contrib/try_static' # this is to manage many public folders
 
 # return a postgresql uuid
 def guid()
