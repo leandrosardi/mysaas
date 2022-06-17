@@ -99,11 +99,16 @@ parser = BlackStack::SimpleCommandLineParser.new(
 PORT = parser.value("port")
 
 configure { set :server, :puma }
-set :public_folder, 'public'
 set :bind, '0.0.0.0'
 set :port, PORT
 enable :sessions
 enable :static
+
+# Setting the root of views and public folders in the `~/code` folder in order to have access to extensions.
+# reference: https://stackoverflow.com/questions/69028408/change-sinatra-views-directory-location
+set :root,  File.dirname(__FILE__)
+set :views, Proc.new { File.join(root) }
+set :public_folder, File.dirname(__FILE__)
 
 # page not found redirection
 not_found do
@@ -134,9 +139,9 @@ end
 set(:auth1) do |*roles|
   condition do
     if !logged_in?
-      redirect "/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
+      redirect "views/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
     elsif unavailable?
-      redirect "/unavailable"      
+      redirect "views/unavailable"      
     else
       @login = BlackStack::Core::Login.where(:id=>session['login.id']).first
     end
@@ -249,7 +254,7 @@ end
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # FreeLeadsData Extension
 # TODO: move this as an extension
-
+=begin
 # define extensions path
 path = '/home/leandro/code'
 
@@ -270,16 +275,16 @@ FileUtils.copy_entry "#{path}/#{name}/views", "./views/#{name}"
 get "/#{name}/exports", :auth1 => true do
   erb :"/#{name}/exports", :layout => :"/#{name}/views/layout"
 end
-
+=end
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # External pages: pages that don't require login
 
 # TODO: here where you have to develop notrial? feature
 get '/', :agent => /(.*)/ do
   if !notrial?
-    erb :'/waiting' #, :layout => :'/layouts/public'
+    erb :'views/waiting' #, :layout => :'/layouts/public'
   else
-    erb :'/waiting' #, :layout => :'/layouts/public'
+    erb :'views/waiting' #, :layout => :'/layouts/public'
   end
 end
 
