@@ -388,12 +388,19 @@ module BlackStack
             end # to_hash
         end # module ExtensionModule
 
-        # Define the extension
+        # Create an extension object.
+        # Add it to the array of extensions
+        # Return the object
         def self.add(h)
+            e = BlackStack::Extensions::Extension::new(h)
+            @@extensions << e
+            e
         end # set
 
-        # Add an extension to your SaaS
+        # Use this method to add an extension to your SaaS
+        # This method do a require of the extension.rb file, where is a call to BlackStack::Extensions.add(h)
         def self.require(name)
+            require "extensions/#{name}/extension"
         end # require
 
     end # module Extensions
