@@ -43,14 +43,5 @@ module BlackStack
                 super(h)
             end
         end # module ExtensionModule
-
-        # Define the extension
-        def self.add(h)
-        end # set
-
-        # Add an extension to your SaaS
-        def self.require(name)
-        end # require
-
     end # module Extensions
 end # module BlackStack

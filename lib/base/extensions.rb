@@ -5,6 +5,11 @@ module BlackStack
         # array of Extension objects
         @@extensions = []
 
+        # getters and setters
+        def self.extensions
+            @@extensions
+        end
+
         # If the extension is an app, this module is to define the icons in the leftbar of the extension. 
         module LeftBarIconModule
             # return an arrayn of strings with the errors found on the hash descriptor
@@ -17,19 +22,19 @@ module BlackStack
                     errors << ":label is required" if h[:label].to_s.size==0
                     
                     # the value of h[:label] must be a string
-                    errors << ":label must be a string" if h[:label].class!=String
+                    errors << ":label must be a string" if !h[:label].is_a?(String)
 
                     # the key :icon must exits
                     errors << ":icon is required" if h[:icon].to_s.size==0
 
                     # the value of h[:icon] must be a symbol
-                    errors << ":icon must be a symbol" if h[:icon].class!=Symbol
+                    errors << ":icon must be a symbol" if !h[:icon].is_a?(Symbol)
 
                     # the key :screen must exits
                     errors << ":screen is required" if h[:screen].to_s.size==0
 
                     # the value of h[:screen] must be a symbol
-                    errors << ":screen must be a symbol" if h[:screen].class!=Symbol
+                    errors << ":screen must be a symbol" if !h[:screen].is_a?(Symbol)
                 end
                 
                 # return
@@ -64,7 +69,7 @@ module BlackStack
                 errors = []
 
                 # validate: h must be a hash
-                errors << "h must be a hash" unless h.is_a?(Hash)
+                errors << "setting_screen must be a hash" unless h.is_a?(Hash)
 
                 # only if h is a hash
                 if h.is_a?(Hash)
@@ -72,19 +77,19 @@ module BlackStack
                     errors << ":section is required" if h[:section].to_s.size==0
 
                     # validate: the value of h[:section] must be a string
-                    errors << ":section must be a string" if h[:section].class!=String
+                    errors << ":section must be a string" if !h[:section].is_a?(String)
 
                     # validate: the key :label is required
                     errors << ":label is required" if h[:label].to_s.size==0
 
                     # validate: the value of h[:label] must be a string
-                    errors << ":label must be a string" if h[:label].class!=String
+                    errors << ":label must be a string" if !h[:label].is_a?(String)
 
                     # validate: the key :screen is required
                     errors << ":screen is required" if h[:screen].to_s.size==0
 
                     # validate: the value of h[:screen] must be a symbol
-                    errors << ":screen must be a symbol" if h[:screen].class!=Symbol
+                    errors << ":screen must be a symbol" if !h[:screen].is_a?(Symbol)
                 end
 
                 # return
@@ -119,7 +124,7 @@ module BlackStack
                 errors = []
 
                 # validate: h must be a hash
-                errors << "h must be a hash" unless h.is_a?(Hash)
+                errors << "storage_folder descriptor must be a hash" unless h.is_a?(Hash)
 
                 # only if h is a hash
                 if h.is_a?(Hash)
@@ -127,7 +132,7 @@ module BlackStack
                     errors << ":name is required" if h[:name].to_s.size==0
 
                     # validate: the value of h[:name] must be a string
-                    errors << ":name must be a string" if h[:name].class!=String
+                    errors << ":name must be a string" if !h[:name].is_a?(String)
                 end
 
                 # return
@@ -158,7 +163,7 @@ module BlackStack
                 errors = []
 
                 # validate: h must be a hash
-                errors << "h must be a hash" unless h.is_a?(Hash)
+                errors << "dependency must be a hash" unless h.is_a?(Hash)
 
                 # only if h is a hash
                 if h.is_a?(Hash)
@@ -166,13 +171,13 @@ module BlackStack
                     errors << ":extension is required" if h[:extension].to_s.size==0
 
                     # validate: the value of h[:extension] must be a symbol
-                    errors << ":extension must be a symbol" if h[:extension].class!=Symbol
+                    errors << ":extension must be a symbol" if !h[:extension].is_a?(Symbol)
 
                     # validate: the key :version is required
                     errors << ":version is required" if h[:version].to_s.size==0
 
                     # validate: the value of h[:version] must be a string
-                    errors << ":version must be a string" if h[:version].class!=String
+                    errors << ":version must be a string" if !h[:version].is_a?(String)
                 end
 
                 # return
@@ -205,7 +210,7 @@ module BlackStack
                 errors = []
 
                 # validate: h must be a hash
-                errors << "h must be a hash" unless h.is_a?(Hash)
+                errors << "extension descriptor must be a hash" unless h.is_a?(Hash)
 
                 # only if h is a hash
                 if h.is_a?(Hash)
@@ -213,52 +218,52 @@ module BlackStack
                     errors << ":name is required" if h[:name].to_s.size==0
 
                     # validate: the value of h[:name] must be a string
-                    errors << ":name must be a string" if h[:name].class!=String
+                    errors << ":name must be a string" if !h[:name].is_a?(String)
 
                     # validate: the key :description is required
                     errors << ":description is required" if h[:description].to_s.size==0
 
                     # validate: the value of h[:description] must be a string
-                    errors << ":description must be a string" if h[:description].class!=String
+                    errors << ":description must be a string" if !h[:description].is_a?(String)
 
                     # validate: the key :author is required
                     errors << ":author is required" if h[:author].to_s.size==0
 
                     # validate: the value of h[:author] must be a string
-                    errors << ":author must be a string" if h[:author].class!=String
+                    errors << ":author must be a string" if !h[:author].is_a?(String)
 
                     # validate: the key :version is required
                     errors << ":version is required" if h[:version].to_s.size==0
 
                     # validate: the value of h[:version] must be a string
-                    errors << ":version must be a string" if h[:version].class!=String
+                    errors << ":version must be a string" if !h[:version].is_a?(String)
 
 
                     # if the key :app_section exists, it must be a string
                     if h[:app_section].to_s.size>0
-                        errors << ":app_section must be a string" if h[:app_section].class!=String
+                        errors << ":app_section must be a string" if !h[:app_section].is_a?(String)
                     end
 
                     # if the key :show_in_top_bar exists, it must be a bool
                     if h[:show_in_top_bar].to_s.size>0
-                        errors << ":show_in_top_bar must be a bool" if h[:show_in_top_bar].class!=TrueClass and h[:show_in_top_bar].class!=FalseClass
+                        errors << ":show_in_top_bar must be a bool" if !h[:show_in_top_bar].is_a?(TrueClass) and !h[:show_in_top_bar].is_a?(FalseClass)
                     end
 
                     # if the key :show_in_footer exists, it must be a bool
                     if h[:show_in_footer].to_s.size>0
-                        errors << ":show_in_footer must be a bool" if h[:show_in_footer].class!=TrueClass and h[:show_in_footer].class!=FalseClass
+                        errors << ":show_in_footer must be a bool" if !h[:show_in_footer].is_a?(TrueClass) and !h[:show_in_footer].is_a?(FalseClass)
                     end
 
                     # if the key :show_in_dashboard exists, it must be a bool
                     if h[:show_in_dashboard].to_s.size>0
-                        errors << ":show_in_dashboard must be a bool" if h[:show_in_dashboard].class!=TrueClass and h[:show_in_dashboard].class!=FalseClass
+                        errors << ":show_in_dashboard must be a bool" if !h[:show_in_dashboard].is_a?(TrueClass) and !h[:show_in_dashboard].is_a?(FalseClass)
                     end
 
 
                     # if exists the key :dependencies
                     if h[:dependencies].to_s.size>0
                         # validate: the value of h[:dependencies] must be an array
-                        errors << ":dependencies must be an array" if h[:dependencies].class!=Array
+                        errors << ":dependencies must be an array" if !h[:dependencies].is_a?(Array)
 
                         # validate: each element of h[:dependencies] must be a valid dependency descriptor
                         h[:dependencies].each do |i|
@@ -269,7 +274,7 @@ module BlackStack
 
                     # if the key :leftbar_icons exists, it must be an array, and each array element must be a valid leftbaricon descriptor
                     if h[:leftbar_icons].to_s.size>0
-                        errors << ":leftbar_icons must be an array" if h[:leftbar_icons].class!=Array
+                        errors << ":leftbar_icons must be an array" if !h[:leftbar_icons].is_a?(Array)
                         h[:leftbar_icons].each do |i|
                             e = BlackStack::Extensions::LeftBarIconModule::validate_descritor(i)
                             errors << ":leftbar_icons must be an array of leftbaricon descriptors. Errors found: #{e.join(". ")}" if e.size>0
@@ -278,7 +283,7 @@ module BlackStack
 
                     # if the key :setting_screens exists, it must be an array, and each array element must be a valid settingscreen descriptor
                     if h[:setting_screens].to_s.size>0
-                        errors << ":setting_screens must be an array" if h[:setting_screens].class!=Array
+                        errors << ":setting_screens must be an array" if !h[:setting_screens].is_a?(Array)
                         h[:setting_screens].each do |i|
                             e = BlackStack::Extensions::SettingScreenModule::validate_descritor(i)
                             errors << ":setting_screens must be an array of settingscreen descriptors. Errors found: #{e.join(". ")}" if e.size>0
@@ -287,7 +292,7 @@ module BlackStack
 
                     # if the key :storage_folders exists, it must be an array, and each array element must be a valid storagefolder descriptor
                     if h[:storage_folders].to_s.size>0
-                        errors << ":storage_folders must be an array" if h[:storage_folders].class!=Array
+                        errors << ":storage_folders must be an array" if !h[:storage_folders].is_a?(Array)
                         h[:storage_folders].each do |i|
                             e = BlackStack::Extensions::StorageFolderModule::validate_descritor(i)
                             errors << ":storage_folders must be an array of storagefolder descriptors. Errors found: #{e.join(". ")}" if e.size>0
@@ -399,9 +404,15 @@ module BlackStack
 
         # Use this method to add an extension to your SaaS
         # This method do a require of the extension.rb file, where is a call to BlackStack::Extensions.add(h)
-        def self.require(name)
-            require "extensions/#{name}/extension"
+        def self.append(name)
+#puts
+#puts
+#puts "name: #{name}"
+#puts "name.is_a?(Symbol): #{name.is_a?(Symbol)}"
+            # validate: name must be a symbol
+            raise "name must be a symbol" if !name.is_a?(Symbol)
+            # require
+            require "extensions/#{name.to_s}/extension"
         end # require
-
     end # module Extensions
 end # module BlackStack
