@@ -1,3 +1,5 @@
+![GitHub issues](https://img.shields.io/github/issues/leandrosardi/mysaas)
+
 ![logo](./logo.png)
 
 # MySaaS - Open Source SaaS Platform - Extensible and Scalable.  
