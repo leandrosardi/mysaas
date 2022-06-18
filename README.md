@@ -1,4 +1,4 @@
-![GitHub issues](https://img.shields.io/github/issues/leandrosardi/mysaas)
+![GitHub issues](https://img.shields.io/github/issues/leandrosardi/mysaas) ![GitHub](https://img.shields.io/github/license/leandrosardi/mysaas) ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/leandrosardi/mysaas) ![GitHub last commit](https://img.shields.io/github/last-commit/leandrosardi/mysaas)
 
 ![logo](./logo.png)
 
