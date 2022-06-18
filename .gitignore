@@ -8,7 +8,7 @@
 /ssl/*/*
 !/ssl/_desa/*
 
-# ignore everthing inside .extensions, extept the README.md file
+# ignore everthing inside extensions, extept the README.md file
 # reference: for more information, read #33
 /extensions/*
 !/extensions/README.md
