@@ -193,13 +193,13 @@ DB[q].each { |row|
 						%>
 					</td>
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.name.to_s.encode_html%>' <%=disabled%> />
+						<input class='user-input input-block-level select-all-on-focus' type='text' id='name' name='names[<%=u.id.to_guid%>][]' value='<%=u.name.to_s.encode_html%>' <%=disabled%> />
 					</td>
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.email.to_s.encode_html%>' <%=disabled%> />
+						<input class='user-input input-block-level select-all-on-focus' type='text' id='email' name='emails[<%=u.id.to_guid%>][]' value='<%=u.email.to_s.encode_html%>' <%=disabled%> />
 					</td>						
 					<td>
-						<input class='user-input input-block-level select-all-on-focus' type='text' value='<%=u.phone.to_s.encode_html%>' <%=disabled%> />
+						<input class='user-input input-block-level select-all-on-focus' type='text' id='phone' name='phones[<%=u.id.to_guid%>][]' value='<%=u.phone.to_s.encode_html%>' <%=disabled%> />
 					</td>
 					<td style='text-align: center; vertical-align: top;'>
 						<% if u.verified %>
@@ -217,6 +217,7 @@ DB[q].each { |row|
 						%>
 						<a class='btn btn-link' style='color:<%=color_for_delete%>;' title='Remove User' href='/settings/filter_users_delete?ids=<%=u.id.to_guid%>' <%=disabled_for_delete%>><i class="icon-remove"></i></a>
 					</td>
+					<button type='submit' id="update_users" style="display: none" class='btn btn-link' title='Add User'></button>
 				</tr>
 				<%
 				}
@@ -365,6 +366,14 @@ var selectRowsJs = {
     },
 } // var selectRowsJs
 
+$('#update').on('click', function (){
+	$('#update_users').click();
+})
+
+$('#remove').on('click', function (){
+	$('#edit_users').attr('action', '/settings/filter_users_delete')
+	$('#update_users').click();
+})
 
 semiTransparentLinks();
 

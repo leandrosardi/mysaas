@@ -161,6 +161,14 @@ module BlackStack
                 u
             end
 
+            def update_users(h, notif=false)
+                # update users
+                u = self.account.update_users(h)
+
+                # send notification to the new user
+                BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+            end
+
             # signup a new user to the same account of this user.
             # return the new user object.
             def remove_users(h) 
@@ -184,6 +192,14 @@ module BlackStack
             def remove
                 self.delete_time = now
                 self.email = self.email + "-deleted-" + guid
+                self.save
+            end
+
+            # update user
+            def update(h)
+                self.email = h[:email]
+                self.name = h[:name]
+                self.phone = h[:phone]
                 self.save
             end
 

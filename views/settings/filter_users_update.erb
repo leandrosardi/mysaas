@@ -1,50 +1,18 @@
-<% 
-login = BlackStack::Core::Login.where(:id=>session['login.id']).first
-if (login == nil)
-	DB.disconnect
-	GC.start
-	redirect '/settings/users?err='+ERR_PIPELINE_NOT_USER_LOGED_IN.to_s
-end
+<%
+	# map params key-values to session key-values
+	params_to_session('settings.users')
 
-linkedin_url_pattern = /((https?:\/\/)?(www\.)?linkedin\.com\/in\/)(([-A-Za-z0-9](\/?))+$)/
-
-params[:uid].each { |uid|
-	id = uid.split(':').first
-	user = uid.split(':')[1].to_s
-	phone = uid.split(':')[2].to_s
-	linkedin_url = uid.split(':')[3].to_s
-	gtc = uid.split(':')[4].to_s
-
-	if linkedin_url.size > 0
-		linkedin_url = "https://" + linkedin_url
+	# login
+	begin
+		# guardar el ID de intento de l en una variable de sesion
+		@login.user.update_users(params)
+	rescue => e
+		# libero recursos
+		DB.disconnect
+		GC.start
+		# redirect
+		redirect "/settings/users?err="+ CGI::escape(e.message)
 	end
 
-	if user.size <= 0
-		DB.disconnect
-		GC.start
-		msg = 'Username is Required.'
-		redirect "/settings/users?err=#{CGI.escape(msg)}"
-		break
-	elsif linkedin_url.size > 0 && !(linkedin_url =~ linkedin_url_pattern)
-		DB.disconnect
-		GC.start
-		msg = 'Valid Linkedin url is Required.'
-		redirect "/settings/users?err=#{CGI.escape(msg)}"
-		break
-	elsif linkedin_url.size <= 0 && gtc == "true"
-		DB.disconnect
-		GC.start
-		msg = 'Linkedin url is Required to Allow Group Transfer Chat.'
-		redirect "/settings/users?err=#{CGI.escape(msg)}"
-		break
-	else
-		DB.execute("UPDATE [user] SET name='#{user}', phone='#{phone}', linkedin_profile_url='#{linkedin_url}', allowed_for_linkedin_group_chat_transfers='#{gtc}' WHERE id='#{uid}'")
-	end
-	DB.disconnect
-	GC.start
-} 
-
-# redireccionar al dashboard
-redirect "/settings/users?msg=Done!"
+	redirect "/settings/users?msg=#{CGI::escape("User Updated.")}"
 %>
-<!-- ---------------------------------------- -->
