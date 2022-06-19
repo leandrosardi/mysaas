@@ -208,7 +208,7 @@ module BlackStack
             # return an array of strings with the errors found on the hash descriptor
             def self.validate_descritor(h)
                 errors = []
-
+binding.pry
                 # validate: h must be a hash
                 errors << "extension descriptor must be a hash" unless h.is_a?(Hash)
 
@@ -324,25 +324,25 @@ module BlackStack
 
                 if h[:dependencies].to_s.size>0
                     h[:dependencies].each do |i|
-                        self.dependencies << BlackStack::Extensions::DependencyModule::new(i) 
+                        self.dependencies << BlackStack::Extensions::Dependency.new(i) 
                     end
                 end
 
                 if h[:leftbar_icons].to_s.size>0
                     h[:leftbar_icons].each do |i|
-                        self.leftbar_icons << BlackStack::Extensions::LeftBarIconModule::new(i)
+                        self.leftbar_icons << BlackStack::Extensions::LeftBarIcon.new(i)
                     end
                 end
 
                 if h[:setting_screens].to_s.size>0
                     h[:setting_screens].each do |i|
-                        self.setting_screens << BlackStack::Extensions::SettingScreenModule::new(i)
+                        self.setting_screens << BlackStack::Extensions::SettingScreen.new(i)
                     end
                 end
 
                 if h[:storage_folders].to_s.size>0
                     h[:storage_folders].each do |i|
-                        self.storage_folders << BlackStack::Extensions::StorageFolderModule::new(i)
+                        self.storage_folders << BlackStack::Extensions::StorageFolder.new(i)
                     end
                 end
             end # set
