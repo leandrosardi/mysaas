@@ -120,29 +120,31 @@ Such installation tasks are:
 
 ## Features & Documentation
 
-Some features of **MySaaS** include:
+Some features of **MySaaS** include these:
+
+(**note:** the points with no links are not developed yet)
 
 1. [account management](./docu/1.accounts-management.md);
 
-2. [invoicing and payments processing](./docu/2.invoicing-and-payments-processing.md);
+2. invoicing and payments processing;
 
-3. [email notifications](./docu/3.email-notifications.md) with easy setup of automation rules;
+3. email notifications, with easy setup of automation rules;
 
-4. [affiliates tracking](./docu/4.affiliates-tracking.md) for managing resellers and pay commission;
+4. affiliates tracking, for managing resellers and pay commission;
 
-5. [domain aliasing](./docu/5.domain-aliasing.md) for licencing your site to other companies;
+5. domain aliasing, for licencing your site to other companies;
 
-6. [abuse preventing](./docu/6.abuse-preventing.md) by tracking user's network and browser fingertings;
+6. abuse preventing, by tracking user's network and browser fingertings;
 
-7. [shadow profiling](./docu/7.shadow-profiling.md) [[1](https://en.wikipedia.org/wiki/Shadow_profile)] for sales optimizations and client retention;
+7. shadow profiling [[1](https://en.wikipedia.org/wiki/Shadow_profile)], for sales optimizations and client retention;
 
-8. [SSL certificates](./docu/8.ssl-certificates.md) support;
+8. SSL certificates, support;
 
-9. [horizontal scalability](./docu/9.horizontal-scalability.md) of both: database and webservers;
+9. horizontal scalability, of both: database and webservers;
 
 10. [access points and RPC](./docu/10.access-points-and-rpc.md) to connect your site with any other products;
 
-11. [background processesing](./docu/11.background-processesing.md) for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
+11. background processesing, for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
 12. [extensiblilty](./docu/12.extensiblilty.md), writing your own modules or installing the modules of thirth parties;
 
@@ -150,11 +152,15 @@ Some features of **MySaaS** include:
 
 14. stored parameters;
 
-15. appendix 1: writing modules;
+15. appendix 1: installation turbleshuting;
 
-16. appendix 2: managing transcactional and historical data;
+16. [appendix 2: folders structure](./docu/a02.folders-structure.md);
 
-17. appendix 3: archiving inactive account.
+17. [appendix 3: dessign patterns](./docu/a03.design-patterns.md);
+
+16. appendix 4: transcactional and historical data;
+
+17. appendix 5: archiving inactive account.
 
 ## Dependencies
 
