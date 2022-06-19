@@ -1,5 +1,5 @@
 require 'blackstack-deployer'
-require 'lib/base/extensions.rb'
+require 'controllers/extensions.rb'
 
 module BlackStack
     module Extensions

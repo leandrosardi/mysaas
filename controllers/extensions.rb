@@ -9,6 +9,24 @@ module BlackStack
         def self.extensions
             @@extensions
         end
+        
+        # this method is to require the file `lib/controllers.rb` of the extension from the `lib/contollers.rb` of the project.
+        # this method shouldn't be called by the end-user.
+        def self.append_controllers
+            # TODO: Code Me!
+        end
+
+        # this method is to require the file `lib/stubs.rb` of the extension from the `lib/stubs.rb` of the project.
+        # this method shouldn't be called by the end-user.
+        def self.append_stubs
+            # TODO: Code Me!
+        end
+
+        # this method is to require the file `lib/skeletons.rb` of the extension from the `lib/skeletons.rb` of the project.
+        # this method shouldn't be called by the end-user.
+        def self.append_skeletons
+            # TODO: Code Me!
+        end
 
         # If the extension is an app, this module is to define the icons in the leftbar of the extension. 
         module LeftBarIconModule

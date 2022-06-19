@@ -1,4 +1,4 @@
-require 'lib/stub/email'
+require 'models/stub/email'
 
 module BlackStack
   module Core

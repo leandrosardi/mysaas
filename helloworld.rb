@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'lib/core.rb'
+require 'models/core.rb'
 
 puts
 puts

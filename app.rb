@@ -1,10 +1,10 @@
 require 'sinatra'
-require 'lib/core'
-require 'lib/stub'
+require 'models/core'
+require 'models/stub'
 require 'config'
 require 'version'
 DB = BlackStack::Core::CRDB::connect
-require 'lib/skeleton'
+require 'models/skeleton'
 
 # map params key-values to session key-values.
 # for security: the keys `:password` and `:new_password` are not mapped.
@@ -109,13 +109,13 @@ enable :static
 set :root,  File.dirname(__FILE__)
 set :views, Proc.new { File.join(root) }
 
-# Setting the public directories
+# Setting the public directory of MySaaS, and the public directories of all the extensions.
 # Public folder is where we store the files who are referenced from HTML (images, CSS, JS, fonts).
 # reference: https://stackoverflow.com/questions/18966318/sinatra-multiple-public-directories
-#set :public_folder, Proc.new { File.join(root, 'public2') }
-use Rack::TryStatic, :root => 'public2', :urls => %w[/]
-
-use Rack::TryStatic, :root => 'extensions/leads/public', :urls => %w[/]
+use Rack::TryStatic, :root => 'public', :urls => %w[/]
+BlackStack::Extensions.extensions.each { |e|
+  use Rack::TryStatic, :root => "extensions/#{e.name.downcase}/public", :urls => %w[/]
+}
 
 # page not found redirection
 not_found do
@@ -196,7 +196,7 @@ end
 
 =begin
 
-# TODO: develop these methods on the lib folder
+# TODO: develop these methods on the models folder
 
 # si el cliente tiene configurada una cuenta reseller,
 # y un operador esta accediendo a esta cuenta,
@@ -450,3 +450,11 @@ end
 post '/api1.0/ping.json', :api_key => true do
   erb :'views/api1.0/ping'
 end
+
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Require the app.rb file of each one of the extensions.
+
+BlackStack::Extensions.extensions.each { |e|
+  require "extensions/#{e.name.downcase}/app.rb"
+}
