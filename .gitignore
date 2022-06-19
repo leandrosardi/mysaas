@@ -8,6 +8,11 @@
 /ssl/*/*
 !/ssl/_desa/*
 
+# ignore everthing inside extensions, extept the README.md file
+# reference: for more information, read #33
+/extensions/*
+!/extensions/README.md
+
 # igonore the backups of the configuration files
 config.*.rb
 !config.template.rb
@@ -63,6 +68,3 @@ config.backup*.rb
 
 # clients' storage folder
 /public/clients/*/
-
-# extensions folder
-/extensions/
