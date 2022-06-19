@@ -208,7 +208,7 @@ module BlackStack
             # return an array of strings with the errors found on the hash descriptor
             def self.validate_descritor(h)
                 errors = []
-binding.pry
+
                 # validate: h must be a hash
                 errors << "extension descriptor must be a hash" unless h.is_a?(Hash)
 
