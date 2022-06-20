@@ -156,7 +156,7 @@ Some features of **MySaaS** include these:
 
 16. [appendix 2: folders structure](./docu/a02.folders-structure.md);
 
-17. [appendix 3: dessign patterns](./docu/a03.design-patterns.md);
+17. [appendix 3: design patterns](./docu/a03.design-patterns.md);
 
 16. appendix 4: transcactional and historical data;
 
