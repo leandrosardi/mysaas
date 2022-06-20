@@ -10,14 +10,14 @@ if email.to_s.size == 0
 end
 
 # verificar que el usuario existe
-user = BlackStack::Core::User.where(:email=>email).first
+user = BlackStack::MySaaS::User.where(:email=>email).first
 
 if user.nil?
 	redirect "/recover?err=#{CGI::escape("User Not Found.")}"
 end
 
 # envio el correo electronico de bienvenida
-n = BlackStack::Core::NotificationReset.new(user).do
+n = BlackStack::MySaaS::NotificationReset.new(user).do
 
 # redirecciono
 redirect "/recover?msg=#{CGI::escape("We Sent You an Email to Reset Your Password.")}"

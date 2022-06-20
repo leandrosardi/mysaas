@@ -57,7 +57,7 @@ msg = params[:msg]
 						%>
 						<span class='badge badge-blue' title='You Are Running the Webserver using this API-KEY for validating the API-CALLs.'>Website Owner</span>
 						<%
-						end # if BlackStack::Core::api_key.to_guid == account.api_key.to_guid
+						end # if BlackStack::MySaaS::api_key.to_guid == account.api_key.to_guid
 					end # if !account.api_key.nil?
 					%>
 					</td>

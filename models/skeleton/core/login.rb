@@ -1,9 +1,9 @@
 require 'sequel'
 
 module BlackStack
-    module Core
+    module MySaaS
         class Login < Sequel::Model(:login)
-            many_to_one :user, :class=>:'BlackStack::Core::User', :key=>:id_user
+            many_to_one :user, :class=>:'BlackStack::MySaaS::User', :key=>:id_user
         end # class Login
-    end # module Core
+    end # module MySaaS
 end # module BlackStack

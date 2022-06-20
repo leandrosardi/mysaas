@@ -22,7 +22,7 @@ account = user.account
 			<div class="controls">
 				<select class="input-xlarge" name="id_timezone" id="id_timezone">
 					<%
-					BlackStack::Core::Timezone.order(:offset, :large_description).all { |t|
+					BlackStack::MySaaS::Timezone.order(:offset, :large_description).all { |t|
 						sSelected = ""
 						if t.id.to_guid == account.id_timezone.to_guid
 							sSelected = "selected"

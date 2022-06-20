@@ -1,7 +1,7 @@
 # Notification to deliver when a new user signups, and his/her account is created.
 module BlackStack
-  module Core
-    class NotificationWelcome < BlackStack::Core::Notification
+  module MySaaS
+    class NotificationWelcome < BlackStack::MySaaS::Notification
       def initialize(i_user)
         super(i_user)
         self.type = 1
@@ -29,5 +29,5 @@ module BlackStack
         "
       end
     end # class NotificationWelcome
-  end # module Core
+  end # module MySaaS
 end # module BlackStack

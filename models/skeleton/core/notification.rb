@@ -1,7 +1,7 @@
 module BlackStack
-    module Core
+    module MySaaS
       class Notification < Sequel::Model(:notification)
-        many_to_one :user, :class=>:'BlackStack::Core::User', :key=>:id_user
+        many_to_one :user, :class=>:'BlackStack::MySaaS::User', :key=>:id_user
   
         # replace the merge-tag <CONTENT HERE> for the content of the email
         NOTIFICATION_CONTENT_MERGE_TAG = "<CONTENT HERE>"
@@ -124,5 +124,5 @@ module BlackStack
         end
         
       end # class Notification
-    end # module Core
+    end # module MySaaS
   end # module BlackStack

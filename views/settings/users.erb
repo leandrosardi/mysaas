@@ -61,7 +61,7 @@ q = "
 # build the array of objects
 users = []
 DB[q].each { |row| 
-	user = BlackStack::Core::User.where(:id=>row[:id]).first 
+	user = BlackStack::MySaaS::User.where(:id=>row[:id]).first 
 	raise "User `#{row[:id]}` not found" if user.nil?
 	users << user
 	# release resources on each iteration

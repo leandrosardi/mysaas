@@ -9,7 +9,7 @@ end
 # TODO: Validar que nid tenga el formato de un GUID
 
 # load objects
-notification = BlackStack::Core::NotificationConfirm.where(:id=>nid).first
+notification = BlackStack::MySaaS::NotificationConfirm.where(:id=>nid).first
 
 # verifico si la notificacion existe
 if notification.nil?
@@ -17,7 +17,7 @@ if notification.nil?
 end
 
 # load objects
-user = BlackStack::Core::User.where(:id=>notification.id_user).first
+user = BlackStack::MySaaS::User.where(:id=>notification.id_user).first
 
 # if the user is already verified, then redirect to the home page
 if user.verified
@@ -25,7 +25,7 @@ if user.verified
 end
 
 # verifico que la notificacion no es anterior a NotificationConfirmation::LINK_TIMEOUT
-if notification.oldness > BlackStack::Core::NotificationConfirm::LINK_TIMEOUT
+if notification.oldness > BlackStack::MySaaS::NotificationConfirm::LINK_TIMEOUT
 	redirect "/login?err=#{CGI::escape("Link Expired.")}"
 end
 

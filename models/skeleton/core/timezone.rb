@@ -1,5 +1,5 @@
 module BlackStack
-  module Core
+  module MySaaS
     class Timezone < Sequel::Model(:timezone)    
       # Recibe un string con formato "+HH:MM".
       # Retorna la cantidad de horas como un numero real, con decimales.
@@ -56,44 +56,44 @@ module BlackStack
       # Convierte el atributo offset en un string con formato de hora.
       # Ejemplos: 5.0 => 05:00, 5.5 => 05:30, -5.75 => -05:45   
       def offsetDescription()
-        return BlackStack::Core::Timezone.floatToDesc(self.offset.to_f)
+        return BlackStack::MySaaS::Timezone.floatToDesc(self.offset.to_f)
       end
       
       # Convierte una hora almacenada en el servidor de bases de datos, a la hora en esta zona horaria.
       # Recibe un string con formato "+HH:MM".
       # Retorna un string con formato "+HH:MM".
       def convertFromThisTimeZoneToDatabaseTime(s_time_in_client_timezone)
-        f_time_in_client_timezone = BlackStack::Core::Timezone.descToFloat(s_time_in_client_timezone)
-        s = BlackStack::Core::Timezone.getDatabaseOffset()
-        x = BlackStack::Core::Timezone.descToFloat(s) # database offset
+        f_time_in_client_timezone = BlackStack::MySaaS::Timezone.descToFloat(s_time_in_client_timezone)
+        s = BlackStack::MySaaS::Timezone.getDatabaseOffset()
+        x = BlackStack::MySaaS::Timezone.descToFloat(s) # database offset
         y = self.offset # client offset
         z = y - x 
-        return BlackStack::Core::Timezone.floatToDesc((f_time_in_client_timezone.to_f + z.to_f).modulo(24))
+        return BlackStack::MySaaS::Timezone.floatToDesc((f_time_in_client_timezone.to_f + z.to_f).modulo(24))
       end
     
       # Convierte una hora almacenada en el servidor de bases de datos, a la hora en esta zona horaria.
       # Recibe un string con formato "+HH:MM".
       # Retorna un string con formato "+HH:MM".
       def convertFromDatabaseTimeToThisTimeZone(s_time_in_database)
-        f_time_in_database = BlackStack::Core::Timezone.descToFloat(s_time_in_database)
-        s = BlackStack::Core::Timezone.getDatabaseOffset()
-        x = BlackStack::Core::Timezone.descToFloat(s) # database offset
+        f_time_in_database = BlackStack::MySaaS::Timezone.descToFloat(s_time_in_database)
+        s = BlackStack::MySaaS::Timezone.getDatabaseOffset()
+        x = BlackStack::MySaaS::Timezone.descToFloat(s) # database offset
         y = self.offset # client offset
         z = y - x 
-        return BlackStack::Core::Timezone.floatToDesc((f_time_in_database.to_f - z.to_f).modulo(24))
+        return BlackStack::MySaaS::Timezone.floatToDesc((f_time_in_database.to_f - z.to_f).modulo(24))
       end
     
       # Convierte una fecha-hora almacenada en el servidor de bases de datos, a la hora en esta zona horaria.
       # Recibe un string con formato "YYYY-MM-DD HH:MM:SS".
       # Retorna un string con formato "YYYY-MM-DD HH:MM:SS".
       def convertFromDatabaseDateTimeToThisTimeZone(s_datetime_in_database)
-        s = BlackStack::Core::Timezone.getDatabaseOffset() # Example: '-03:00'
+        s = BlackStack::MySaaS::Timezone.getDatabaseOffset() # Example: '-03:00'
     #puts ""
     #puts ""
     #puts "s:#{s.to_s}:."
     #puts ""
     #puts ""
-        x = BlackStack::Core::Timezone.descToFloat(s) # database offset. Number of hours, with decimals
+        x = BlackStack::MySaaS::Timezone.descToFloat(s) # database offset. Number of hours, with decimals
     #puts ""
     #puts ""
     #puts "x:#{x.to_s}:."

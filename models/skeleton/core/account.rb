@@ -2,12 +2,12 @@ require 'sequel'
 require_relative './user'
 
 module BlackStack
-  module Core
+  module MySaaS
     class Account < Sequel::Model(:account)
-        one_to_many :users, :class=>:'BlackStack::Core::User', :key=>:id_account
-        many_to_one :timezone, :class=>:'BlackStack::Core::Timezone', :key=>:id_timezone
-        many_to_one :user_to_contact, :class=>'BlackStack::Core::User', :key=>:id_user_to_contact
-        many_to_one :account_owner, :class=>'BlackStack::Core::Account', :key=>:id_account_owner
+        one_to_many :users, :class=>:'BlackStack::MySaaS::User', :key=>:id_account
+        many_to_one :timezone, :class=>:'BlackStack::MySaaS::Timezone', :key=>:id_timezone
+        many_to_one :user_to_contact, :class=>'BlackStack::MySaaS::User', :key=>:id_user_to_contact
+        many_to_one :account_owner, :class=>'BlackStack::MySaaS::Account', :key=>:id_account_owner
 
         # validate the parameters in the signup descriptor `h``.
         # create new records on tables account, user and login.
@@ -52,7 +52,7 @@ module BlackStack
           end
 
           # comparar contra la base de datos
-          u = BlackStack::Core::User.where(:email=>email).first
+          u = BlackStack::MySaaS::User.where(:email=>email).first
 
           # decidir si el intento de l es exitoso o no
           if !u.nil?
@@ -66,7 +66,7 @@ module BlackStack
           # TODO: Validar formato de la password
 
           # getting timezone
-          t = BlackStack::Core::Timezone.where(:short_description=>DEFAULT_TIMEZONE_SHORT_DESCRIPTION).first
+          t = BlackStack::MySaaS::Timezone.where(:short_description=>DEFAULT_TIMEZONE_SHORT_DESCRIPTION).first
           if t.nil?
             errors << "Default timezone not found."
           end # if t.nil?
@@ -81,9 +81,9 @@ module BlackStack
 
           DB.transaction do
             # crear el cliente
-            a = BlackStack::Core::Account.new
+            a = BlackStack::MySaaS::Account.new
             a.id = guid
-            a.id_account_owner = BlackStack::Core::Account.where(:api_key=>BlackStack::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
+            a.id_account_owner = BlackStack::MySaaS::Account.where(:api_key=>BlackStack::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
             a.name = companyname
             a.create_time = now
             a.id_timezone = t.id
@@ -91,7 +91,7 @@ module BlackStack
             a.save
             
             # crear el usuario
-            u = BlackStack::Core::User.new
+            u = BlackStack::MySaaS::User.new
             u.id = guid
             u.id_account = a.id
             u.create_time = guid
@@ -107,7 +107,7 @@ module BlackStack
             a.save
             
             # registrar el l
-            l = BlackStack::Core::Login.new
+            l = BlackStack::MySaaS::Login.new
             l.id = guid
             l.id_user = u.id
             l.create_time = now
@@ -117,8 +117,8 @@ module BlackStack
           # notificar al usuario, if the notif flag is true
           # TODO: https://github.com/leandrosardi/mysaas/issues/27
           if notif
-            BlackStack::Core::NotificationWelcome.new(u).do
-            BlackStack::Core::NotificationConfirm.new(u).do
+            BlackStack::MySaaS::NotificationWelcome.new(u).do
+            BlackStack::MySaaS::NotificationConfirm.new(u).do
           end
 
           # libero recursos
@@ -155,7 +155,7 @@ module BlackStack
           end
 
           # validate: h[:email] is not already registered
-          t = BlackStack::Core::User.where(:email=>h[:email]).first 
+          t = BlackStack::MySaaS::User.where(:email=>h[:email]).first 
           if !t.nil?
             # if the user exists under this account
             if t.id_account.to_guid == self.id.to_guid
@@ -171,7 +171,7 @@ module BlackStack
           end
 
           # perform operation
-          u = BlackStack::Core::User.new
+          u = BlackStack::MySaaS::User.new
           u.id = guid
           u.id_account = self.id
           u.create_time = now
@@ -203,7 +203,7 @@ module BlackStack
 
           # validate: each id is a user belonging to this account
           ids.each do |id|
-            t = BlackStack::Core::User.where(:id=>id).first
+            t = BlackStack::MySaaS::User.where(:id=>id).first
             if t.nil?
               errors << "User #{id} not found."
             elsif t.id_account.to_guid != self.id.to_guid
@@ -253,7 +253,7 @@ module BlackStack
           end
 
           # validate: h[:email] is not already registered
-          t = BlackStack::Core::User.where(:email=>h[:email]).first
+          t = BlackStack::MySaaS::User.where(:email=>h[:email]).first
           unless t.nil?
             # if the user exists under this account
             if t.id.upcase != user_id
@@ -280,7 +280,7 @@ module BlackStack
 
           # validate: each id is a user belonging to this account
           ids.each do |id|
-            t = BlackStack::Core::User.where(:id=>id).first
+            t = BlackStack::MySaaS::User.where(:id=>id).first
             if t.nil?
               errors << "User #{id} not found."
             elsif t.id_account.to_guid != self.id.to_guid
@@ -372,5 +372,5 @@ module BlackStack
           }
         end
     end # class Accounts
-  end # module Core
+  end # module MySaaS
 end # module BlackStack

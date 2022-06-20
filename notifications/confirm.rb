@@ -1,7 +1,7 @@
 # Notification to deliver when a new user signups, or a new user is added to an exisitng account.
 module BlackStack
-  module Core
-    class NotificationConfirm < BlackStack::Core::Notification 
+  module MySaaS
+    class NotificationConfirm < BlackStack::MySaaS::Notification 
       LINK_TIMEOUT = 18
 
       def initialize(i_user)
@@ -21,7 +21,7 @@ module BlackStack
 
           <p><b>Click the link below to confirm your email address.</b></p>
           
-          <p>This link will be valid for #{BlackStack::Core::NotificationConfirm::LINK_TIMEOUT.to_s} minutes.</p>
+          <p>This link will be valid for #{BlackStack::MySaaS::NotificationConfirm::LINK_TIMEOUT.to_s} minutes.</p>
           
           <p><a href='#{CS_HOME_WEBSITE}/confirm/#{self.id.to_guid}'><b>Click here and confirm your email address</b></a>.</p>
           
@@ -32,5 +32,5 @@ module BlackStack
         "
       end
     end
-  end # module Core
+  end # module MySaaS
 end # module BlackStack

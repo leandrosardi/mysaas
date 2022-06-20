@@ -1,9 +1,9 @@
 require 'sequel'
 module BlackStack
-    module Core
+    module MySaaS
         class User < Sequel::Model(:user)
-            many_to_one :account, :class=>:'BlackStack::Core::Account', :key=>:id_account
-            one_to_many :preferences, :class=>:'BlackStack::Core::Preference', :key=>:id_user
+            many_to_one :account, :class=>:'BlackStack::MySaaS::Account', :key=>:id_account
+            one_to_many :preferences, :class=>:'BlackStack::MySaaS::Preference', :key=>:id_user
 
             # get the type of the default parameter (string, integer, boolean, or float).
             # lookup for the name in the preference table.
@@ -12,15 +12,15 @@ module BlackStack
                 type = nil
                 
                 # get the type of the default value
-                type = BlackStack::Core::Preference::type_of(default)
+                type = BlackStack::MySaaS::Preference::type_of(default)
                 if type.nil?
                     raise "Invalid default value for preference. Expected String, Integer, Float, or Boolean."
                 end
 
                 # get the preference
-                p = BlackStack::Core::Preference.where(:name=>name, :id_user=>self.id).first
+                p = BlackStack::MySaaS::Preference.where(:name=>name, :id_user=>self.id).first
                 if p.nil?
-                    p = BlackStack::Core::Preference.new
+                    p = BlackStack::MySaaS::Preference.new
                     p.id = guid
                     p.id_user = self.id
                     p.create_time = now
@@ -32,7 +32,7 @@ module BlackStack
 
                 # validate: the type of the preference is the same than the default value
                 if p.type != type
-                    raise "Invalid default value for preference. Expected #{BlackStack::Core::Preference.type_name(p.type)}."
+                    raise "Invalid default value for preference. Expected #{BlackStack::MySaaS::Preference.type_name(p.type)}."
                 end
 
                 # if exists params[name], then update the value of the preference
@@ -60,7 +60,7 @@ module BlackStack
                 
                 # comparar contra la base de datos
                 # TODO: getting the right owner when we develop domain aliasing
-                u = BlackStack::Core::User.where(:email=>email).first 
+                u = BlackStack::MySaaS::User.where(:email=>email).first 
         
                 # decidir si el intento de l es exitoso o no
                 if u.nil?
@@ -83,7 +83,7 @@ module BlackStack
                 end
                 
                 # registro el login
-                l = BlackStack::Core::Login.new
+                l = BlackStack::MySaaS::Login.new
                 l.id = guid
                 l.id_user = u.id
                 l.create_time = now
@@ -154,7 +154,7 @@ module BlackStack
                 u = self.account.add_user(h)
                 
                 # send notification to the new user
-                BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+                BlackStack::MySaaS::NotificationYouAdded.new(u, self).do if notif
     
                 # return
                 u
@@ -165,7 +165,7 @@ module BlackStack
                 u = self.account.update_users(h)
 
                 # send notification to the new user
-                BlackStack::Core::NotificationYouAdded.new(u, self).do if notif
+                BlackStack::MySaaS::NotificationYouAdded.new(u, self).do if notif
             end
 
             # signup a new user to the same account of this user.
@@ -224,7 +224,7 @@ module BlackStack
 
                 if errors.size == 0                                
                     # validate: h[:id_user] is a valid user
-                    user = BlackStack::Core::User.where(:id=>h[:id_user]).first
+                    user = BlackStack::MySaaS::User.where(:id=>h[:id_user]).first
                     if user.nil?
                         errors << "User #{h[:id_user]} not found."
                     end
@@ -264,7 +264,7 @@ module BlackStack
 
                 if errors.size == 0                                
                     # validate: h[:id_user] is a valid user
-                    user = BlackStack::Core::User.where(:id=>h[:id_user]).first
+                    user = BlackStack::MySaaS::User.where(:id=>h[:id_user]).first
                     if user.nil?
                         errors << "User #{h[:id_user]} not found."
                     end
@@ -283,7 +283,7 @@ module BlackStack
                 end
 
                 # perform the operation
-                BlackStack::Core::NotificationConfirm.new(user).do
+                BlackStack::MySaaS::NotificationConfirm.new(user).do
             end
 
             # return true if this user is the owner of its account.
@@ -307,5 +307,5 @@ module BlackStack
                 # TODO: Code Me!
             end
         end # class User
-    end # module Core
+    end # module MySaaS
 end # module BlackStack

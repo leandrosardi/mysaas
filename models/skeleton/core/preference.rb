@@ -1,7 +1,7 @@
 module BlackStack
-    module Core
+    module MySaaS
         class Preference < Sequel::Model(:preference)
-            many_to_one :user, :class=>:'BlackStack::Core::User', :key=>:id_user
+            many_to_one :user, :class=>:'BlackStack::MySaaS::User', :key=>:id_user
 
             TYPE_STRING = 1
             TYPE_INT = 2
@@ -12,13 +12,13 @@ module BlackStack
             def self.type_of(x)
                 # if x is a string
                 if x.is_a?(String)
-                    return BlackStack::Core::Preference::TYPE_STRING
+                    return BlackStack::MySaaS::Preference::TYPE_STRING
                 elsif x.is_a?(Integer)
-                    return BlackStack::Core::Preference::TYPE_INT
+                    return BlackStack::MySaaS::Preference::TYPE_INT
                 elsif x.is_a?(Float)
-                    return BlackStack::Core::Preference::TYPE_FLOAT
+                    return BlackStack::MySaaS::Preference::TYPE_FLOAT
                 elsif x.is_a?(TrueClass) || x.is_a?(FalseClass)
-                    return BlackStack::Core::Preference::TYPE_BOOL
+                    return BlackStack::MySaaS::Preference::TYPE_BOOL
                 else
                     return nil
                 end
@@ -26,13 +26,13 @@ module BlackStack
 
             # get a descriptive name for a type value
             def self.type_name(type)
-                if type == BlackStack::Core::Preference::TYPE_STRING
+                if type == BlackStack::MySaaS::Preference::TYPE_STRING
                     return "String"
-                elsif type == BlackStack::Core::Preference::TYPE_INT
+                elsif type == BlackStack::MySaaS::Preference::TYPE_INT
                     return "Integer"
-                elsif type == BlackStack::Core::Preference::TYPE_FLOAT
+                elsif type == BlackStack::MySaaS::Preference::TYPE_FLOAT
                     return "Float"
-                elsif type == BlackStack::Core::Preference::TYPE_BOOL
+                elsif type == BlackStack::MySaaS::Preference::TYPE_BOOL
                     return "Boolean"
                 else
                     return "Unknown"
@@ -55,13 +55,13 @@ module BlackStack
             end
 
             def get_value
-                if self.type == BlackStack::Core::Preference::TYPE_STRING
+                if self.type == BlackStack::MySaaS::Preference::TYPE_STRING
                     return self.value_string
-                elsif self.type == BlackStack::Core::Preference::TYPE_INT 
+                elsif self.type == BlackStack::MySaaS::Preference::TYPE_INT 
                     return self.value_int
-                elsif self.type == BlackStack::Core::Preference::TYPE_FLOAT
+                elsif self.type == BlackStack::MySaaS::Preference::TYPE_FLOAT
                     return self.value_float
-                elsif self.type == BlackStack::Core::Preference::TYPE_BOOL
+                elsif self.type == BlackStack::MySaaS::Preference::TYPE_BOOL
                     return self.value_bool
                 else
                     return nil
@@ -69,5 +69,5 @@ module BlackStack
             end
 
         end # class Notification
-    end # module Core
+    end # module MySaaS
 end # module BlackStack

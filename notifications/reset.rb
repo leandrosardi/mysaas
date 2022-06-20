@@ -1,6 +1,6 @@
 module BlackStack
-  module Core
-    class NotificationReset < BlackStack::Core::Notification
+  module MySaaS
+    class NotificationReset < BlackStack::MySaaS::Notification
       LINK_TIMEOUT = 18 # minutes
       
       def initialize(i_user)
@@ -20,7 +20,7 @@ module BlackStack
 
           <p><b>Click the link below to reset your password.</b></p>
           
-          <p>This link will be valid for #{BlackStack::Core::NotificationReset::LINK_TIMEOUT.to_s} minutes.</p>
+          <p>This link will be valid for #{BlackStack::MySaaS::NotificationReset::LINK_TIMEOUT.to_s} minutes.</p>
           
           <p><a href='#{CS_HOME_WEBSITE}/reset/#{self.id.to_guid}'><b>Click here to reset your password</b></a>.</p>
           
@@ -30,5 +30,5 @@ module BlackStack
         "
       end
     end # class NotificationReset
-  end # module Core
+  end # module MySaaS
 end # module BlackStack

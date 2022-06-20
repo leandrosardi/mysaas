@@ -1,7 +1,7 @@
 # Notification to deliver when a new user signups, and his/her account is created.
 module BlackStack
-  module Core
-    class NotificationYouAdded < BlackStack::Core::Notification
+  module MySaaS
+    class NotificationYouAdded < BlackStack::MySaaS::Notification
       attr_accessor :added_by # who is the other user who added this user.
 
       def initialize(i_user, i_added_by)
@@ -39,5 +39,5 @@ module BlackStack
         "
       end
     end # class NotificationWelcome
-  end # module Core
+  end # module MySaaS
 end # module BlackStack
