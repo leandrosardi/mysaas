@@ -142,7 +142,7 @@ Some features of **MySaaS** include these:
 
 9. horizontal scalability, of both: database and webservers;
 
-10. [access points and RPC](./docu/10.access-points-and-rpc.md) to connect your site with any other products;
+10. access points and RPC, to connect your site with any other products;
 
 11. background processesing, for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
