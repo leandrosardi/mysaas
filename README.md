@@ -146,7 +146,7 @@ Some features of **MySaaS** include these:
 
 11. background processesing, for offline tasks like reports generation, payments processing, email notifications, web scraping, other tasks planning or dispatching, etc.;
 
-12. [extensiblilty](./docu/12.extensiblilty.md), writing your own modules or installing the modules of thirth parties;
+12. [extensiblilty](./docu/12.extensibility.md), writing your own modules or installing the modules of thirth parties;
 
 13. automated deploying;
 
