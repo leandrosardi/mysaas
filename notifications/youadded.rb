@@ -33,7 +33,7 @@ module BlackStack
           </p>
 
           <p>
-          <b><i>PS:</i> Whitelist all emails from #{BlackStack::Core::Emails::sender_email.encode_html}.</b><br/>
+          <b><i>PS:</i> Whitelist all emails from #{BlackStack::Emails::sender_email.encode_html}.</b><br/>
           This is important!
           </p>
         "

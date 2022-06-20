@@ -52,7 +52,7 @@ module BlackStack
           <section class=\"container\">
           <table style=background-color:rgb(255,255,255);width:75%;align:center;horizontal-align:center;padding:20px; align=center>
           <!--logo--> 
-          <tr><td align=center style=text-align:center;><img src=#{BlackStack::Core::Notifications::logo_url} height=32px /></td></tr> 
+          <tr><td align=center style=text-align:center;><img src=#{BlackStack::Notifications::logo_url} height=32px /></td></tr> 
           <tr>
           <td>
           #{NOTIFICATION_CONTENT_MERGE_TAG}
@@ -61,9 +61,9 @@ module BlackStack
           <tr><td height=5px><br/></td></tr>
           <!--signature--> 
           <tr><td>
-          <p>Warmest Regards.<br/>#{BlackStack::Core::Notifications::signature_name}.<br/>#{BlackStack::Core::Notifications::signature_position}.</p> 
+          <p>Warmest Regards.<br/>#{BlackStack::Notifications::signature_name}.<br/>#{BlackStack::Notifications::signature_position}.</p> 
           </td></tr>
-          <tr><td><img src=#{BlackStack::Core::Notifications::signature_picture_url} height=32px /></td></tr> 
+          <tr><td><img src=#{BlackStack::Notifications::signature_picture_url} height=32px /></td></tr> 
           </table>  
           </section>   
           </body>
@@ -93,7 +93,7 @@ module BlackStack
         end
 
         def delivery
-          BlackStack::Core::Emails::delivery(
+          BlackStack::Emails::delivery(
             :receiver_name => self.user.name,
             :receiver_email => self.user.email,
             :subject => self.subject,
@@ -111,8 +111,8 @@ module BlackStack
           self.email_to = self.user.email
           self.subject = self.subject_template
           self.body = NOTIFICATION_BODY_TEMPLATE.gsub(/#{NOTIFICATION_CONTENT_MERGE_TAG}/, self.body_template)
-          self.name_from = BlackStack::Core::Emails::from_name
-          self.email_from = BlackStack::Core::Emails::from_email
+          self.name_from = BlackStack::Emails::from_name
+          self.email_from = BlackStack::Emails::from_email
           self.save
 
           # delivery the email

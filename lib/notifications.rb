@@ -1,7 +1,6 @@
 require 'lib/emails'
 
 module BlackStack
-  module Core
     module Notifications
       # notifications setup
       @@logo_url = nil
@@ -63,5 +62,4 @@ module BlackStack
         @@signature_position = h[:signature_position]
       end
     end # module Notifications
-  end # module Core
 end # module BlackStack

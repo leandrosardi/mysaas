@@ -146,9 +146,9 @@ end
 set(:auth1) do |*roles|
   condition do
     if !logged_in?
-      redirect "views/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
+      redirect "/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
     elsif unavailable?
-      redirect "views/unavailable"      
+      redirect "/unavailable"      
     else
       @login = BlackStack::Core::Login.where(:id=>session['login.id']).first
     end

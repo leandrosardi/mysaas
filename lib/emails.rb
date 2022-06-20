@@ -1,5 +1,4 @@
 module BlackStack
-  module Core
     module Emails
         # smtp request sender information
         @@sender_email = nil
@@ -98,10 +97,10 @@ module BlackStack
             # reply_to_email = nil,
 
             options = { 
-                :address              => BlackStack::Core::Emails::smtp_url,
-                :port                 => BlackStack::Core::Emails::smtp_port,
-                :user_name            => BlackStack::Core::Emails::smtp_user,
-                :password             => BlackStack::Core::Emails::smtp_password,
+                :address              => BlackStack::Emails::smtp_url,
+                :port                 => BlackStack::Emails::smtp_port,
+                :user_name            => BlackStack::Emails::smtp_user,
+                :password             => BlackStack::Emails::smtp_password,
                 :authentication       => 'plain',
                 :enable_starttls_auto => true, 
                 :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE
@@ -114,8 +113,8 @@ module BlackStack
             mail = Mail.new do
                 to "#{receiver_email}"
                 #message_id the_message_id # use this for
-                from "#{BlackStack::Core::Emails::from_name} <#{BlackStack::Core::Emails::from_email}>"
-                #reply_to reply_to_email.nil? ? BlackStack::Core::Emails::from_email : reply_to_email
+                from "#{BlackStack::Emails::from_name} <#{BlackStack::Emails::from_email}>"
+                #reply_to reply_to_email.nil? ? BlackStack::Emails::from_email : reply_to_email
                 subject "#{email_subject}"
                 html_part do
                     content_type 'text/html; charset=UTF-8'
@@ -127,5 +126,4 @@ module BlackStack
             mail.deliver
         end # def smtp
     end # module Emails
-  end # module Core
 end # module BlackStack

@@ -91,7 +91,7 @@ POSTMARK_API_TOKEN = '@postmark_api_token@'
 
 # parameters for email notifications
 # how to get Postmark SMTP parameters: https://postmarkapp.com/developer/user-guide/send-email-with-smtp
-BlackStack::Core::Emails.set (
+BlackStack::Emails.set (
   # smtp request sender information
   :sender_email => '@sender_email@',
   :from_email => '@from_email@', # reply-to field in the SMTP request
