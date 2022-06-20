@@ -68,7 +68,7 @@ module BlackStack
                 end
 
                 # reference: https://github.com/bcrypt-ruby/bcrypt-ruby#how-to-use-bcrypt-ruby-in-general
-                if BCrypt::Password.new(u.password) != password
+                if !u.nil? && BCrypt::Password.new(u.password) != password
                     # TODO: register failed login attempt
                     # TODO: validate number of login attempts last hour
                     errors << "Wrong passsword."
