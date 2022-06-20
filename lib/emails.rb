@@ -1,6 +1,6 @@
 module BlackStack
   module Core
-    module EmailDeliveryModule
+    module Emails
         # smtp request sender information
         @@sender_email = nil
         @@from_email = nil
@@ -98,10 +98,10 @@ module BlackStack
             # reply_to_email = nil,
 
             options = { 
-                :address              => BlackStack::Core::EmailDeliveryModule::smtp_url,
-                :port                 => BlackStack::Core::EmailDeliveryModule::smtp_port,
-                :user_name            => BlackStack::Core::EmailDeliveryModule::smtp_user,
-                :password             => BlackStack::Core::EmailDeliveryModule::smtp_password,
+                :address              => BlackStack::Core::Emails::smtp_url,
+                :port                 => BlackStack::Core::Emails::smtp_port,
+                :user_name            => BlackStack::Core::Emails::smtp_user,
+                :password             => BlackStack::Core::Emails::smtp_password,
                 :authentication       => 'plain',
                 :enable_starttls_auto => true, 
                 :openssl_verify_mode => OpenSSL::SSL::VERIFY_NONE
@@ -114,8 +114,8 @@ module BlackStack
             mail = Mail.new do
                 to "#{receiver_email}"
                 #message_id the_message_id # use this for
-                from "#{BlackStack::Core::EmailDeliveryModule::from_name} <#{BlackStack::Core::EmailDeliveryModule::from_email}>"
-                #reply_to reply_to_email.nil? ? BlackStack::Core::EmailDeliveryModule::from_email : reply_to_email
+                from "#{BlackStack::Core::Emails::from_name} <#{BlackStack::Core::Emails::from_email}>"
+                #reply_to reply_to_email.nil? ? BlackStack::Core::Emails::from_email : reply_to_email
                 subject "#{email_subject}"
                 html_part do
                     content_type 'text/html; charset=UTF-8'
@@ -126,6 +126,6 @@ module BlackStack
             # deliver the email
             mail.deliver
         end # def smtp
-    end # module EmailDeliveryModule
+    end # module Emails
   end # module Core
 end # module BlackStack

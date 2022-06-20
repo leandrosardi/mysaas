@@ -1,13 +1,13 @@
-require 'models/stub/email'
+require 'lib/emails'
 
 module BlackStack
   module Core
-    module NotificationDeliveryModule
+    module Notifications
       # notifications setup
       @@logo_url = nil
       @@signature_picture_url = nil
       @@signature_name = nil
-      @@signature_position = NotificationDeliveryModule
+      @@signature_position = nil
       @@notifications = []
 
       # getters and setters
@@ -62,6 +62,6 @@ module BlackStack
         @@signature_name = h[:signature_name]
         @@signature_position = h[:signature_position]
       end
-    end # module NotificationDeliveryModule
+    end # module Notifications
   end # module Core
 end # module BlackStack

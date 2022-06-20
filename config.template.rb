@@ -15,7 +15,7 @@ BlackStack::Debugging::set(
 )
 
 # DB ACCESS - KEEP IT SECRET
-BlackStack::Core::CRDB::set_db_params(
+BlackStack::CRDB::set_db_params(
   :db_url => '@db_url@',
   :db_port => '@db_port@',
   :db_name => '@db_name@',
@@ -26,7 +26,7 @@ BlackStack::Core::CRDB::set_db_params(
 # Setup connection to the API, in order get bots requesting and pushing data to the database.
 # TODO: write your API-Key here. Refer to this article about how to create your API key:
 # https://sites.google.com/expandedventure.com/knowledge/
-BlackStack::Core::API::set_api_url(
+BlackStack::API::set_api_url(
   # IMPORTANT: It is strongly recommended that you 
   # use the api_key of an account with prisma role, 
   # and assigned to the central division too.
@@ -56,7 +56,7 @@ BlackStack::Core::API::set_api_url(
 # By now, to update the storage forder of an account, you should use
 # the method `Account::update_storage_folder`. 
 #
-BlackStack::Core::Storage::set_storage(
+BlackStack::Storage::set_storage(
   :storage_folder => './public/clients',
   :storage_default_max_allowed_kilobytes => 15 * 1024,
   :storage_sub_folders => [
@@ -91,7 +91,7 @@ POSTMARK_API_TOKEN = '@postmark_api_token@'
 
 # parameters for email notifications
 # how to get Postmark SMTP parameters: https://postmarkapp.com/developer/user-guide/send-email-with-smtp
-BlackStack::Core::EmailDeliveryModule.set (
+BlackStack::Core::Emails.set (
   # smtp request sender information
   :sender_email => '@sender_email@',
   :from_email => '@from_email@', # reply-to field in the SMTP request

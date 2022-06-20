@@ -18,7 +18,7 @@ module BlackStack
           Welcome to <b>#{APP_NAME.encode_html}</b>!</p>          
           
           <p>
-          <b>Whitelist all emails from #{BlackStack::Core::EmailDeliveryModule::sender_email.encode_html}.</b><br/>
+          <b>Whitelist all emails from #{BlackStack::Core::Emails::sender_email.encode_html}.</b><br/>
           This is important!
           </p>
 

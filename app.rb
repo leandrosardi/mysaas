@@ -1,10 +1,10 @@
 require 'sinatra'
-require 'models/core'
-require 'models/stub'
+require 'mysaas'
+require 'lib/stubs'
 require 'config'
 require 'version'
-DB = BlackStack::Core::CRDB::connect
-require 'models/skeleton'
+DB = BlackStack::CRDB::connect
+require 'lib/skeletons'
 
 # map params key-values to session key-values.
 # for security: the keys `:password` and `:new_password` are not mapped.

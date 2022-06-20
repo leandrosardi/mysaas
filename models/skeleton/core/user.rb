@@ -1,5 +1,4 @@
 require 'sequel'
-
 module BlackStack
     module Core
         class User < Sequel::Model(:user)

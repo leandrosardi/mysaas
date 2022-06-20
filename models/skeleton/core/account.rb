@@ -83,11 +83,11 @@ module BlackStack
             # crear el cliente
             a = BlackStack::Core::Account.new
             a.id = guid
-            a.id_account_owner = BlackStack::Core::Account.where(:api_key=>BlackStack::Core::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
+            a.id_account_owner = BlackStack::Core::Account.where(:api_key=>BlackStack::API::api_key).first.id # TODO: getting the right owner when we develop domain aliasing
             a.name = companyname
             a.create_time = now
             a.id_timezone = t.id
-            a.storage_total_kb = BlackStack::Core::Storage::storage_default_max_allowed_kilobytes
+            a.storage_total_kb = BlackStack::Storage::storage_default_max_allowed_kilobytes
             a.save
             
             # crear el usuario

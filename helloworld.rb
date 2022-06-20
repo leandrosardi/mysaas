@@ -1,5 +1,5 @@
 require 'sinatra'
-require 'models/core.rb'
+require 'mysaas.rb'
 
 puts
 puts
