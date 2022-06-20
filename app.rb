@@ -65,7 +65,7 @@ error do
 end
 
 # condition: if there is not authenticated user on the platform, then redirect to the signup page 
-set(:auth1) do |*roles|
+set(:auth) do |*roles|
   condition do
     if !logged_in?
       redirect "/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
@@ -201,7 +201,7 @@ FileUtils.copy_entry "#{path}/#{name}/views", "./views/#{name}"
 #exit(0)
 
 # define screens
-get "/#{name}/exports", :auth1 => true do
+get "/#{name}/exports", :auth => true do
   erb :"/#{name}/exports", :layout => :"/#{name}/views/layout"
 end
 =end
@@ -268,10 +268,10 @@ end
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # User dashboard
 
-get '/', :auth1 => true do
+get '/', :auth => true do
   redirect '/dashboard'
 end
-get '/dashboard', :auth1 => true, :agent => /(.*)/ do
+get '/dashboard', :auth => true, :agent => /(.*)/ do
   erb :'views/dashboard', :layout => :'/views/layouts/core'
 end
 
@@ -280,77 +280,77 @@ end
 # Configuration screens
 
 # main configuration screen
-get '/settings', :auth1 => true do
+get '/settings', :auth => true do
   redirect '/settings/dashboard'
 end
-get '/settings/', :auth1 => true do
+get '/settings/', :auth => true do
   redirect '/settings/dashboard'
 end
-get '/settings/dashboard', :auth1 => true, :agent => /(.*)/ do
+get '/settings/dashboard', :auth => true, :agent => /(.*)/ do
   erb :'views/settings/dashboard', :layout => :'/views/layouts/core'
 end
 
 # account information
-get '/settings/account', :auth1 => true, :agent => /(.*)/ do
+get '/settings/account', :auth => true, :agent => /(.*)/ do
   erb :'views/settings/account', :layout => :'/views/layouts/core'
 end
-post '/settings/filter_account', :auth1 => true do
+post '/settings/filter_account', :auth => true do
   erb :'views/settings/filter_account'
 end
 
 # change password
-get '/settings/password', :auth1 => true, :agent => /(.*)/ do
+get '/settings/password', :auth => true, :agent => /(.*)/ do
   erb :'views/settings/password', :layout => :'/views/layouts/core'
 end
-post '/settings/filter_password', :auth1 => true do
+post '/settings/filter_password', :auth => true do
   erb :'views/settings/filter_password'
 end
 
 # change password
-get '/settings/apikey', :auth1 => true, :agent => /(.*)/ do
+get '/settings/apikey', :auth => true, :agent => /(.*)/ do
   erb :'views/settings/apikey', :layout => :'/views/layouts/core'
 end
-post '/settings/filter_apikey', :auth1 => true do
+post '/settings/filter_apikey', :auth => true do
   erb :'views/settings/filter_apikey'
 end
 
 ## users management screen
-get '/settings/users', :auth1 => true, :agent => /(.*)/ do
+get '/settings/users', :auth => true, :agent => /(.*)/ do
   erb :'views/settings/users', :layout => :'/views/layouts/core'
 end
 
-get '/settings/filter_users_add', :auth1 => true do
+get '/settings/filter_users_add', :auth => true do
   erb :'views/settings/filter_users_add'
 end
-post '/settings/filter_users_add', :auth1 => true do
+post '/settings/filter_users_add', :auth => true do
   erb :'views/settings/filter_users_add'
 end
 
-get '/settings/filter_users_delete', :auth1 => true do
+get '/settings/filter_users_delete', :auth => true do
   erb :'views/settings/filter_users_delete'
 end
-post '/settings/filter_users_delete', :auth1 => true do
+post '/settings/filter_users_delete', :auth => true do
   erb :'views/settings/filter_users_delete'
 end
 
-get '/settings/filter_users_update', :auth1 => true do
+get '/settings/filter_users_update', :auth => true do
   erb :'views/settings/filter_users_update'
 end
-post '/settings/filter_users_update', :auth1 => true do
+post '/settings/filter_users_update', :auth => true do
   erb :'views/settings/filter_users_update'
 end
 
-get '/settings/filter_users_send_confirmation_email', :auth1 => true do
+get '/settings/filter_users_send_confirmation_email', :auth => true do
   erb :'views/settings/filter_users_send_confirmation_email'
 end
-post '/settings/filter_users_send_confirmation_email', :auth1 => true do
+post '/settings/filter_users_send_confirmation_email', :auth => true do
   erb :'views/settings/filter_users_send_confirmation_email'
 end
 
-get '/settings/filter_users_set_account_owner', :auth1 => true do
+get '/settings/filter_users_set_account_owner', :auth => true do
   erb :'views/settings/filter_users_set_account_owner'
 end
-post '/settings/filter_users_set_account_owner', :auth1 => true do
+post '/settings/filter_users_set_account_owner', :auth => true do
   erb :'views/settings/filter_users_set_account_owner'
 end
 
