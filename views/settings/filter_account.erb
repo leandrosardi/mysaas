@@ -1,20 +1,20 @@
 <%
 account = @login.user.account
-company_name = params[:company_name]
+name = params[:name]
 id_timezone = params[:id_timezone]
 
-# validate: company_name is required
-if company_name.to_s.size==0
+# validate: name is required
+if name.to_s.size==0
 	redirect "/settings/account?err=#{CGI::escape("Company Name is Required.")}"
 end
 
-# validate: company_name cannot be longer then 100 characters
-if company_name.to_s.size>100
+# validate: name cannot be longer then 100 characters
+if name.to_s.size>100
 	redirect "/settings/account?err=#{CGI::escape("Company Name cannot be longer then 100 characters.")}"
 end
 
 # save
-account.name = company_name
+account.name = name
 account.id_timezone = id_timezone
 account.save
 

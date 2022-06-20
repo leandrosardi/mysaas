@@ -80,15 +80,17 @@ end
 # condition: api_key parameter is required too for the access points
 set(:api_key) do |*roles|
   condition do
-    return_message = {}
+    @return_message = {}
     
+    @return_message[:status] = 'success'
+
     if !params.has_key?('api_key')
       # libero recursos
       DB.disconnect 
       GC.start
-      return_message[:status] = 'api_key is required'
-      return_message[:value] = ""
-      halt return_message.to_json
+      @return_message[:status] = 'api_key is required'
+      @return_message[:value] = ""
+      halt @return_message.to_json
     end
 
     if !params['api_key'].guid?
@@ -96,22 +98,22 @@ set(:api_key) do |*roles|
       DB.disconnect 
       GC.start
   
-      return_message[:status] = 'Invalid api_key'
-      return_message[:value] = ""
-      halt return_message.to_json      
+      @return_message[:status] = 'Invalid api_key'
+      @return_message[:value] = ""
+      halt @return_message.to_json      
     end
     
     validation_api_key = params['api_key'].to_guid
     
-    validation_client = BlackStack::MySaaS::Account.where(:api_key => validation_api_key).first
-    if validation_client.nil?
+    @account = BlackStack::MySaaS::Account.where(:api_key => validation_api_key).first
+    if @account.nil?
       # libero recursos
       DB.disconnect 
       GC.start
       #     
-      return_message[:status] = 'Api_key not found'
-      return_message[:value] = ""
-      halt return_message.to_json        
+      @return_message[:status] = 'Api_key not found'
+      @return_message[:value] = ""
+      halt @return_message.to_json        
     end
   end
 end
@@ -372,6 +374,12 @@ end
 post '/api1.0/ping.json', :api_key => true do
   erb :'views/api1.0/ping'
 end
+
+# mysaas
+post '/api1.0/mysaas/account/update.json', :api_key => true do
+  erb :'views/api1.0/ping'
+end
+
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
