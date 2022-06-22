@@ -58,5 +58,9 @@ module BlackStack
                 @@default_max_allowed_kilobytes = h[:storage_max_allowed_kilobytes]
                 @@storage_sub_folders = h[:storage_sub_folders]
             end
+
+            def self.add_sub_folder(name)
+                @@storage_sub_folders << name
+            end
         end # module Storage
 end # module BlackStack
