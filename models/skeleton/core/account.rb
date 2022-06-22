@@ -338,11 +338,11 @@ module BlackStack
 
         # return the location of the storage for this client
         def storage_folder
-          "#{BlackStack::Code::Storage::storage_folder}/#{self.id.to_guid}"
+          "#{BlackStack::Storage::storage_folder}/#{self.id.to_guid}"
         end
         
         def storage_sub_folder(name)
-          "#{BlackStack::Code::Storage::storage_folder}/#{self.id.to_guid}/#{name}"
+          "#{BlackStack::Storage::storage_folder}/#{self.id.to_guid}/#{name}"
         end
                 
         # returns the max allowed KB in the storage for this client
@@ -364,9 +364,8 @@ module BlackStack
         # si el cliente no tiene creado el storage, entonces se lo crea, carpeta por carpeta, ferificando cada una si no existe ya.
         def create_storage
           folder = self.storage_folder
-          Dir.mkdir BlackStack::Pampa::storage_folder if Dir[BlackStack::Pampa::storage_folder].size==0
           Dir.mkdir folder if Dir[folder].size==0        
-          BlackStack::Pampa::storage_sub_folders.each { |name|
+          BlackStack::Storage::storage_sub_folders.each { |name|
             s = "#{folder}/#{name}"
             Dir.mkdir s if Dir[s].size==0        
           }
