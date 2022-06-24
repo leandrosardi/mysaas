@@ -12,6 +12,9 @@ BlackStack::Extensions.extensions.each { |e|
   require "extensions/#{e.name.downcase}/#{e.name.downcase}"
 }
 
+# TODO: move this to the extension module?
+Leads.server_side
+
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
