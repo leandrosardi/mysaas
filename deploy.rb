@@ -1,7 +1,7 @@
 # encoding: utf-8
 
 require 'simple_command_line_parser'
-require 'blackstack-deployer'
+require_relative '../blackstack-deployer/lib/blackstack-deployer'
 require_relative './deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
@@ -147,37 +147,15 @@ commands += [
     { :command => :'install-packages', }, 
 ]
 
+# update the configuration file with the local copy
 if parser.value('web')
   commands += [
-    # install ruby
-    { :command => :'install-ruby', }, 
-    # pull the source code of mysaas
-    { :command => :'install-mysaas', },
     # edit mysaas/config.rb
     { :command => :'setup-mysaas', },
   ]
 end # parser.value('web')
 
-if parser.value('db')
-  commands += [
-    # install cockroachdb node
-    { :command => :'install-crdb-environment', },
-    # start cockroachdb node
-    { :command => :'start-crdb-environment', },
-    # create user, database, tables and roles; and insert some seed data
-    { :command => :'install-crdb-database', },
-  ]
-end # parser.value('db')
-
-# setup deploying rutine
-BlackStack::Deployer::add_routine({
-  :name => 'install-mysaas-dev-environment',
-  :commands => commands,
-})
-
-# deploy
-BlackStack::Deployer::run_routine('my-dev-environment', 'install-mysaas-dev-environment')
-
+# run database updates
 if parser.value('db')
   l.logs 'Connecting the database... '
   BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{crdb_hostname}:#{parser.value('crdb_database_port')}/blackstack")
@@ -192,9 +170,17 @@ if parser.value('db')
   BlackStack::Deployer::DB::set_folder ('./sql')
   BlackStack::Deployer::DB::deploy(true)
   l.done
+
+  # run the .sql scripts of each extension
+  BlackStack::Extensions.extensions.each { |e|
+    l.logs "Running database updates for #{e.name.downcase}... "
+    BlackStack::Deployer::DB::set_folder ("./extensions/#{e.name.downcase}/sql")
+    BlackStack::Deployer::DB::deploy(true, "./blackstack-deployer.#{e.name.downcase}.lock")
+    l.done
+  }
 end # if parser.value('db')
 
-# start mysaas webserver
+# rrestart webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
 if parser.value('web')
   # deploy
