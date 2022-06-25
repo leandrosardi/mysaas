@@ -1,6 +1,5 @@
 # encoding: utf-8
 
-require 'sinatra'
 require 'mysaas'
 require 'lib/stubs'
 require 'config'
@@ -177,12 +176,18 @@ if parser.value('db')
 
   # run the .sql scripts of each extension
   BlackStack::Extensions.extensions.each { |e|
+    l.logs "Loading checkpoint for #{e.name.downcase}... "
+    BlackStack::Deployer::DB::load_checkpoint("./blackstack-deployer.#{e.name.downcase}.lock")
+    l.logf "done (#{BlackStack::Deployer::DB::checkpoint.to_s})"
+
     l.logs "Running database updates for #{e.name.downcase}... "
     BlackStack::Deployer::DB::set_folder ("./extensions/#{e.name.downcase}/sql")
     BlackStack::Deployer::DB::deploy(true, "./blackstack-deployer.#{e.name.downcase}.lock")
     l.done
   }
 end # if parser.value('db')
+
+# TODO: copy local version of config to the production server
 
 # restart webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
