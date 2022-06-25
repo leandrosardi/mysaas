@@ -1,20 +1,17 @@
 # encoding: utf-8
-
 require 'mysaas'
 require 'lib/stubs'
 require 'config'
 require 'version'
-require_relative '../blackstack-deployer/lib/blackstack-deployer' # TODO: replace for gem
 require_relative './deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
-commands = []
 
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
   :configuration => [{
-
+=begin
   # ssh access
     :name=>'ssh_hostname', 
     :mandatory=>false, 
@@ -78,6 +75,7 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :type=>BlackStack::SimpleCommandLineParser::STRING,
     :default => 'eth0',
   }, {
+=end
   # installation options
     :name=>'web', 
     :mandatory=>false, 
@@ -90,15 +88,17 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :description=>'Enable or disable the installation and running of the cockroachdb server, with the creation of the schema and seed of the tables.', 
     :type=>BlackStack::SimpleCommandLineParser::BOOL,
     :default => true,
+=begin
   }, {
     :name=>'local', 
     :mandatory=>false, 
     :description=>'Enable installing a server in your local machine for development. If this flag is activated, the connection to the database will be attempted to be to the lan IP of the computer. Otherwise, the connection will be attempted to `ssh_hostname`.', 
     :type=>BlackStack::SimpleCommandLineParser::BOOL,
     :default => false,
+=end
   }]
 )
-
+=begin
 #value = BlackStack::Deployer::NodeModule::eth0_ip(parser.value('laninterface'))
 #puts '....'+value.to_s
 #exit(0)
@@ -110,59 +110,14 @@ raise 'Either ssh_password or ssh_private_key_file must be specified.' if parser
 ssh_password = parser.value('ssh_password').to_s=='-' ? nil : parser.value('ssh_password').to_s
 ssh_private_key_file = parser.value('ssh_private_key_file').to_s=='-' ? nil : parser.value('ssh_private_key_file').to_s
 crdb_hostname = parser.value('local') ? BlackStack::Deployer::NodeModule::eth0_ip(parser.value('laninterface')) : parser.value('ssh_hostname')
-
-# declare nodes
-BlackStack::Deployer::add_nodes([{
-    # use this command to connect from terminal: ssh -i "plank.pem" ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
-    :name => 'my-dev-environment',
- 
-    # ssh
-    :net_remote_ip => parser.value('ssh_hostname'),  
-    :ssh_username => parser.value('ssh_username'),
-    :ssh_port => parser.value('ssh_port'),
-    :ssh_password => ssh_password,
-    :ssh_private_key_file => ssh_private_key_file,
- 
-    # git
-    :git_branch => 'main',
-
-    # name of the LAN interface
-    :laninterface => parser.value('laninterface'),
-
-    # cockroachdb
-    :crdb_hostname => crdb_hostname,
-    :crdb_database_certs_path => "/home/#{parser.value('ssh_username')}",
-    :crdb_database_password => parser.value('crdb_database_password'),
-    :crdb_database_port => parser.value('crdb_database_port'),
-    :crdb_dashboard_port => parser.value('crdb_dashboard_port'),
-
-    # sinatra
-    :web_port => parser.value('web_port'),
-
-    # default deployment routine for this node
-    :deployment_routine => 'install-mysaas-dev-environment',
-}])
-
-commands += [
-    # update and upgrade apt
-    { :command => :'upgrade-packages', }, 
-    # install some required packages
-    { :command => :'install-packages', }, 
-]
-
-# update the configuration file with the local copy
-if parser.value('web')
-  commands += [
-    # edit mysaas/config.rb
-    { :command => :'setup-mysaas', },
-  ]
-end # parser.value('web')
+=end
 
 # run database updates
 if parser.value('db')
   l.logs 'Connecting the database... '
-  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{crdb_hostname}:#{parser.value('crdb_database_port')}/blackstack")
-#  BlackStack::Deployer::DB::connect("postgres://blackstack:#{parser.value('crdb_database_password')}@#{parser.value('ssh_hostname')}:#{parser.value('crdb_database_port')}/blackstack")
+  BlackStack::Deployer::DB::connect(
+    BlackStack::CRDB::connection_string # use the connection parameters setting in ./config.rb
+  )
   l.done
 
   l.logs 'Loading checkpoint... '
@@ -187,13 +142,14 @@ if parser.value('db')
   }
 end # if parser.value('db')
 
-# TODO: copy local version of config to the production server
-
 # restart webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
 if parser.value('web')
-  # deploy
+  l.logs 'Upload config.rb... '
+  BlackStack::Deployer::run_routine('sinatra1', 'setup-mysaas-upload-config')
+  l.done
+
   l.logs 'Starting web server... '
-  BlackStack::Deployer::run_routine('my-dev-environment', 'start-mysaas')
+  BlackStack::Deployer::run_routine('sinatra1', 'start-mysaas')
   l.done
 end # if parser.value('web')
