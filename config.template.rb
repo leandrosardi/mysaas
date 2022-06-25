@@ -110,29 +110,49 @@ BlackStack::Emails.set (
   :signature_position => 'Founder & CEO',
 )
 
-# setting up extensions
-BlackStack::Extensions.set({
-    # locations where extensions are installed for your project
-    :extensions_path => 'c:/code',
-    # here is the array of extensions that will be loaded
-    :extensions => [{
-        # this is the name of the folder where the extension is installed
-        :name => "pampa",
-        # what are the roles assigned to a user who can see this extension
-        :access_roles => ['su'],
-        # on which products-section show we include this module
-        # set it to nil if you don't want to include it any product, but as a core feature of the platform 
-        :section => 'Software',
-        # what is the version of the module to include
-        :version => "1.0.0",
-        # the git path from where clone (install) and update the module
-        :git_path => 'https://github.com/leandrosardi/pampa' 
-    }, {
-        :name => "invoicing-payments-processing",
-        :access_roles => ['all'],
-        :section => nil,
-        :version => "1.0.0",
-        :git_path => 'https://github.com/leandrosardi/invoicing-payments-processing', 
-    }],
-});
+# parameters for end user notifications
+BlackStack::Notifications.set(  
+  :logo_url => "https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/logo/logo-32-01.png",
+  :signature_picture_url => "https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/support-avatar.jpeg",
+  :signature_name => "Leandro D. Sardi",
+  :signature_position => "Founder & CEO",
+)
+
+# declare nodes
+BlackStack::Deployer::add_nodes([{
+    # use this command to connect from terminal: ssh -i "plank.pem" ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
+    :name => "sinatra1",
+ 
+    # ssh
+    :net_remote_ip => "44.203.58.26",  
+    :ssh_username => "ubuntu",
+    :ssh_port => 22,
+    #:ssh_password => ssh_password,
+    :ssh_private_key_file => "./plank.pem",
+ 
+    # git
+    :git_branch => "main",
+
+    # name of the LAN interface
+    :laninterface => "eth0",
+
+    # cockroachdb
+    :crdb_hostname => "44.203.58.26",
+    :crdb_database_certs_path => "/home/ubuntu",
+    :crdb_database_password => "bsws2022",
+    :crdb_database_port => 26257,
+    :crdb_dashboard_port => 8080,
+
+    # sinatra
+    :web_port => 81,
+
+    # config.rb content
+    :config_rb_content => File.read("./config.rb"),
+
+    # default deployment routine for this node
+    :deployment_routine => "deploy-mysaas",
+}])
+
+# add required extensions
+BlackStack::Extensions.append :leads
 =end
