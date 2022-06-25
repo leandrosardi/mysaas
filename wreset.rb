@@ -47,7 +47,7 @@ parser = BlackStack::SimpleCommandLineParser.new(
     :mandatory=>false, 
     :description=>'Listening port for the Sinatra webserver.', 
     :type=>BlackStack::SimpleCommandLineParser::INT,
-    :default => 80,
+    :default => 81,
   }]
 )
 
