@@ -61,6 +61,9 @@ end # if parser.value('db')
 # restart webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
 if parser.value('web')
+
+  # TODO: pull source code of extensions extensions 
+
   l.logs 'Upload config.rb... '
   BlackStack::Deployer::run_routine('sinatra1', 'setup-mysaas-upload-config')
   l.done
