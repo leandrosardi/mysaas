@@ -12,6 +12,9 @@ BlackStack::Extensions.extensions.each { |e|
   require "extensions/#{e.name.downcase}/#{e.name.downcase}"
 }
 
+# TODO: move this to the extension module?
+Leads.server_side
+
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
   :description => 'This command will launch a Sinatra-based BlackStack webserver.', 
@@ -110,8 +113,8 @@ set(:api_key) do |*roles|
       halt @return_message.to_json      
     end
     
-    validation_api_key = params['api_key'].to_guid
-    
+    validation_api_key = params['api_key'].to_guid.downcase
+
     @account = BlackStack::MySaaS::Account.where(:api_key => validation_api_key).first
     if @account.nil?
       # libero recursos
@@ -381,13 +384,6 @@ end
 post '/api1.0/ping.json', :api_key => true do
   erb :'views/api1.0/ping'
 end
-
-# mysaas
-post '/api1.0/mysaas/account/update.json', :api_key => true do
-  erb :'views/api1.0/ping'
-end
-
-
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Require the app.rb file of each one of the extensions.
