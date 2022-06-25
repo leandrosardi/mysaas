@@ -1,7 +1,11 @@
 # encoding: utf-8
 
-require 'simple_command_line_parser'
-require_relative '../blackstack-deployer/lib/blackstack-deployer'
+require 'sinatra'
+require 'mysaas'
+require 'lib/stubs'
+require 'config'
+require 'version'
+require_relative '../blackstack-deployer/lib/blackstack-deployer' # TODO: replace for gem
 require_relative './deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)
@@ -180,7 +184,7 @@ if parser.value('db')
   }
 end # if parser.value('db')
 
-# rrestart webserver
+# restart webserver
 # Reference: https://stackoverflow.com/questions/3430330/best-way-to-make-a-shell-script-daemon
 if parser.value('web')
   # deploy
