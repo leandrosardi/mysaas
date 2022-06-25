@@ -67,23 +67,23 @@ BlackStack::Storage::set_storage(
 # IMPORTANT NOTE: This value should have a format like FOO.COM. 
 # => Other formats can generate bugs in the piece of codes where 
 # => this constant is concatenated. 
-APP_DOMAIN = "127.0.0.1" 
-APP_NAME = "@app_name@"
+APP_DOMAIN = '127.0.0.1' 
+APP_NAME = '@app_name@'
 
 # Email to contact support
 HELPDESK_EMAIL = 'tickets@expandedventure.com'
 
 # Company Information
-COMPANY_NAME = "@company_name@"
-COMPANY_ADDRESS = "@company_address@"
-COMPANY_PHONE = "@company_phone@"
-COMPANY_URL = "@company_url@"
+COMPANY_NAME = '@company_name@'
+COMPANY_ADDRESS = '@company_address@'
+COMPANY_PHONE = '@company_phone@'
+COMPANY_URL = '@company_url@'
 
 # app url
-CS_HOME_PAGE_PROTOCOL = "http"
-CS_HOME_PAGE_DOMAIN = "127.0.0.1"
-CS_HOME_PAGE_PORT = "80"
-CS_HOME_WEBSITE = "#{CS_HOME_PAGE_PROTOCOL}://#{CS_HOME_PAGE_DOMAIN}:#{CS_HOME_PAGE_PORT}"
+CS_HOME_PAGE_PROTOCOL = 'http'
+CS_HOME_PAGE_DOMAIN = '127.0.0.1'
+CS_HOME_PAGE_PORT = '80'
+CS_HOME_WEBSITE = CS_HOME_PAGE_PROTOCOL+'://'+CS_HOME_PAGE_DOMAIN+':'+CS_HOME_PAGE_PORT
 
 =begin
 # API access to PostMark
@@ -112,34 +112,34 @@ BlackStack::Emails.set (
 
 # parameters for end user notifications
 BlackStack::Notifications.set(  
-  :logo_url => "https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/logo/logo-32-01.png",
-  :signature_picture_url => "https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/support-avatar.jpeg",
-  :signature_name => "Leandro D. Sardi",
-  :signature_position => "Founder & CEO",
+  :logo_url => 'https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/logo/logo-32-01.png',
+  :signature_picture_url => 'https://raw.githubusercontent.com/leandrosardi/mysaas/0.0.2/public/core/images/support-avatar.jpeg',
+  :signature_name => 'Leandro D. Sardi',
+  :signature_position => 'Founder & CEO',
 )
 
 # declare nodes
 BlackStack::Deployer::add_nodes([{
-    # use this command to connect from terminal: ssh -i "plank.pem" ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
-    :name => "sinatra1",
+    # use this command to connect from terminal: ssh -i 'plank.pem' ubuntu@ec2-34-234-83-88.compute-1.amazonaws.com
+    :name => 'sinatra1',
  
     # ssh
-    :net_remote_ip => "44.203.58.26",  
-    :ssh_username => "ubuntu",
+    :net_remote_ip => '44.203.58.26',  
+    :ssh_username => 'ubuntu',
     :ssh_port => 22,
     #:ssh_password => ssh_password,
-    :ssh_private_key_file => "./plank.pem",
+    :ssh_private_key_file => './plank.pem',
  
     # git
-    :git_branch => "main",
+    :git_branch => 'main',
 
     # name of the LAN interface
-    :laninterface => "eth0",
+    :laninterface => 'eth0',
 
     # cockroachdb
-    :crdb_hostname => "44.203.58.26",
-    :crdb_database_certs_path => "/home/ubuntu",
-    :crdb_database_password => "bsws2022",
+    :crdb_hostname => '44.203.58.26',
+    :crdb_database_certs_path => '/home/ubuntu',
+    :crdb_database_password => 'bsws2022',
     :crdb_database_port => 26257,
     :crdb_dashboard_port => 8080,
 
@@ -147,10 +147,10 @@ BlackStack::Deployer::add_nodes([{
     :web_port => 81,
 
     # config.rb content
-    :config_rb_content => File.read("./config.rb"),
+    :config_rb_content => File.read('./config.rb'),
 
     # default deployment routine for this node
-    :deployment_routine => "deploy-mysaas",
+    :deployment_routine => 'deploy-mysaas',
 }])
 
 # add required extensions
