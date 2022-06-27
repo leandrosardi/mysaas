@@ -8,7 +8,7 @@ require 'lib/skeletons'
 
 puts "
 
-Welcome to MySaaS v#{VERSION}.
+Welcome to MySaaS v#{BLACKSTACK_VERSION}.
 
 Sandbox Environment: #{SANDBOX.to_s}.
 

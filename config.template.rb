@@ -132,7 +132,7 @@ BlackStack::Deployer::add_nodes([{
 
     # cockroachdb
     :crdb_hostname => SANDBOX ? '127.0.0.1' : '44.203.58.26',
-    :crdb_database_certs_path => '/home/ubuntu',
+    :crdb_database_certs_path => SANDBOX ? '/home/ubuntu' : '/home/ubuntu',
     :crdb_database_password => 'bsws2022',
     :crdb_database_port => 26257,
     :crdb_dashboard_port => 8080,
