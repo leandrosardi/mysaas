@@ -148,7 +148,7 @@ Some features of **MySaaS** include these:
 
 12. [extensiblilty](./docu/12.extensibility.md), writing your own modules or installing the modules of thirth parties;
 
-13. automated deploying;
+13. [automated deploying](./docu/13.automated-deploying.md) for **continious deployment** of your software;
 
 14. stored parameters;
 
