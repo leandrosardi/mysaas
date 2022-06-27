@@ -6,6 +6,17 @@ require 'version'
 DB = BlackStack::CRDB::connect
 require 'lib/skeletons'
 
+# enable this line if you want to work with the live version of blackstack-core.
+#require_relative '../blackstack-core/lib/blackstack-core' 
+
+puts "
+
+Welcome to MySaaS v#{BLACKSTACK_VERSION}.
+
+Sandbox Environment: #{SANDBOX.to_s}.
+
+"
+
 # include the libraries of the extensions
 # reference: https://github.com/leandrosardi/mysaas/issues/33
 BlackStack::Extensions.extensions.each { |e|
@@ -93,6 +104,31 @@ set(:api_key) do |*roles|
     @return_message = {}
     
     @return_message[:status] = 'success'
+
+    # validate: the pages using the :api_key condition must work as post only.
+    if request.request_method != 'POST'
+      @return_message[:status] = 'Pages with and `api_key` parameter are only available for POST requests.'
+      @return_message[:value] = ""
+      halt @return_message.to_json
+    end
+
+    # when ruby pushes hash of hashes (or hash of arrays), all values are converted into strings.
+    # and arrays are mapped to the last element only.
+    # reference: https://github.com/leandrosardi/mysaas/issues/59
+    # 
+    # iterate the keys of the hash
+    params.each do |key, value|
+      # convert the value to json
+      # reference: https://stackoverflow.com/questions/1667630/how-do-i-convert-a-string-object-into-a-hash-object
+      begin
+      params[key] = eval(value)
+      rescue Exception => e
+      rescue SyntaxError => e
+          # do nothing
+          # Example: if value='hello', you the eval will raise SyntaxError.
+          # Eval will work when value is an array or hash converted to string.
+      end
+    end
 
     if !params.has_key?('api_key')
       # libero recursos

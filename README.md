@@ -162,6 +162,8 @@ Some features of **MySaaS** include these:
 
 17. appendix 5: archiving inactive account.
 
+18. appendix 6: sandbox environments.
+
 ## Dependencies
 
 The logo has been taken from [here](https://www.shareicon.net/supermarket-shopping-store-commerce-and-shopping-online-store-shopping-cart-commerce-802984).
