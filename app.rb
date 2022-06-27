@@ -6,6 +6,16 @@ require 'version'
 DB = BlackStack::CRDB::connect
 require 'lib/skeletons'
 
+puts "
+
+Welcome to MySaaS v#{VERSION}.
+
+Sandbox Environment: #{SANDBOX.to_s}.
+
+"
+
+
+
 # include the libraries of the extensions
 # reference: https://github.com/leandrosardi/mysaas/issues/33
 BlackStack::Extensions.extensions.each { |e|
