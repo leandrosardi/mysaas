@@ -1,8 +1,8 @@
 # encoding: utf-8
 require 'mysaas'
 require 'lib/stubs'
-require_relative '../blackstack-deployer/lib/blackstack-deployer' # enable this line if you want to work with a live version of deployer
-require_relative '../blackstack-nodes/lib/blackstack-nodes' # enable this line if you want to work with a live version of nodes
+#require_relative '../blackstack-deployer/lib/blackstack-deployer' # enable this line if you want to work with a live version of deployer
+#require_relative '../blackstack-nodes/lib/blackstack-nodes' # enable this line if you want to work with a live version of nodes
 require 'config'
 require 'version'
 require_relative './deployment-routines/all-routines'
