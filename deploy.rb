@@ -89,12 +89,12 @@ if parser.value('web')
                 ],
                 :sudo => false,
             }, { 
-                :command => "cd ~/code/mysaas/#{e.name.downcase}; git fetch --all",
+                :command => "cd ~/code/mysaas/extensions/#{e.name.downcase}; git fetch --all",
                 :matches => [/\-> origin\//, /^Fetching origin$/],
                 :nomatches => [ { :nomatch => /error/i, :error_description => 'An error ocurred.' } ],
                 :sudo => false,
             }, { 
-                :command => "cd ~/code/mysaas/#{e.name.downcase}; git reset --hard origin/#{e.repo_branch}",
+                :command => "cd ~/code/mysaas/extensions/#{e.name.downcase}; git reset --hard origin/#{e.repo_branch}",
                 :matches => /HEAD is now at/,
                 :sudo => false,      
             }
