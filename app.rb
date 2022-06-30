@@ -134,7 +134,7 @@ set(:api_key) do |*roles|
       # libero recursos
       DB.disconnect 
       GC.start
-      @return_message[:status] = 'api_key is required'
+      @return_message[:status] = "api_key is required on #{params}"
       @return_message[:value] = ""
       halt @return_message.to_json
     end
