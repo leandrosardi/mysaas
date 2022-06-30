@@ -1,1 +1,1 @@
-ruby ./wreset.rb ssh_hostname=44.204.187.240 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
+ruby ./wreset.rb ssh_hostname=3.231.42.55 ssh_port=22 ssh_username=ubuntu ssh_private_key_file=./plank.pem
