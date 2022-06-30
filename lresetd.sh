@@ -1,0 +1,1 @@
+ruby ./dreset.rb laninterface=enp2s0 ssh_hostname=127.0.0.1 ssh_port=22 ssh_username=leandro ssh_password=2404
