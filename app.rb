@@ -111,47 +111,29 @@ set(:api_key) do |*roles|
       @return_message[:value] = ""
       halt @return_message.to_json
     end
-=begin
-    # when ruby pushes hash of hashes (or hash of arrays), all values are converted into strings.
-    # and arrays are mapped to the last element only.
-    # reference: https://github.com/leandrosardi/mysaas/issues/59
-    # 
-    # iterate the keys of the hash
-    params.each do |key, value|
-      # convert the value to json
-      # reference: https://stackoverflow.com/questions/1667630/how-do-i-convert-a-string-object-into-a-hash-object
-      begin
-      params[key] = eval(value)
-      rescue Exception => e
-      rescue SyntaxError => e
-          # do nothing
-          # Example: if value='hello', you the eval will raise SyntaxError.
-          # Eval will work when value is an array or hash converted to string.
-      end
-    end
-=end
-    params = JSON.parse(request.body.read)
 
-    if !params.has_key?('api_key')
+    @body = JSON.parse(request.body.read)
+
+    if !@body.has_key?('api_key')
       # libero recursos
       DB.disconnect 
       GC.start
-      @return_message[:status] = "api_key is required on #{params.to_s}"
+      @return_message[:status] = "api_key is required on #{@body.to_s}"
       @return_message[:value] = ""
       halt @return_message.to_json
     end
 
-    if !params['api_key'].guid?
+    if !@body['api_key'].guid?
       # libero recursos
       DB.disconnect 
       GC.start
   
-      @return_message[:status] = "Invalid api_key (#{params['api_key']}))"
+      @return_message[:status] = "Invalid api_key (#{@body['api_key']}))"
       @return_message[:value] = ""
       halt @return_message.to_json      
     end
     
-    validation_api_key = params['api_key'].to_guid.downcase
+    validation_api_key = @body['api_key'].to_guid.downcase
 
     @account = BlackStack::MySaaS::Account.where(:api_key => validation_api_key).first
     if @account.nil?
