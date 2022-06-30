@@ -144,7 +144,7 @@ set(:api_key) do |*roles|
       DB.disconnect 
       GC.start
   
-      @return_message[:status] = 'Invalid api_key'
+      @return_message[:status] = "Invalid api_key ()#{params['api_key']})"
       @return_message[:value] = ""
       halt @return_message.to_json      
     end
