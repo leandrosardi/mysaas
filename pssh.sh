@@ -1,1 +1,1 @@
-sudo ssh -i "plank.pem" ubuntu@ec2-44-204-187-240.compute-1.amazonaws.com
+sudo ssh -i "plank.pem" ubuntu@ec2-3-231-42-55.compute-1.amazonaws.com
