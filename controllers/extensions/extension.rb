@@ -23,6 +23,18 @@ module BlackStack
                     # validate: the value of h[:description] must be a string
                     errors << ":description must be a string" if !h[:description].is_a?(String)
 
+                    # validate: the key :repo_url is required
+                    errors << ":repo_url is required" if h[:repo_url].to_s.size==0
+
+                    # validate: the value of h[:repo_url] must be a string
+                    errors << ":repo_url must be a string" if !h[:repo_url].is_a?(String)
+
+                    # validate: the key :repo_branch is required
+                    errors << ":repo_branch is required" if h[:repo_branch].to_s.size==0
+
+                    # validate: the value of h[:repo_branch] must be a string
+                    errors << ":repo_branch must be a string" if !h[:repo_branch].is_a?(String)
+
                     # validate: the key :author is required
                     errors << ":author is required" if h[:author].to_s.size==0
 
@@ -34,7 +46,6 @@ module BlackStack
 
                     # validate: the value of h[:version] must be a string
                     errors << ":version must be a string" if !h[:version].is_a?(String)
-
 
                     # if the key :app_section exists, it must be a string
                     if h[:app_section].to_s.size>0
@@ -55,7 +66,6 @@ module BlackStack
                     if h[:show_in_dashboard].to_s.size>0
                         errors << ":show_in_dashboard must be a bool" if !h[:show_in_dashboard].is_a?(TrueClass) and !h[:show_in_dashboard].is_a?(FalseClass)
                     end
-
 
                     # if exists the key :dependencies
                     if h[:dependencies].to_s.size>0
@@ -111,6 +121,8 @@ module BlackStack
                 # map the hash descriptor to the attributes of the object
                 self.name = h[:name] if h[:name].to_s.size>0
                 self.description = h[:description] if h[:description].to_s.size>0
+                self.repo_url = h[:repo_url] if h[:repo_url].to_s.size>0
+                self.repo_branch = h[:repo_branch] if h[:repo_branch].to_s.size>0
                 self.author = h[:author] if h[:author].to_s.size>0
                 self.version = h[:version] if h[:version].to_s.size>0
 
@@ -150,6 +162,8 @@ module BlackStack
                 
                 h[:name] = self.name if self.name.to_s.size>0
                 h[:description] = self.description if self.description.to_s.size>0
+                h[:repo_url] = self.repo_url if self.repo_url.to_s.size>0
+                h[:repo_branch] = self.repo_branch if self.repo_branch.to_s.size>0
                 h[:author] = self.author if self.author.to_s.size>0
                 h[:version] = self.version if self.version.to_s.size>0
                     

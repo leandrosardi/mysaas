@@ -2,6 +2,7 @@
 
 require 'simple_command_line_parser'
 require 'blackstack-deployer'
+#require_relative '../blackstack-deployer/lib/blackstack-deployer' # use this if you want to run with the live verison of blackstack-deployer
 require_relative './deployment-routines/all-routines'
 
 l = BlackStack::BaseLogger.new(nil)

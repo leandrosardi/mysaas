@@ -1,0 +1,1 @@
+sudo ssh -i "plank.pem" ubuntu@ec2-3-231-42-55.compute-1.amazonaws.com
