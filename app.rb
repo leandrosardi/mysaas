@@ -130,14 +130,13 @@ set(:api_key) do |*roles|
       end
     end
 =end
-    old_params = params
-    params = eval(old_params.to_s)
+    params = JSON.parse(request.body.read)
 
     if !params.has_key?('api_key')
       # libero recursos
       DB.disconnect 
       GC.start
-      @return_message[:status] = "api_key is required on #{old_params.to_s} -> #{params.to_s}"
+      @return_message[:status] = "api_key is required on #{params.to_s}"
       @return_message[:value] = ""
       halt @return_message.to_json
     end
