@@ -111,7 +111,7 @@ set(:api_key) do |*roles|
       @return_message[:value] = ""
       halt @return_message.to_json
     end
-
+=begin
     # when ruby pushes hash of hashes (or hash of arrays), all values are converted into strings.
     # and arrays are mapped to the last element only.
     # reference: https://github.com/leandrosardi/mysaas/issues/59
@@ -129,12 +129,15 @@ set(:api_key) do |*roles|
           # Eval will work when value is an array or hash converted to string.
       end
     end
+=end
+    old_params = params
+    params = eval(old_params.to_s)
 
     if !params.has_key?('api_key')
       # libero recursos
       DB.disconnect 
       GC.start
-      @return_message[:status] = "api_key is required on #{params}"
+      @return_message[:status] = "api_key is required on #{old_params.to_s} -> #{params.to_s}"
       @return_message[:value] = ""
       halt @return_message.to_json
     end
