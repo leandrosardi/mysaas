@@ -7,9 +7,11 @@ account = user.account
 err = params[:err]
 msg = params[:msg]
 
-@program = 'FreeLeadsData' #@program || PRODUCT_SSM
+ALL_SERVICES = '(All Services)'
 
-#h = BlackStack::InvoicingPaymentsProcessing.products_descriptor.select { |o| o[:code].upcase == @program.upcase }.first
+@service = @login.user.preference('service', ALL_SERVICES, params[:service])
+
+#h = BlackStack::InvoicingPaymentsProcessing.products_descriptor.select { |o| o[:code].upcase == @service.upcase }.first
 
 %>
 <div id='wait' name='wait' style='display: none; position: fixed; z-index: 1000000; top: 0; left: 0; height: 100%; width: 100%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;'>
@@ -30,7 +32,7 @@ msg = params[:msg]
 		<div class="container">
 			<table width='100%'>
 				<tr>
-					<td width='50px'><a class="logo" href="/services" title='Web Services'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
+					<td width='50px'><a class="logo" href="/dashboard" title='Home'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
 					<td width='50px'>
 						<!-- TODO: badge if this user has any role -->
 					</td>
@@ -39,12 +41,25 @@ msg = params[:msg]
 							<ul class="nav">
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class='icon-coffee'></i> <%=@program%> <i class="icon-chevron-down"></i>  
+									<i class='icon-coffee'></i> <%=@service.to_s.capitalize.encode_html%> <i class="icon-chevron-down"></i>  
 									</a>
 									<ul class="dropdown-menu" style='width:250px;'>
-										<li class="nav-header"><i class="icon-desktop"></i> For Marketers</li>
-										<li><a href="/prospecting/?program=drx">Prospecting</a></li>
-										<li><a href="/affiliatestrackingservice/?program=aff">Affiliates Tracking Service</a></li>
+										<li><a href="/dashboard?service=<%=ALL_SERVICES%>"><i class="icon-home"></i> Home</a></li>
+
+										<li class="nav-header"><i class="icon-desktop"></i> Services</li>
+										<%
+										BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true }.each do |e|
+											%>
+											<li>
+												<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>">
+													<%=e.name.capitalize.encode_html%>
+													<br/>
+													<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+												</a>
+											</li>
+											<%
+										end # each
+										%>
 									</ul>
 								</li>
 							</ul>
