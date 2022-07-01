@@ -45,20 +45,25 @@ ALL_SERVICES = '(All Services)'
 									</a>
 									<ul class="dropdown-menu" style='width:250px;'>
 										<li><a href="/dashboard?service=<%=ALL_SERVICES%>"><i class="icon-home"></i> Home</a></li>
-
-										<li class="nav-header"><i class="icon-desktop"></i> Services</li>
 										<%
-										BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true }.each do |e|
+										# getting full list of sections
+										sections = BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true && !e.services_section.nil? }.map { |e| e.services_section }.uniq.sort
+										sections.each { |section|
 											%>
-											<li>
-												<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>">
-													<%=e.name.capitalize.encode_html%>
-													<br/>
-													<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
-												</a>
-											</li>
+											<li class="nav-header"><i class="icon-coffee"></i> <%=section%></li>
 											<%
-										end # each
+											BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true && e.services_section == section }.each do |e|
+												%>
+												<li>
+													<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>">
+														<%=e.name.capitalize.encode_html%>
+														<br/>
+														<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+													</a>
+												</li>
+												<%
+											end # each
+										}
 										%>
 									</ul>
 								</li>

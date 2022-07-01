@@ -17,16 +17,25 @@
 		</div>
 
 		<div class='span3 text-left'>
-			<b><i class='icon-coffee'></i> Services</b><br/>
 			<%
-			BlackStack::Extensions::extensions.select { |e| e.show_in_footer == true }.each do |e|
+			# getting full list of sections
+			sections = BlackStack::Extensions::extensions.select { |e| e.show_in_footer == true && !e.services_section.nil? }.map { |e| e.services_section }.uniq.sort
+			sections.each { |section|
 				%>
-				<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>"><%=e.name.capitalize.encode_html%></a>
-				<br/>
-				<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+				<b><i class='icon-coffee'></i> <%=section.encode_html%></b><br/>
+				<%
+				BlackStack::Extensions::extensions.select { |e| e.show_in_footer == true && e.services_section == section }.each do |e|
+					%>
+					<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>"><%=e.name.capitalize.encode_html%></a>
+					<br/>
+					<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+					<br/>
+					<%
+				end # each
+				%>
 				<br/>
 				<%
-			end # each
+			}
 			%>
 		</div>
 

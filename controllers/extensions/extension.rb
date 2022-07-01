@@ -47,9 +47,9 @@ module BlackStack
                     # validate: the value of h[:version] must be a string
                     errors << ":version must be a string" if !h[:version].is_a?(String)
 
-                    # if the key :app_section exists, it must be a string
-                    if h[:app_section].to_s.size>0
-                        errors << ":app_section must be a string" if !h[:app_section].is_a?(String)
+                    # if the key :services_section exists, it must be a string
+                    if h[:services_section].to_s.size>0
+                        errors << ":services_section must be a string" if !h[:services_section].is_a?(String)
                     end
 
                     # if the key :show_in_top_bar exists, it must be a bool
@@ -126,7 +126,7 @@ module BlackStack
                 self.author = h[:author] if h[:author].to_s.size>0
                 self.version = h[:version] if h[:version].to_s.size>0
 
-                self.app_section = h[:app_section] if h[:app_section].to_s.size>0
+                self.services_section = h[:services_section] if h[:services_section].to_s.size>0
                 self.show_in_top_bar = h[:show_in_top_bar] if h[:show_in_top_bar].to_s.size>0
                 self.show_in_footer = h[:show_in_footer] if h[:show_in_footer].to_s.size>0
                 self.show_in_dashboard = h[:show_in_dashboard] if h[:show_in_dashboard].to_s.size>0
@@ -167,7 +167,7 @@ module BlackStack
                 h[:author] = self.author if self.author.to_s.size>0
                 h[:version] = self.version if self.version.to_s.size>0
                     
-                h[:app_section] = self.app_section if self.app_section.to_s.size>0
+                h[:services_section] = self.services_section if self.services_section.to_s.size>0
                 h[:show_in_top_bar] = self.show_in_top_bar if self.show_in_top_bar.to_s.size>0
                 h[:show_in_footer] = self.show_in_footer if self.show_in_footer.to_s.size>0
                 h[:show_in_dashboard] = self.show_in_dashboard if self.show_in_dashboard.to_s.size>0
