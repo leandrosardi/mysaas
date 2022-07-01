@@ -10,20 +10,28 @@
 			</div>
 		</div>
 		<div class='span3 text-left'>
-				<b><a href='https://help.expandedventure.com/connectionsphere' target='_window'>Help</a></b><br/>
+				<b><i class='icon-question-sign'></i> Help</b><br/>
 				<a href='https://help.expandedventure.com/connectionsphere' target='_window'>Introducing <%=APP_NAME.to_s%></a><br/>
 				<a href='https://help.expandedventure.com/connectionsphere/getting-started' target='_window'>Getting Started</a><br/>
 				<a href='https://help.expandedventure.com/connectionsphere/setup-a-reseller-account' target='_window'>Setting Up a Reseller Account</a><br/>
 		</div>
 
 		<div class='span3 text-left'>
-			<b><a href='<%=CS_HOME_WEBSITE%>/services#marketers' target='_window'>Services for Marketers</a></b><br/>
-			<a href='<%=CS_HOME_WEBSITE%>/prospecting' target='_window'>Prospecting</a><br/>
-			<a href='<%=CS_HOME_WEBSITE%>/affiliatestrackingservice' target='_window'>Affiliates Tracking Service</a><br/>
+			<b><i class='icon-coffee'></i> Services</b><br/>
+			<%
+			BlackStack::Extensions::extensions.select { |e| e.show_in_footer == true }.each do |e|
+				%>
+				<a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>"><%=e.name.capitalize.encode_html%></a>
+				<br/>
+				<span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+				<br/>
+				<%
+			end # each
+			%>
 		</div>
 
 		<div class='span3 text-left'>
-				<b><a href='https://help.expandedventure.com/developers' target='_window'>Integrations</a></b><br/>
+				<b><i class='icon-heart'></i> Docs</b><br/>
 				<a href='https://help.expandedventure.com/developers/getting-your-api-key' target='_window'>Generating Your API-KEY</a><br/>
 				<a href='https://help.expandedventure.com/developers/connectionsphere-api-1-5' target='_window'>API Specifications</a><br/>
 				<a href='https://help.expandedventure.com/developers/zapier-integrations' target='_window'>Zapier Integrations</a><br/>
