@@ -50,7 +50,7 @@ ALL_SERVICES = '(All Services)'
 										sections = BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true && !e.services_section.nil? }.map { |e| e.services_section }.uniq.sort
 										sections.each { |section|
 											%>
-											<li class="nav-header"><i class="icon-coffee"></i> <%=section%></li>
+											<li class="nav-header"><i class="icon-coffee"></i> <%=section.encode_html%></li>
 											<%
 											BlackStack::Extensions::extensions.select { |e| e.show_in_top_bar == true && e.services_section == section }.each do |e|
 												%>

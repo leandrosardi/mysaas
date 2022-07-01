@@ -1,1 +1,80 @@
-Dashboard!
+<%
+# getting full list of sections
+sections = BlackStack::Extensions::extensions.select { |e| e.show_in_dashboard == true && !e.services_section.nil? }.map { |e| e.services_section }.uniq.sort
+%>
+
+<section>
+<%
+# getting full list of sections
+sections.each { |section|
+    %>
+    <h4><i class="icon-coffee"></i> <%=section.encode_html%></h4>
+    <section class='row-fluid'>
+    <%
+    i = 0
+    BlackStack::Extensions::extensions.select { |e| e.show_in_dashboard == true && e.services_section == section }.each do |e|
+        i += 1
+    
+        if i==3
+        %>
+        </section>
+        <section class='row-fluid'>
+        <%
+        end # if 
+
+        %>
+        <section class='span4 box' style='height:165px;'>
+            <a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>">
+                <div class='span3'>
+                    <img src='/leads/images/logo.png' width='48px' height='48px' />
+                </div>
+                <div class='span9' style='position:relative;height:100%;'>
+                    <%=e.name.capitalize.encode_html%>
+                    <br/>
+                    <span style='font-size: 10px;color:gray;'><%=e.description.encode_html%></span>
+
+                    <div style='position:absolute;bottom:0px;right:0px;'>
+                        Go <i class='icon-chevron-right'></i>
+                    </div>
+                </div>
+            </a>
+        </section>
+        <%
+    end # each
+    %>
+
+        <!-- TODO: remove this as soon as we release these services -->
+        <section class='span4 box' style='height:165px;opacity:0.4;'>
+            <div class='span3'>
+                <img src='/leads/images/logo.png' width='48px' height='48px' />
+            </div>
+            <div class='span9' style='position:relative;height:100%;'>
+                Virgin Proxies
+                <br/>
+                <span style='font-size: 10px;color:gray;'>Cost-effective Datacenter Proxies, Never Used Before.</span>
+
+                <div style='position:absolute;bottom:0px;right:0px;'>
+                    <span class='badge badge-green'>Soon</span>
+                </div>
+            </div>
+        </section>
+        <section class='span4 box' style='height:165px;opacity:0.4;'>
+            <div class='span3'>
+                <img src='/leads/images/logo.png' width='48px' height='48px' />
+            </div>
+            <div class='span9' style='position:relative;height:100%;'>
+                Mobile Proxies
+                <br/>
+                <span style='font-size: 10px;color:gray;'>Rotating IP Mobile Proxies at an Afforable Price.</span>
+
+                <div style='position:absolute;bottom:0px;right:0px;'>
+                    <span class='badge badge-green'>Soon</span>
+                </div>
+            </div>
+        </section>
+
+    </section>
+    <%
+}
+%>
+</section>
