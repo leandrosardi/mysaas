@@ -617,9 +617,10 @@ q = "
 		<li>Note the usage of <code>@login.user.preference</code> to bring the value of the parameter from the database, from the preferences of the user.</li>
 		<li>The 3th parameter in <code>@login.user.preference</code> is a value to update the user preferences before the function brings its value.<br/>
 		This value is optional, if it is not provided, the function will not update the user preference.<br/>
-		In this example, we use the GET parameter received in the URL to update the user preference. 
-		</li>
+		In this example, we use the GET parameter received in the URL to update the user preference. </li>
 		<li>The 2nd parameter in <code>@login.user.preference</code> is the default value in case that both, the user preference and the GET parameter are <code>nil</code>.</li>
+		<li>If you want to store an <code>int</code> value into a user preference, be aware that all values in the <code>params</code> hash are strings.<br/>
+		So, in this case you have to do a special handle like this <code>params[:number].nil? ? nil : params[:number].to_i</code>.</li>
 	</ul>
 
 	<pre class="line-numbers language-html html">
