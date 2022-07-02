@@ -17,7 +17,7 @@ q = "
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<th>Name</th>
 				<th>Position</th>
@@ -44,22 +44,67 @@ q = "
 	</div>
 </section>
 
+<section class="row-fluid box">
+	<p>This code is to draw the table above.</p>
+
+	<pre class="line-numbers language-html html">
+<%='
+<%
+q = "
+	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
+	FROM fl_lead l
+	LIMIT 3
+" 
+%
+<section class="row-fluid">
+	<div class="span12 box">
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
+			<thead>
+				<th>Name</th>
+				<th>Position</th>
+				<th>Company</th>
+				<th>Industry</th>
+				<th>Location</th>
+			</thead>
+			<tbody>
+				<%
+				DB[q].all do |row|
+				%
+				<tr>
+					<td><%=row[:name]%</td>
+					<td><%=row[:position]%</td>
+					<td><%=row[:stat_company_name]%</td>
+					<td><%=row[:stat_industry_name]%</td>
+					<td><%=row[:stat_location_name]%</td>
+				</tr>
+				<%
+				end
+				%
+			</tbody>
+		</table>
+	</div>
+</section>
+'.encode_html
+%>
+	</pre>
+</section>
+
 
 <!-- Complex Query Table -->
 <h4>Complex Query Table</h4>
 <%
-q = '
+q = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
 	FROM fl_lead l
-	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1."type" = 20) -- emails
-	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2."type" = 10) -- phones
+	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1.\"type\" = 20) -- emails
+	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2.\"type\" = 10) -- phones
 	GROUP BY l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
 	LIMIT 3
-'
+"
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<th>Name</th>
 				<th>Position</th>
@@ -90,42 +135,94 @@ q = '
 	</div>
 </section>
 
+<section class="row-fluid box">
+	<p>This code is to draw the table above.</p>
+
+	<pre class="line-numbers language-html html">
+<%='
+<%
+q = "
+	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
+	FROM fl_lead l
+	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1.\"type\" = 20) -- emails
+	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2.\"type\" = 10) -- phones
+	GROUP BY l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
+	LIMIT 3
+"
+%
+<section class="row-fluid">
+	<div class="span12 box">
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
+			<thead>
+				<th>Name</th>
+				<th>Position</th>
+				<th>Company</th>
+				<th>Industry</th>
+				<th>Location</th>
+				<th>Emails</th>
+				<th>Phones</th>
+			</thead>
+			<tbody>
+				<%
+				DB[q].all do |row|
+				%
+				<tr>
+					<td><%=row[:name]%</td>
+					<td><%=row[:position]%</td>
+					<td><%=row[:stat_company_name]%</td>
+					<td><%=row[:stat_industry_name]%</td>
+					<td><%=row[:stat_location_name]%</td>
+					<td><%=row[:emails]%</td>
+					<td><%=row[:phones]%</td>
+				</tr>
+				<%
+				end
+				%
+			</tbody>
+		</table>
+	</div>
+</section>
+'.encode_html
+%>
+	</pre>
+</section>
+
 <!-- Enhanced HTML -->
 <h4>Enhanced HTML</h4>
 <%
-q = '
+q = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
 	FROM fl_lead l
-	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1."type" = 20) -- emails
-	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2."type" = 10) -- phones
+	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1.\"type\" = 20) -- emails
+	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2.\"type\" = 10) -- phones
 	GROUP BY l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
 	LIMIT 3
-'
+"
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
-				<th style='width:90px;'>Name</th>
-				<th style='width:auto;'>Position</th>
-				<th style='width:90px;'>Company</th>
-				<th style='width:90px;'>Industry</th>
-				<th style='width:90px;'>Location</th>
-				<th style='width:32px;text-align:right;'>Emails</th>
-				<th style='width:32px;text-align:right;'>Phones</th>
+				<th style="width:90px;">Name</th>
+				<th style="width:auto;">Position</th>
+				<th style="width:90px;">Company</th>
+				<th style="width:90px;">Industry</th>
+				<th style="width:90px;">Location</th>
+				<th style="width:32px;text-align:right;">Emails</th>
+				<th style="width:32px;text-align:right;">Phones</th>
 			</thead>
 			<tbody>
 				<%
 				DB[q].all do |row|
 				%>
 				<tr>
-					<td class='fix' title='<%=row[:name].to_s.encode_html%>'><%=row[:name].to_s.encode_html%></td>
-					<td class='fix' title='<%=row[:position].to_s.encode_html%>'><%=row[:position].to_s.encode_html%></td>
-					<td class='fix' title='<%=row[:stat_company_name].to_s.encode_html%>'><%=row[:stat_company_name].to_s.encode_html%></td>
-					<td class='fix' title='<%=row[:stat_industry_name].to_s.encode_html%>'><%=row[:stat_industry_name].to_s.encode_html%></td>
-					<td class='fix' title='<%=row[:stat_location_name].to_s.encode_html%>'><%=row[:stat_location_name].to_s.encode_html%></td>
-					<td class='fix' title='<%=row[:emails].to_s.encode_html%>' style='text-align:right;'><%=row[:emails].to_label%></td>
-					<td class='fix' title='<%=row[:phones].to_s.encode_html%>' style='text-align:right;'><%=row[:phones].to_label%></td>
+					<td class="fix" title="<%=row[:name].to_s.encode_html%>"><%=row[:name].to_s.encode_html%></td>
+					<td class="fix" title="<%=row[:position].to_s.encode_html%>"><%=row[:position].to_s.encode_html%></td>
+					<td class="fix" title="<%=row[:stat_company_name].to_s.encode_html%>"><%=row[:stat_company_name].to_s.encode_html%></td>
+					<td class="fix" title="<%=row[:stat_industry_name].to_s.encode_html%>"><%=row[:stat_industry_name].to_s.encode_html%></td>
+					<td class="fix" title="<%=row[:stat_location_name].to_s.encode_html%>"><%=row[:stat_location_name].to_s.encode_html%></td>
+					<td class="fix" title="<%=row[:emails].to_s.encode_html%>" style="text-align:right;"><%=row[:emails].to_label%></td>
+					<td class="fix" title="<%=row[:phones].to_s.encode_html%>" style="text-align:right;"><%=row[:phones].to_label%></td>
 				</tr>
 				<%
 				end
@@ -133,6 +230,58 @@ q = '
 			</tbody>
 		</table>
 	</div>
+</section>
+
+<section class="row-fluid box">
+	<p>This code is to draw the table above.</p>
+
+	<pre class="line-numbers language-html html">
+<%='
+<%
+q = "
+	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
+	FROM fl_lead l
+	LEFT JOIN fl_data d1 ON (l.id = d1.id_lead AND d1.\"type\" = 20) -- emails
+	LEFT JOIN fl_data d2 ON (l.id = d2.id_lead AND d2.\"type\" = 10) -- phones
+	GROUP BY l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
+	LIMIT 3
+"
+%
+<section class="row-fluid">
+	<div class="span12 box">
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
+			<thead>
+				<th style="width:90px;">Name</th>
+				<th style="width:auto;">Position</th>
+				<th style="width:90px;">Company</th>
+				<th style="width:90px;">Industry</th>
+				<th style="width:90px;">Location</th>
+				<th style="width:32px;text-align:right;">Emails</th>
+				<th style="width:32px;text-align:right;">Phones</th>
+			</thead>
+			<tbody>
+				<%
+				DB[q].all do |row|
+				%
+				<tr>
+					<td class="fix" title="<%=row[:name].to_s.encode_html%"><%=row[:name].to_s.encode_html%</td>
+					<td class="fix" title="<%=row[:position].to_s.encode_html%"><%=row[:position].to_s.encode_html%</td>
+					<td class="fix" title="<%=row[:stat_company_name].to_s.encode_html%"><%=row[:stat_company_name].to_s.encode_html%</td>
+					<td class="fix" title="<%=row[:stat_industry_name].to_s.encode_html%"><%=row[:stat_industry_name].to_s.encode_html%</td>
+					<td class="fix" title="<%=row[:stat_location_name].to_s.encode_html%"><%=row[:stat_location_name].to_s.encode_html%</td>
+					<td class="fix" title="<%=row[:emails].to_s.encode_html%" style="text-align:right;"><%=row[:emails].to_label%</td>
+					<td class="fix" title="<%=row[:phones].to_s.encode_html%" style="text-align:right;"><%=row[:phones].to_label%</td>
+				</tr>
+				<%
+				end
+				%
+			</tbody>
+		</table>
+	</div>
+</section>
+'.encode_html
+%>
+	</pre>
 </section>
 
 
@@ -147,13 +296,13 @@ all = "
 total_rows = DB[all].count
 
 q = "
-	#{all}
+	"+all+"
 	LIMIT 3
 "
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<th>Name</th>
 				<th>Position</th>
@@ -195,13 +344,13 @@ total_rows = DB[all].count
 total_pages = (total_rows.to_f/page_size.to_f).ceil
 
 q = "
-	#{all}
-	LIMIT #{page_size}
+	"+all+"
+	LIMIT "+page_size.to_label+"
 "
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<th>Name</th>
 				<th>Position</th>
@@ -244,7 +393,7 @@ total_rows = DB[all].count
 total_pages = (total_rows.to_f/page_size.to_f).ceil
 # if there is a GET parameters `number` on the URL, update the user preference regarding the page number on this screen
 # then, get user preferences regarding the page number on this screen
-page_number = @login.user.preference('developers.tables.pagination-example.pagination.page', 1, params[:number].nil? ? nil : params[:number].to_i)
+page_number = @login.user.preference('developers.tables.basics.pagination.page', 1, params[:number].nil? ? nil : params[:number].to_i)
 # pagination correction to prevent glitches
 page_number = 1 if page_number < 1
 page_number = total_pages if page_number > total_pages
@@ -253,15 +402,15 @@ from_row = (page_number.to_i-1) * page_size.to_i + 1
 to_row = [page_number*page_size, total_rows].min
 
 q = "
-	#{all}
-	LIMIT #{page_number*page_size}
-	OFFSET #{(page_number.to_i - 1) * page_size.to_i}
+	"+all+"
+	LIMIT "+(page_number*page_size).to_label+"
+	OFFSET "+((page_number.to_i - 1) * page_size.to_i).to_label+"
 "
 
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<th>Name</th>
 				<th>Position</th>
@@ -306,21 +455,21 @@ all = "
 " 
 
 all += "
-	AND l.name LIKE '%#{filter_name.to_s.to_sql}%'
+	AND l.name LIKE '%"+filter_name.to_s.to_sql+"%'
 " if filter_name.to_s.length > 0
 
 all += "
-	AND l.stat_company_name LIKE '%#{filter_company.to_s.to_sql}%'
+	AND l.stat_company_name LIKE '%"+filter_company.to_s.to_sql+"%'
 " if filter_company.to_s.length > 0
 
 q = "
-	#{all}
+	"+all+"
 	LIMIT 3
 "
 %>
 <section class="row-fluid">
 	<div class="span12 box">
-		<table class="table table-striped" style='table-layout: fixed; width: 100%;'>
+		<table class="table table-striped" style="table-layout: fixed; width: 100%;">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -332,12 +481,12 @@ q = "
 				</tr>
 				<form action='/developers/mysaas/tables/basics' method='get'>
 					<tr>
-						<th><input class='input input-block-level' id='name' name='name' value='<%=filter_name.to_s.encode_html%>' /></th>
+						<th><input class='input input-block-level' id="name" name="name" value="<%=filter_name.to_s.encode_html%>" /></th>
 						<th></th>
-						<th><input class='input input-block-level' id='company' name='company' value='<%=filter_company.to_s.encode_html%>' /></th>
+						<th><input class='input input-block-level' id="ompany" name="company" value="<%=filter_company.to_s.encode_html%>" /></th>
 						<th></th>
 						<th></th>
-						<th><button type='submit' class='btn btn-link'>Search</button></th>
+						<th><button type="submit" class="btn btn-link">Search</button></th>
 					</tr>
 				</form>
 			</thead>
