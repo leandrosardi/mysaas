@@ -620,7 +620,8 @@ q = "
 		In this example, we use the GET parameter received in the URL to update the user preference. </li>
 		<li>The 2nd parameter in <code>@login.user.preference</code> is the default value in case that both, the user preference and the GET parameter are <code>nil</code>.</li>
 		<li>If you want to store an <code>int</code> value into a user preference, be aware that all values in the <code>params</code> hash are strings.<br/>
-		So, in this case you have to do a special handle like this <code>params[:number].nil? ? nil : params[:number].to_i</code>.</li>
+		So, in this case you have to do a special handle like this <code>params[:number].nil? ? nil : params[:number].to_i</code>.<br/>
+		Just doing <code>params[:number].to_i</code> will convert <code>nil</code> into <code>0</code> and you don&apos;t want that.</li>
 	</ul>
 
 	<pre class="line-numbers language-html html">
