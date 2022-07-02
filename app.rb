@@ -175,7 +175,7 @@ def nav1(name1, beta=false)
 
   ret = 
   "<p>" + 
-  "<a class='simple' href='/settings/account'><b>#{CGI.escapeHTML(user.account.name.encode_html)}</b></a>" + 
+  "<a class='simple' href='/dashboard'><b>#{CGI.escapeHTML(user.account.name.encode_html)}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   CGI.escapeHTML(name1)
 
@@ -189,7 +189,7 @@ def nav2(name1, url1, name2)
   user = BlackStack::MySaaS::User.where(:id=>login.id_user).first  
 
   "<p>" + 
-  "<a class='simple' href='/settings/account'><b>#{user.account.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/dashboard'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 
@@ -201,7 +201,7 @@ def nav3(name1, url1, name2, url2, name3)
   login = BlackStack::MySaaS::Login.where(:id=>session['login.id']).first
   user = BlackStack::MySaaS::User.where(:id=>login.id_user).first  
   "<p>" + 
-  "<a class='simple' href='/settings/account'><b>#{user.account.name.encode_html}</b></a>" + 
+  "<a class='simple' href='/dashboard'><b>#{user.account.name.encode_html}</b></a>" + 
   " <i class='icon-chevron-right'></i> " + 
   "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
   " <i class='icon-chevron-right'></i> " + 
@@ -211,6 +211,21 @@ def nav3(name1, url1, name2, url2, name3)
   "</p>"
 end
 
+def nav4(name1, url1, name2, url2, name3, url3, name4)
+  login = BlackStack::MySaaS::Login.where(:id=>session['login.id']).first
+  user = BlackStack::MySaaS::User.where(:id=>login.id_user).first  
+  "<p>" + 
+  "<a class='simple' href='/dashboard'><b>#{user.account.name.encode_html}</b></a>" + 
+  " <i class='icon-chevron-right'></i> " + 
+  "<a class='simple' href='#{url1}'>#{CGI.escapeHTML(name1)}</a>" + 
+  " <i class='icon-chevron-right'></i> " + 
+  "<a class='simple' href='#{url2}'>#{CGI.escapeHTML(name2)}</a>" + 
+  " <i class='icon-chevron-right'></i> " + 
+  "<a class='simple' href='#{url3}'>#{CGI.escapeHTML(name3)}</a>" + 
+  " <i class='icon-chevron-right'></i> " + 
+  name4 +
+  "</p>"
+end
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # FreeLeadsData Extension
@@ -237,6 +252,25 @@ get "/#{name}/exports", :auth => true do
   erb :"/#{name}/exports", :layout => :"/#{name}/views/layout"
 end
 =end
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Developers Training Pages.
+
+# layouts
+get '/developers/mysaas/layouts/navbars', :auth => true, :agent => /(.*)/ do
+  erb :"/views/developers/mysaas/layouts/navbars", :layout => :'/views/layouts/core'
+end
+
+get '/developers/mysaas/layouts/panels', :auth => true, :agent => /(.*)/ do
+  erb :"/views/developers/mysaas/layouts/panels", :layout => :'/views/layouts/core'
+end
+
+# tables
+get '/developers/mysaas/tables/basics', :auth => true, :agent => /(.*)/ do
+  erb :"/views/developers/mysaas/tables/basics", :layout => :'/views/layouts/core'
+end
+
+
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # External pages: pages that don't require login
 

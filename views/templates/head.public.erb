@@ -452,8 +452,6 @@ theme = 'black-blue'
 		}
 
 		td.fix {
-			width: 125px;
-			max-width: 125px;
 			white-space:nowrap;
 			overflow:hidden;
 			text-overflow:ellipsis;
@@ -469,14 +467,51 @@ theme = 'black-blue'
 
 	</style>
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-102299452-4"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-	
-	  gtag('config', 'UA-102299452-4');
+	<script type="text/javascript">	
+		// draw pagination function
+		// 
+		function drawPagination(o, current_page, total_pages)
+		{
+			url = '?number='; // url to get the next page	
+			
+			o.html("");
+			u = $("<ul></ul>");
+			o.append(u);
+		
+			if (current_page>1) {
+				li = $('<li><a href="'+url+(current_page-1).toString()+'">Prev</a></li>');
+			} else {
+				li = $('<li class="disabled"><a href="#">Prev</a></li>')
+			}
+			u.append(li);
+		
+			i=1
+			i_prev = 1
+			while (i<=total_pages) {
+				if (i==current_page) {
+					sClassActive="class='active'"
+				} else {
+					sClassActive=""
+				}
+				if ( i==1 || i==total_pages || (i>=current_page-2 && i<=current_page+2) ) {
+					if (i>i_prev+1) {
+						li = $('<li><span>...</span></li>')
+						u.append(li)
+					}
+					li = $('<li '+sClassActive+'><a href="'+url+i.toString()+'">'+i.toString()+'</a></li>')
+					u.append(li)
+					i_prev=i
+				}
+				i=i+1
+			}
+		
+			if (current_page<total_pages) {
+				i = $('<li><a href="./'+url+(current_page+1).toString()+'">Next</a></li>');
+			} else {
+				i = $('<li class="disabled"><a href="#">Next</a></li>')
+			}
+			u.append(i);
+		}	
 	</script>
 
 </head>
