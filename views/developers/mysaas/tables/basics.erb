@@ -6,8 +6,26 @@
 	</section>
 </div>
 
+
+<!-- Contennts  -->
+<h4>Contents</h4>
+<section class="row-fluid">
+	<div class="span12 box">
+		<ul>
+			<li><a href='#simple-query-table'>Simple Query Table</a></li>
+			<li><a href='#complex-query-table'>Complex Query Table</a></li>
+			<li><a href='#enhanced-html'>Enhanced HTML</a></li>
+			<li><a href='#calculating-total-results'>Calculating Total Results</a></li>
+			<li><a href='#calculating-total-pages'>Total Pages</a></li>
+			<li><a href='#pagination'>Pagination</a></li>
+			<li><a href='#filtering'>Filtering</a></li>
+			<li><a href='#sorting'>Sorting</a></li>
+		</ul>
+	</div>
+</section>
+
 <!-- Simple Query Table -->
-<h4>Simple Query Table</h4>
+<h4 id='simple-query-table'>Simple Query Table</h4>
 <%
 q = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
@@ -112,7 +130,7 @@ q = "
 </section>
 
 <!-- Complex Query Table -->
-<h4>Complex Query Table</h4>
+<h4 id='complex-query-table'>Complex Query Table</h4>
 <%
 q = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
@@ -220,7 +238,7 @@ q = "
 </section>
 
 <!-- Enhanced HTML -->
-<h4>Enhanced HTML</h4>
+<h4 id='enhanced-html'>Enhanced HTML</h4>
 <%
 q = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name, COUNT(DISTINCT d1.id) AS emails, COUNT(DISTINCT d2.id) AS phones
@@ -330,7 +348,7 @@ q = "
 
 
 <!-- Total Results -->
-<h4>Total Results</h4>
+<h4 id='calculating-total-results'>Calculating Total Results</h4>
 <%
 all = "
 	SELECT l.name, l.position, l.stat_company_name, l.stat_industry_name, l.stat_location_name
@@ -427,7 +445,7 @@ q = "
 </section>
 
 <!-- Total Pages -->
-<h4>Total Pages</h4>
+<h4 id='calculating-total-pages'>Total Pages</h4>
 <%
 
 all = "
@@ -529,7 +547,7 @@ q = "
 </section>
 
 <!-- Pagination -->
-<h4>Pagination</h4>
+<h4 id='pagination'>Pagination</h4>
 <%
 page_size = 3
 
@@ -664,7 +682,7 @@ q = "
 </section>
 
 <!-- Filtering -->
-<h4>Filtering</h4>
+<h4 id='filtering'>Filtering</h4>
 <%
 filter_name = @login.user.preference("developers.tables.basics.filter.name", "", params[:name])
 filter_company = @login.user.preference("developers.tables.basics.filter.company", "", params[:company])
@@ -813,6 +831,6 @@ q = "
 </section>
 
 <!-- Sorting -->
-<h4>Sorting</h4>
+<h4 id='sorting'>Sorting</h4>
 
 <i>(pending)</i>
