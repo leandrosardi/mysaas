@@ -67,8 +67,6 @@ q = "
 <section class="row-fluid box">
 	<p>Aside of the NavBar, this is the only code that is required to draw a table.</p>
 
-	<p>Aside of the NavBar, this is the only code that is required to draw a table.
-
 	<p>Some Hints:</p>
 
 	<ul>
@@ -613,6 +611,17 @@ q = "
 <section class="row-fluid box">
 	<p>Aside of the NavBar, this is the only code that is required to draw a table.</p>
 
+	<p>Some Hints:</p>
+	
+	<ul>
+		<li>Note the usage of <code>@login.user.preference</code> to bring the value of the parameter from the database, from the preferences of the user.</li>
+		<li>The 3th parameter in <code>@login.user.preference</code> is a value to update the user preferences before the function brings its value.<br/>
+		This value is optional, if it is not provided, the function will not update the user preferences.<br/>
+		In this example, we use the GET parameter received in the URL to update the user preference. 
+		</li>
+		<li>Se 2nd parameter in <code>@login.user.preference</code> is the default value in case that both, the user preference and the GET parameter are <code>nil</code>.</li>
+	</ul>
+
 	<pre class="line-numbers language-html html">
 <%='
 <%
@@ -626,12 +635,15 @@ all = "
 page_size = 3
 total_rows = DB[all].count
 total_pages = (total_rows.to_f/page_size.to_f).ceil
+
 # if there is a GET parameters `number` on the URL, update the user preference regarding the page number on this screen
 # then, get user preferences regarding the page number on this screen
 page_number = @login.user.preference("developers.tables.basics.pagination.page", 1, params[:number].nil? ? nil : params[:number].to_i)
+
 # pagination correction to prevent glitches
 page_number = 1 if page_number < 1
 page_number = total_pages if page_number > total_pages
+
 # calculate info for showing at the bottom of the table
 from_row = (page_number.to_i-1) * page_size.to_i + 1
 to_row = [page_number*page_size, total_rows].min
