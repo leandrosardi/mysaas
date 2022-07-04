@@ -14,6 +14,7 @@ puts "
 Welcome to MySaaS v#{BLACKSTACK_VERSION}.
 
 Sandbox Environment: #{SANDBOX.to_s}.
+Local Web-Server: #{LOCALW.to_s}.
 
 "
 
