@@ -21,7 +21,7 @@ Local Web-Server: #{LOCALW.to_s}.
 # include the libraries of the extensions
 # reference: https://github.com/leandrosardi/mysaas/issues/33
 BlackStack::Extensions.extensions.each { |e|
-  require "extensions/#{e.name.downcase}/#{e.name.downcase}"
+  require "extensions/#{e.name.downcase}/main"
 }
 
 # TODO: move this to the extension module?
