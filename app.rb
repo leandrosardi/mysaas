@@ -24,8 +24,10 @@ BlackStack::Extensions.extensions.each { |e|
   require "extensions/#{e.name.downcase}/main"
 }
 
-# TODO: move this to the extension module?
-Leads.server_side
+# Load skeleton classes
+BlackStack::Extensions.extensions.each { |e|
+  require "extensions/#{e.name.downcase}/lib/skeletons"
+}
 
 # 
 parser = BlackStack::SimpleCommandLineParser.new(
