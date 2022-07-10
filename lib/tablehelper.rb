@@ -10,7 +10,7 @@ module BlackStack
     # This method works with the TableHelper module.
     # Return the FROM-WHERE part of the SQL query to retrieve the results of the table, with not pagination nor sorting, nor listed columns.
     # This method is used to build custom queries on other methods.
-    def core
+    def core(h={})
         raise 'BlackStack::TableHelper::core: method is abstract. Code it yourself in your child class.'
     end
 
@@ -76,7 +76,8 @@ module BlackStack
   
     # total number of unique leads matching with this search
     def count
-        DB["SELECT COUNT(id) AS n #{self.core}"].first[:n]
+        q = "SELECT COUNT(*) AS n #{self.core}"
+        DB[q].first[:n]
     end
   
     # return a hash descriptor with the status of the pagination: row_from, row_to, total_rows, total_pages, page (after revision)
@@ -119,7 +120,7 @@ module BlackStack
     end
   
     # return an array of leads, filtering by the parameters of this search, and paginating and sorting by the parameters received.
-    def rows(h)
+    def rows(h={})
         # validate the pagination descriptor
         errors = self.validate_pagination_descriptor(h)
   
@@ -133,7 +134,7 @@ module BlackStack
         column_names = self.columns.map {|c| c['query_field'] }
         q = "
             SELECT #{column_names.join(', ')}
-            #{self.core}
+            #{self.core(h)}
             -- sorting
             ORDER BY l.#{h['sortcolumn']} #{h['sortorder']}
             -- pagination
