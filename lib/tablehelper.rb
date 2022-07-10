@@ -55,7 +55,6 @@ module BlackStack
         errors
     end
   
-
     def validate_columns_descriptor(h)
         errors = []
   
@@ -95,14 +94,20 @@ module BlackStack
         total_rows = self.count
         total_pages = (total_rows.to_f/page_size.to_f).ceil
   
-        # pagination correction to prevent glitches
-        page_number = 1 if page_number < 1
-        page_number = total_pages if page_number > total_pages
-  
-        # calculate info for showing at the bottom of the table
-        from_row = (page_number.to_i-1) * page_size.to_i + 1
-        to_row = [page_number*page_size, total_rows].min
-  
+        if total_rows > 0
+            # pagination correction to prevent glitches
+            page_number = 1 if page_number < 1
+            page_number = total_pages if page_number > total_pages
+    
+            # calculate info for showing at the bottom of the table
+            from_row = (page_number.to_i-1) * page_size.to_i + 1
+            to_row = [page_number*page_size, total_rows].min
+        else
+            page_number = 1
+            from_row = 0
+            to_row = 0
+        end
+
         # return
         {
             'row_from' => from_row,
