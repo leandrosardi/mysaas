@@ -6,11 +6,6 @@ account = BlackStack::I2P::Account.where(:id=>user.id_account).first
 
 err = params[:err]
 msg = params[:msg]
-
-ALL_SERVICES = '(All Services)'
-
-@service = @login.user.preference('service', ALL_SERVICES, params[:service])
-@hservice = BlackStack::I2P::service_descriptor(@service)
 %>
 
 
@@ -99,11 +94,17 @@ ALL_SERVICES = '(All Services)'
 								</li>
 																		
 								<li>
+									<%
+									if !@hservice.nil?
+									%>
 									<a href="/leads/plans"> 
 										<span>
-											<span class='label label-blue'><%=account.credits(@service).to_i.to_s%></span> <%=@hservice[:unit_name].to_s%> 
+											<span id='credits' class='label label-blue'><%=account.credits(@service).to_i.to_s%></span> <%=@hservice[:unit_name].to_s%> 
 										</span>
 									</a>
+									<%
+									end
+									%>
 								</li>
 
 								<!--

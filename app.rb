@@ -6,6 +6,9 @@ require 'version'
 DB = BlackStack::CRDB::connect
 require 'lib/skeletons'
 
+# constante auxiliar
+ALL_SERVICES = '(All Services)'
+
 # enable this line if you want to work with the live version of blackstack-core.
 #require_relative '../blackstack-core/lib/blackstack-core' 
 
@@ -97,6 +100,8 @@ set(:auth) do |*roles|
       redirect "/unavailable"      
     else
       @login = BlackStack::MySaaS::Login.where(:id=>session['login.id']).first
+      @service = @login.user.preference('service', ALL_SERVICES, params[:service])
+      @hservice = BlackStack::I2P::service_descriptor(@service)
     end
   end
 end

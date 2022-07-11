@@ -8,6 +8,27 @@
 
 	showWait('Loading... ');
 
+	// function to update the credits in the header. TODO: move this to the I2P module
+	// call ajax /ajax/ip2/get_credits.json, and update the credits in the header
+	function i2p_update_header(service) {
+		$.ajax({
+			url: '/ajax/ip2/get_credits.json',
+			type: 'POST',
+			data: {service: service},
+			dataType: 'json',
+			success: function(data) {
+				if (data.status == 'success') {
+					$('#credits').html(data.credits);
+				} else {
+					alert('Error Ocurrend when Updating the Credits in the Header: ' + data.status);
+				}
+			},
+			error: function(data) {
+				alert('Unkown Error Ocurrend when Updating the Credits in the Header: ' + data.status);
+			},
+		});
+	}
+
 	// overload the onload event in order to
 	// hide the "Loading..." message when the 
 	// onload event has done.
