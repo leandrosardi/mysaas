@@ -2,7 +2,7 @@
 require "digest/md5"
 login = @login
 user = login.user
-account = user.account
+account = BlackStack::I2P::Account.where(:id=>user.id_account).first
 
 err = params[:err]
 msg = params[:msg]
@@ -11,7 +11,7 @@ ALL_SERVICES = '(All Services)'
 
 @service = @login.user.preference('service', ALL_SERVICES, params[:service])
 
-#h = BlackStack::InvoicingPaymentsProcessing.products_descriptor.select { |o| o[:code].upcase == @service.upcase }.first
+#h = BlackStack::InvoicingPaymentsProcessing.services_descriptor.select { |o| o[:code].upcase == @service.upcase }.first
 
 %>
 <div id='wait' name='wait' style='display: none; position: fixed; z-index: 1000000; top: 0; left: 0; height: 100%; width: 100%; background: rgba( 255, 255, 255, .8 ) 50% 50% no-repeat;'>
@@ -101,7 +101,7 @@ ALL_SERVICES = '(All Services)'
 								<li>
 									<a href="/settings/credit"> 
 										<span>
-											<span class='label label-blue'>500</span> records
+											<span class='label label-blue'><%account.credits(@service).to_label%></span> <%=BlackStack::I2P::service_descriptor(@service)[:unit_name].to_s%> 
 										</span>
 									</a>
 								</li>
@@ -141,7 +141,7 @@ ALL_SERVICES = '(All Services)'
 </header>
 
 
-	<section class="row-fluid">
+<section class="row-fluid">
 	<div class='span12'>
 	<%
 	if !err.nil?
@@ -162,6 +162,4 @@ ALL_SERVICES = '(All Services)'
 	<%
 	end # msg
 	%>
-	</section>
-	
-</div>
+</section>

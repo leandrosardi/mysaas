@@ -75,13 +75,13 @@ module BlackStack
     end
   
     # total number of unique leads matching with this search
-    def count
-        q = "SELECT COUNT(*) AS n #{self.core}"
+    def count(h={})
+        q = "SELECT COUNT(*) AS n #{self.core(h)}"
         DB[q].first[:n]
     end
   
     # return a hash descriptor with the status of the pagination: row_from, row_to, total_rows, total_pages, page (after revision)
-    def status(h)
+    def status(h={})
         # validate the pagination descriptor
         errors = self.validate_pagination_descriptor(h)
   
@@ -141,6 +141,15 @@ module BlackStack
             LIMIT #{h['pagesize']}
             OFFSET #{p['row_from']}
         "
+#puts
+#puts
+#puts
+#puts
+#puts q
+#puts
+#puts
+#puts
+#puts
         DB[q].all
       end 
     end # module TableHelper
