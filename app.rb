@@ -470,3 +470,7 @@ end
 BlackStack::Extensions.extensions.each { |e|
   require "extensions/#{e.name.downcase}/app.rb"
 }
+
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# adding storage sub-folders
+BlackStack::Extensions.add_storage_subfolders

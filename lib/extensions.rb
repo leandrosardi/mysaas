@@ -29,7 +29,16 @@ module BlackStack
             # validate: name must be a symbol
             raise "name must be a symbol" if !name.is_a?(Symbol)
             # require
-            require "extensions/#{name.to_s}/extension"
+            require "extensions/#{name.to_s}/extension"            
         end # require
+
+        # adding storage sub-folders
+        def self.add_storage_subfolders    
+            @@extensions.each do |e|
+                e.storage_folders.each do |f|
+                    BlackStack::Storage::add_storage_sub_folders([f.name])
+                end
+            end
+        end
     end # module Extensions
 end # module BlackStack
