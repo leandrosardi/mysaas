@@ -73,8 +73,9 @@
   text-align: center;
   text-decoration: none;
   text-shadow: 0 1px rgba(0, 0, 0, 0.1);
-  background: #37bce5;
-  border-color: #3996b3;
+  background: #fd935c;
+  border-bottom: 2px solid #cf7e3b;
+  border-color: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
 
@@ -92,7 +93,7 @@
   font-weight: bold;
   color: white;
   text-shadow: 0 1px rgba(0, 0, 0, 0.05);
-  background: #fd935a;
+  background: #37bbe6;
   border-radius: 0 0 4px 4px;
 }
 
