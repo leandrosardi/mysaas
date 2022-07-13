@@ -131,7 +131,7 @@ module BlackStack
         p = self.status(h)
   
         # get the list of leads
-        column_names = self.columns.map {|c| c['query_field'] }
+        column_names = self.columns(h).map {|c| c['query_field'] }
         q = "
             SELECT #{column_names.join(', ')}
             #{self.core(h)}
