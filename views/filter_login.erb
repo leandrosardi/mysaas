@@ -4,9 +4,11 @@ params_to_session
 
 # map some params who are specific for for the filter
 redirect_on_success = session['redirect_on_success']
+redirect_on_error = session['redirect_on_error']
 
 # setup default values
 redirect_on_success = "/dashboard" if redirect_on_success.to_s.size == 0
+redirect_on_error = "/leads/login" if redirect_on_error.to_s.size == 0
 
 # login
 begin
@@ -18,7 +20,7 @@ rescue => e
 	DB.disconnect
 	GC.start
 	# redirect
-	redirect "/login?err="+ CGI::escape(e.message)
+	redirect "#{redirect_on_error}?err="+ CGI::escape(e.message)
 end
 
 # blanquo la variable de sesion de redirect

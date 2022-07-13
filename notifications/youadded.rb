@@ -24,7 +24,7 @@ module BlackStack
           
           <p>
           Below is the email to access your account:<br/>
-          <b>email</b>:#{self.user.email.encode_html}<br/>
+          <b>email</b>: #{self.user.email.encode_html}<br/>
           </p> 
 
           <p>

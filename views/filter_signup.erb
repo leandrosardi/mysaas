@@ -15,6 +15,13 @@ begin
 	# guardar el ID de intento de l en una variable de sesion
 	@login = BlackStack::MySaaS::Account.signup(params)
 	session['login.id'] = @login.id
+
+	# Add free credits to the account
+	# TODO: Move this to a general place.
+	# Reference: https://github.com/leandrosardi/i2p/issues/3
+	account = BlackStack::I2P::Account.where(:id=>@login.user.id_account).first
+	account.bonus('leads', '2025-01-01', 10)
+
 rescue => e
 	# libero recursos
 	DB.disconnect

@@ -301,11 +301,9 @@ end
 
 # TODO: here where you have to develop notrial? feature
 get '/', :agent => /(.*)/ do
-  if !notrial?
-    erb :'views/waiting' #, :layout => :'/views/layouts/public'
-  else
-    erb :'views/waiting' #, :layout => :'/views/layouts/public'
-  end
+  # decide to which landing redirect, based on the extensions and configuration
+  # reference: https://github.com/leandrosardi/i2p/issues/3
+  redirect '/leads/signup'
 end
 
 get '/404', :agent => /(.*)/ do
@@ -317,7 +315,9 @@ get '/500', :agent => /(.*)/ do
 end
 
 get '/login', :agent => /(.*)/ do
-  erb :'views/login', :layout => :'/views/layouts/public'
+  # decide to which landing redirect, based on the extensions and configuration
+  # reference: https://github.com/leandrosardi/i2p/issues/3
+  redirect '/leads/login'
 end
 post '/login' do
   erb :'views/filter_login'
@@ -327,7 +327,10 @@ get '/filter_login' do
 end
 
 get '/signup', :agent => /(.*)/ do
-  erb :'views/signup', :layout => :'/views/layouts/public'
+#  erb :'views/signup', :layout => :'/views/layouts/public'
+  # decide to which landing redirect, based on the extensions and configuration
+  # reference: https://github.com/leandrosardi/i2p/issues/3
+  redirect '/leads/signup'
 end
 post '/signup' do
   erb :'views/filter_signup'
