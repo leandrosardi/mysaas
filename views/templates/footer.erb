@@ -9,10 +9,10 @@
 	showWait('Loading... ');
 
 	// function to update the credits in the header. TODO: move this to the I2P module
-	// call ajax /ajax/ip2/get_credits.json, and update the credits in the header
+	// call ajax /ajax/i2p/get_credits.json, and update the credits in the header
 	function i2p_update_header(service) {
 		$.ajax({
-			url: '/ajax/ip2/get_credits.json',
+			url: '/ajax/i2p/get_credits.json',
 			type: 'POST',
 			data: {service: service},
 			dataType: 'json',
