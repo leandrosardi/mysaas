@@ -1,11 +1,8 @@
 <%
 email = session['email'].to_s
-
-msgerr = params[:msgerr]
 err = params[:err]
 msg = params[:msg]
 %>
-
 <section class='row-fluid  signin-page' style='vertical-align: middle; height: 100%;' height='100%'>
 	<div class='span4 signin-page'>
 		<!-- Page content
@@ -21,16 +18,6 @@ msg = params[:msg]
 				<a href='/'><img src='/core/images/logo/logo-32-01.png' height='90px' title='<%=APP_NAME%> logo' /></a>
 			</h1></span><br/>
 			<span align='right'><h3>Login</h3></span><br/>
-
-			<%
-			if msgerr!=nil
-			%>
-			<div class="alert alert-error">
-			  <a href="#" class="close" data-dismiss="alert"><i class='icon-remove-sign'></i></a><%=msgerr.to_s.encode_html%>
-			</div>
-			<%
-			end # err
-			%>
 		
 			<%
 			if err!=nil
@@ -52,9 +39,7 @@ msg = params[:msg]
 			end # msg
 			%>
 
-			<form action="/login" method="post">
-				<input type="hidden" name="action" id="id_action" value="signin">
-	
+			<form action="/login" method="post">	
 				<fieldset>
 					<div class="fields">
 						<input type="text" name="email" placeholder="Email" id="id_email" tabindex="1"  onfocus="$(this).select();" value="<%=email.encode_html%>">

@@ -95,7 +95,9 @@ end
 set(:auth) do |*roles|
   condition do
     if !logged_in?
-      redirect "/login?redirect=#{CGI.escape(request.path_info.to_s)}%3F#{CGI.escape(request.query_string)}"
+      # remember the internal page I have to return to after login or signup
+      session['redirect_on_success'] = "#{request.path_info.to_s}?#{request.query_string.to_s}"
+      redirect "/login"
     elsif unavailable?
       redirect "/unavailable"      
     else
