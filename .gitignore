@@ -4,6 +4,10 @@
 # ignore the .sandbox file.
 .sandbox
 .localw
+.paypal_sandbox
+
+# ignore ngrok command
+ngrok
 
 # ignore ./deploy.sh because I use this script to shorten the ./install.rb script with all its commands  
 /deploy.sh
