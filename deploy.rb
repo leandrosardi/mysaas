@@ -105,13 +105,6 @@ if parser.value('web')
         BlackStack::Deployer::run_routine('sinatra1', "install-#{e.name.downcase}")
         l.done
 
-        l.logs 'Running extension routines... '
-        e.deployment_routines.each { |r|
-          BlackStack::Deployer::add_routine(r.to_hash)
-          BlackStack::Deployer::run_routine('sinatra1', r.name)
-        }
-        l.done
-
       l.done
     }
   l.done
@@ -120,4 +113,20 @@ if parser.value('web')
   BlackStack::Deployer::run_routine('sinatra1', 'start-mysaas')
   l.done
 
+  l.logs 'Running extensions routines... '
+
+    BlackStack::Extensions.extensions.each { |e|
+      l.logs "#{e.name.downcase}... "
+
+        e.deployment_routines.each { |r|
+          l.logs "Running #{r.name}... "
+          BlackStack::Deployer::add_routine(r.to_hash)
+          BlackStack::Deployer::run_routine('sinatra1', r.name)
+          l.done
+        }
+
+      l.done
+    }
+  l.done
+  
 end # if parser.value('web')
