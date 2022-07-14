@@ -107,7 +107,8 @@ if parser.value('web')
 
         l.logs 'Running extension routines... '
         e.routines.each { |r|
-          BlackStack::Deployer::run_routine('sinatra1', r[:name])
+          BlackStack::Deployer::add_routine(r.to_hash)
+          BlackStack::Deployer::run_routine('sinatra1', r.name)
         }
         l.done
 

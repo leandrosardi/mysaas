@@ -3,7 +3,7 @@ module BlackStack
         # This module is to define the folders to add in the storage, for the extension.
         module StorageFolderModule
             # return an array of strings with the errors found on the hash descriptor
-            def self.validate_descritor(h)
+            def self.validate_descriptor(h)
                 errors = []
 
                 # validate: h must be a hash
@@ -24,7 +24,7 @@ module BlackStack
 
             # map a hash descriptor to the attributes of the object
             def initialize(h)
-                errors = BlackStack::Extensions::StorageFolderModule::validate_descritor(h)
+                errors = BlackStack::Extensions::StorageFolderModule::validate_descriptor(h)
                 # if there are errors, raise an exception
                 raise "Invalid descriptor: #{errors.join(', ')}" if errors.size>0
                 # map the parameters

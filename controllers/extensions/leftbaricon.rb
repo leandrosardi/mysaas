@@ -3,7 +3,7 @@ module BlackStack
         # If the extension is an app, this module is to define the icons in the leftbar of the extension. 
         module LeftBarIconModule
             # return an arrayn of strings with the errors found on the hash descriptor
-            def self.validate_descritor(h)
+            def self.validate_descriptor(h)
                 errors = []
 
                 # only if h is a hash
@@ -29,11 +29,11 @@ module BlackStack
                 
                 # return
                 errors
-            end # validate_descritor
+            end # validate_descriptor
 
             # map a hash descriptor to the attributes of the object
             def initialize(h)
-                errors = BlackStack::Extensions::LeftBarIconModule::validate_descritor(h)
+                errors = BlackStack::Extensions::LeftBarIconModule::validate_descriptor(h)
                 # if there are errors, raise an exception
                 raise "Invalid descriptor: #{errors.join(', ')}" if errors.size>0
                 # map the parameters

@@ -3,7 +3,7 @@ module BlackStack
         # If the extension is an app or api, this module is to define the pages to add in the settings screen, for the extension.
         module SettingScreenModule
             # return an array of strings with the errors found on the hash descriptor
-            def self.validate_descritor(h)
+            def self.validate_descriptor(h)
                 errors = []
 
                 # validate: h must be a hash
@@ -32,11 +32,11 @@ module BlackStack
 
                 # return
                 errors
-            end # validate_descritor
+            end # validate_descriptor
 
             # map a hash descriptor to the attributes of the object
             def initialize(h)
-                errors = BlackStack::Extensions::SettingScreenModule::validate_descritor(h)
+                errors = BlackStack::Extensions::SettingScreenModule::validate_descriptor(h)
                 # if there are errors, raise an exception
                 raise "Invalid descriptor: #{errors.join(', ')}" if errors.size>0
                 # map the parameters

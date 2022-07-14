@@ -3,7 +3,7 @@ module BlackStack
         # This module is to define a an extnsion
         module ExtensionModule
             # return an array of strings with the errors found on the hash descriptor
-            def self.validate_descritor(h)
+            def self.validate_descriptor(h)
                 errors = []
 
                 # validate: h must be a hash
@@ -74,7 +74,7 @@ module BlackStack
 
                         # validate: each element of h[:dependencies] must be a valid dependency descriptor
                         h[:dependencies].each do |i|
-                            e = BlackStack::Extensions::DependencyModule::validate_descritor(i)
+                            e = BlackStack::Extensions::DependencyModule::validate_descriptor(i)
                             errors << ":dependencies must be an array of dependency descriptors. Errors found: #{e.join(". ")}" if e.size>0
                         end
                     end # if exists the key :dependencies
@@ -83,7 +83,7 @@ module BlackStack
                     if h[:leftbar_icons].to_s.size>0
                         errors << ":leftbar_icons must be an array" if !h[:leftbar_icons].is_a?(Array)
                         h[:leftbar_icons].each do |i|
-                            e = BlackStack::Extensions::LeftBarIconModule::validate_descritor(i)
+                            e = BlackStack::Extensions::LeftBarIconModule::validate_descriptor(i)
                             errors << ":leftbar_icons must be an array of leftbaricon descriptors. Errors found: #{e.join(". ")}" if e.size>0
                         end
                     end
@@ -92,7 +92,7 @@ module BlackStack
                     if h[:setting_screens].to_s.size>0
                         errors << ":setting_screens must be an array" if !h[:setting_screens].is_a?(Array)
                         h[:setting_screens].each do |i|
-                            e = BlackStack::Extensions::SettingScreenModule::validate_descritor(i)
+                            e = BlackStack::Extensions::SettingScreenModule::validate_descriptor(i)
                             errors << ":setting_screens must be an array of settingscreen descriptors. Errors found: #{e.join(". ")}" if e.size>0
                         end
                     end
@@ -101,10 +101,20 @@ module BlackStack
                     if h[:storage_folders].to_s.size>0
                         errors << ":storage_folders must be an array" if !h[:storage_folders].is_a?(Array)
                         h[:storage_folders].each do |i|
-                            e = BlackStack::Extensions::StorageFolderModule::validate_descritor(i)
+                            e = BlackStack::Extensions::StorageFolderModule::validate_descriptor(i)
                             errors << ":storage_folders must be an array of storagefolder descriptors. Errors found: #{e.join(". ")}" if e.size>0
                         end
                     end
+
+                    # if the key :deployment_routines exists, it must be an array, and each array element must be a valid routine descriptor
+                    if h[:deployment_routines].to_s.size>0
+                        errors << ":deployment_routines must be an array" if !h[:deployment_routines].is_a?(Array)
+                        h[:deployment_routines].each do |i|
+                            e = BlackStack::Deployer::RoutineModule::descriptor_errors(i)
+                            errors << ":deployment_routines must be an array of :deployment_routines descriptors. Errors found: #{e.join(". ")}" if e.size>0
+                        end
+                    end
+
                 end
 
                 # return
@@ -113,7 +123,7 @@ module BlackStack
 
             # map a hash descriptor to the attributes of the object
             def initialize(h)
-                errors = BlackStack::Extensions::ExtensionModule::validate_descritor(h)
+                errors = BlackStack::Extensions::ExtensionModule::validate_descriptor(h)
         
                 # if there are errors, raise an exception
                 raise "Errors found: #{errors.join(". ")}" if errors.size>0
@@ -152,6 +162,12 @@ module BlackStack
                 if h[:storage_folders].to_s.size>0
                     h[:storage_folders].each do |i|
                         self.storage_folders << BlackStack::Extensions::StorageFolder.new(i)
+                    end
+                end
+
+                if h[:deployment_routines].to_s.size>0
+                    h[:deployment_routines].each do |i|
+                        self.deployment_routines << BlackStack::Deployer::Routine.new(i)
                     end
                 end
             end # set
