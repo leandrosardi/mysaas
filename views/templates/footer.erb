@@ -41,11 +41,11 @@
 			$('header').find('#service_name').remove();
 			$('header').find('#services').width('16px');
 
-			// top bar responsive - hide left bar if width < 485
-			$('header').find('#left-panel-content').remove();
-
 			// top bar responsive - hide the 'email support' label
 			$('header').find('#email_support').remove();
+
+			// top bar responsive - hide left bar if width < 485
+			$('#left-panel-content').remove();
 
 		} else {
 			$('header').find('#services').width('125px');
