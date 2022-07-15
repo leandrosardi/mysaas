@@ -27,16 +27,14 @@ msg = params[:msg]
 		<div class="container">
 			<table width='100%'>
 				<tr>
-					<td width='50px'><a class="logo" href="/dashboard" title='Home'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
-					<td width='50px'>
-						<!-- TODO: badge if this user has any role -->
-					</td>
-					<td width='250px'>
+					<td width='48px'><a class="logo" href="/dashboard" title='Home'><img alt="<%=CS_HOME_WEBSITE%>_logo" src="/core/images/logo/16x16-01.png" width='25px' height='25px'></a></td>
+					
+					<td id='services'>
 						<span style='color: White;font-family: Arial;font-size: 12px;'>
 							<ul class="nav">
 								<li class="dropdown">
 									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-									<i class='icon-coffee'></i> <%=@service.to_s.capitalize.encode_html%> <i class="icon-chevron-down"></i>  
+										<i class='icon-coffee'></i> <span id='service_name'><%=@service.to_s.capitalize.encode_html%> <i class="icon-chevron-down"></span></i>  
 									</a>
 									<ul class="dropdown-menu" style='width:250px;'>
 										<li><a href="/dashboard?service=<%=ALL_SERVICES%>"><i class="icon-home"></i> Home</a></li>
@@ -65,75 +63,66 @@ msg = params[:msg]
 							</ul>
 						</span>					
 					</td>
-					<td width='auto' style='padding-top:0px;'>
+
+					<td align='left' style='text-align: left:' width='125px'>
+						<%
+						if !@hservice.nil?
+						%>
+						<a href="/leads/plans"> 
+							<span>
+								<span id='credits' class='label label-blue'><%=account.credits(@service).to_i.to_s%></span> <span style='color:white;'><%=@hservice[:unit_name].to_s%></span>
+							</span>
+						</a>
+						<%
+						end
+						%>
+					</td>
+
+					<td align='right' style='text-align: right;' width='auto' >
+						<a href="mailto:<%=HELPDESK_EMAIL%>?subject=I Need Help" style='color:white;'>
+							<span>
+								<span class='badge badge-blue'><i class="icon-question"></i> <span id='email_support'>Email Support</span></span>
+							</span>
+						</a>
+					</td>
+
+					<td align='right' style='text-align: right:' width='36px'>
 					<%
 					if !account.api_key.nil?
 						if BlackStack::API::api_key.to_guid == account.api_key.to_guid
 						%>
-						<span class='badge badge-pink' title='You Are Running the Webserver using this API-KEY for validating the API-CALLs.'>Website Owner</span>
+						<span class='badge badge-pink' title='You Are Running the Webserver using this API-KEY for validating the API-CALLs.'><i class='icon-key'></i></span>
 						<%
 						end # if BlackStack::MySaaS::api_key.to_guid == account.api_key.to_guid
 					end # if !account.api_key.nil?
 					%>
 					</td>
 
-					<td></td>
-					<td align='right' style='text-align: right:'>
-						<a class="btn nav-button collapsed" data-toggle="collapse" data-target=".nav-collapse">
-							<span class="icon-reorder"></span>
-						</a>
-			
-						<div class="nav-collapse collapse">
-							<ul class="nav pull-right">
-								<li>
-									<a href="mailto:<%=HELPDESK_EMAIL%>?subject=I Need Help" style='color:white;'>
-										<span>
-											<span class='badge badge-blue'><i class="icon-question-sign"></i> Email Support</span>
-										</span>
-									</a>
-								</li>
-																		
-								<li>
-									<%
-									if !@hservice.nil?
-									%>
-									<a href="/leads/plans"> 
-										<span>
-											<span id='credits' class='label label-blue'><%=account.credits(@service).to_i.to_s%></span> <%=@hservice[:unit_name].to_s%> 
-										</span>
-									</a>
-									<%
-									end
-									%>
-								</li>
 
-								<!--
-								<li class="separator"></li>
-								-->
-
-								<li class="dropdown">
-									<a href="#" class="dropdown-toggle usermenu" data-toggle="dropdown">
-										<img alt="Avatar" src="<%=("https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(user.email.strip.downcase)).encode_html%>">
-										<!--
-										<span>&nbsp;&nbsp;<%=login.user.account.name.encode_html%></span>
-										-->
-									</a>
-									<ul class="dropdown-menu">
-										<li class="nav-header">User Details</li>
-										<li><a><b>Email:</b> <%=user.email.encode_html%></a></li>
-										<li><a><b>Company:</b> <%=account.name.to_s.encode_html%></a></li>								
-										<li class="divider"></li>
-										<li class="nav-header">Options</li>
-										<li>
-											<a href="/settings/dashboard"><i class='icon-cog'></i> Settings</a>
-										</li>
-										<li>
-											<a href="/logout"><i class='icon-signout'></i>Sign Out</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</div>							
+					<td align='right' style='text-align: right:' width='54px'>			
+						<ul class="nav pull-right">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle usermenu" data-toggle="dropdown">
+									<img alt="Avatar" src="<%=("https://www.gravatar.com/avatar/" + Digest::MD5.hexdigest(user.email.strip.downcase)).encode_html%>">
+									<!--
+									<span>&nbsp;&nbsp;<%=login.user.account.name.encode_html%></span>
+									-->
+								</a>
+								<ul class="dropdown-menu">
+									<li class="nav-header">User Details</li>
+									<li><a><b>Email:</b> <%=user.email.encode_html%></a></li>
+									<li><a><b>Company:</b> <%=account.name.to_s.encode_html%></a></li>								
+									<li class="divider"></li>
+									<li class="nav-header">Options</li>
+									<li>
+										<a href="/settings/dashboard"><i class='icon-cog'></i> Settings</a>
+									</li>
+									<li>
+										<a href="/logout"><i class='icon-signout'></i>Sign Out</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
 					</td>
 				</tr>
 			</table>
@@ -164,3 +153,4 @@ msg = params[:msg]
 	end # msg
 	%>
 </section>
+

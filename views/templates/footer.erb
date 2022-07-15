@@ -34,6 +34,23 @@
 	// onload event has done.
 	var old_onload = window.onload;
 	window.onload = function () {
+
+		// making it responsive
+		if ( $(window).width() < 485 ) {
+			// top bar responsive - hide service name if wdith < 485
+			$('header').find('#service_name').remove();
+			$('header').find('#services').width('16px');
+
+			// top bar responsive - hide left bar if width < 485
+			$('header').find('#left-panel-content').remove();
+
+			// top bar responsive - hide the 'email support' label
+			$('header').find('#email_support').remove();
+
+		} else {
+			$('header').find('#services').width('125px');
+		}
+
 		// call the original onload function
 		if (typeof old_onload == 'function') {
 			old_onload();
