@@ -4,6 +4,10 @@ login = @login
 user = login.user
 account = BlackStack::I2P::Account.where(:id=>user.id_account).first
 
+# get extension
+e = BlackStack::Extensions::extensions.select { |e| e.name.downcase==@service.downcase }.first
+
+# get parameters
 err = params[:err]
 msg = params[:msg]
 %>
@@ -112,6 +116,21 @@ msg = params[:msg]
 									<li class="nav-header">User Details</li>
 									<li><a><b>Email:</b> <%=user.email.encode_html%></a></li>
 									<li><a><b>Company:</b> <%=account.name.to_s.encode_html%></a></li>								
+									<%
+									if !e.nil? # I am in a service
+										%>
+										<li class="divider"></li>
+										<li class="nav-header"><%=e.name.to_s.encode_html%></li>
+										<%
+										e.leftbar_icons.each { |i|
+											%>
+											<li>
+												<a href="/<%=e.name.downcase.to_s.encode_html%>/<%=i.screen.to_s.downcase.encode_html%>"><%=i.label.encode_html%> <span class="icon-<%=i.icon.to_s%>"></span></a>
+											</li>
+											<%
+										}
+									end
+									%>					
 									<li class="divider"></li>
 									<li class="nav-header">Options</li>
 									<li>
