@@ -1,13 +1,18 @@
+.plans {
+	text-align:center;
+	position: relative;
+}
+
 .plan {
-  float: center;
+  position: relative;
   margin: 20px 2px;
   padding: 15px 25px;
   text-align: center;
-  background: black;
-  background-clip: padding-box;
+  background: white;
   border: 2px solid #e5ded6;
   border-color: rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  width: 80%;
 }
 
 .plan ul {
@@ -107,6 +112,7 @@
   padding-left: 15px;
   padding-right: 15px;
   border: 4px solid #37bbe6;
+  width: 85%;
 }
 
 .plan-highlight .plan-button {
