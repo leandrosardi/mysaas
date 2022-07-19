@@ -20,7 +20,7 @@ begin
 	# TODO: Move this to a general place.
 	# Reference: https://github.com/leandrosardi/i2p/issues/3
 	account = BlackStack::I2P::Account.where(:id=>@login.user.id_account).first
-	account.bonus('leads', '2025-01-01', 10)
+	account.bonus('leads', '2025-01-01', 50)
 
 rescue => e
 	# libero recursos
