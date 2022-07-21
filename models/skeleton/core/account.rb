@@ -113,15 +113,14 @@ module BlackStack
             l.create_time = now
             l.save
           end # transaction
-=begin
-# reference: https://github.com/leandrosardi/mysaas/issues/79
+
           # notificar al usuario, if the notif flag is true
           # TODO: https://github.com/leandrosardi/mysaas/issues/27
           if notif
             BlackStack::MySaaS::NotificationWelcome.new(u).do
-            BlackStack::MySaaS::NotificationConfirm.new(u).do
+            #BlackStack::MySaaS::NotificationConfirm.new(u).do
           end
-=end
+
           # libero recursos
           DB.disconnect
           GC.start

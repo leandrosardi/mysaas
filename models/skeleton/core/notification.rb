@@ -52,7 +52,7 @@ module BlackStack
           <section class=\"container\">
           <table style=background-color:rgb(255,255,255);width:75%;align:center;horizontal-align:center;padding:20px; align=center>
           <!--logo--> 
-          <tr><td align=center style=text-align:center;><img src=#{BlackStack::Notifications::logo_url} height=32px /></td></tr> 
+          <tr><td align=left style=text-align:left;><img src=#{BlackStack::Notifications::logo_url} height=32px /></td></tr> 
           <tr>
           <td>
           #{NOTIFICATION_CONTENT_MERGE_TAG}
