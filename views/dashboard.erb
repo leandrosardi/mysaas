@@ -26,7 +26,7 @@ sections.each { |section|
         <section class='span4 box' style='height:165px;'>
             <a href="/<%=e.name.downcase.encode_html%>?service=<%=e.name.downcase.encode_html%>">
                 <div class='span3'>
-                    <img src='/leads/images/logo.png' width='48px' height='48px' />
+                    <img src='/<%=e.name.downcase%>/images/logo.png' width='48px' height='48px' />
                 </div>
                 <div class='span9' style='position:relative;height:100%;'>
                     <%=e.name.capitalize.encode_html%>
@@ -43,20 +43,6 @@ sections.each { |section|
     end # each
     %>
         <!-- TODO: remove this as soon as we release these services -->
-        <section class='span4 box' style='height:165px;opacity:0.4;'>
-            <div class='span3'>
-                <img src='/core/images/extensions/buying-signals.png' width='48px' height='48px' />
-            </div>
-            <div class='span9' style='position:relative;height:100%;'>
-                Buying Signals
-                <br/>
-                <span style='font-size: 10px;color:gray;'>Rotating IP Mobile Proxies at an Afforable Price.</span>
-
-                <div style='position:absolute;bottom:0px;right:0px;'>
-                    <span class='badge badge-green'>Soon</span>
-                </div>
-            </div>
-        </section>
         <section class='span4 box' style='height:165px;opacity:0.4;'>
             <div class='span3'>
                 <img src='/core/images/extensions/sales-crowd.png' width='48px' height='48px' />
