@@ -68,6 +68,6 @@ module BlackStack
                 end
             end
 
-        end # class Notification
+        end # class Preference
     end # module MySaaS
 end # module BlackStack

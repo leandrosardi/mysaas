@@ -2,6 +2,8 @@ module BlackStack
     module MySaaS
       class Notification < Sequel::Model(:notification)
         many_to_one :user, :class=>:'BlackStack::MySaaS::User', :key=>:id_user
+        # options
+        attr_accessor :track_opens, :track_clicks
   
         # replace the merge-tag <CONTENT HERE> for the content of the email
         NOTIFICATION_CONTENT_MERGE_TAG = "<CONTENT HERE>"
@@ -70,10 +72,18 @@ module BlackStack
           </html>
         "
 
-        def initialize(i_user)
+        def initialize(i_user, options={})
           super()
           self.id_user = i_user.id
           self.type = 0
+          # if options has key :track_opens, map its value to self.track_opens.
+          # otherwise, set self.track_opens to true.
+          self.track_opens = options[:track_opens] if options.has_key?(:track_opens)
+          self.track_opens = true if self.track_opens.nil? 
+          # if options has key :track_clicks, map its value to self.track_clicks.
+          # otherwise, set self.track_clicks to true.
+          self.track_clicks = options[:track_clicks] if options.has_key?(:track_clicks)
+          self.track_clicks = true if self.track_clicks.nil? 
         end
 
         # return how many minutes ago was the email sent.

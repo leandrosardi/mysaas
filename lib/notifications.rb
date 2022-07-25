@@ -8,6 +8,7 @@ module BlackStack
       @@signature_name = nil
       @@signature_position = nil
       @@notifications = []
+      @@followups = []
 
       # getters and setters
       def self.logo_url
@@ -22,7 +23,10 @@ module BlackStack
       def self.signature_position
         @@signature_position
       end
-      def self.set(h)
+      def self.followups
+        @@followups
+      end
+      def self.set(h={})
         errors = []
           
         # validate: h must be a hash
@@ -61,5 +65,75 @@ module BlackStack
         @@signature_name = h[:signature_name]
         @@signature_position = h[:signature_position]
       end
+
+      # add a followup
+      def self.add_followup(h={})
+        errors = []
+        
+        # validation: h must be a hash
+        errors << "h must be a hash" unless h.is_a?(Hash)
+        # validation: h must have 'name'
+        errors << "'name' is required" if h['name'].to_s.size==0
+        # validation: if 'name' exists, it must be a string
+        errors << "'name' must be a string" if h['name'].class!=String
+        # validation: if 'name' exists, it cannot be blank
+        errors << "'name' cannot be blank" if h['name'].to_s.size==0
+        # validation: if 'name' exists, it cannot be present in any of the hashes added @@followups
+        errors << "'name' cannot be present in @@followups" if @@followups.map{|x| x['name']}.include?(h['name'])
+      
+        # validation: 'description' must be nil or string
+        errors << "'description' must be nil or string" if h['description'].class!=NilClass && h['description'].class!=String
+
+        # validation: 'notification' is mandatory
+        errors << "'notification' is required" if h['notification'].nil?
+        # validation: if 'notification' exists, it must be a class
+        errors << "'notification' must be a child class of BlackStack::MySaaS::Notification" if !h['notification'].nil? && h['notification'].class!=Class
+        # validation: if 'notification' is a class, it must be a child class of BlackStack::MySaaS::Notification
+        errors << "'notification' must be a child class of BlackStack::MySaaS::Notification" if h['notification'].class==Class && !h['notification'].ancestors.include?(BlackStack::MySaaS::Notification)
+        
+        # validation: 'condition' must nil or be a function
+        errors << "'condition' must be a function" if h['condition'].class!=NilClass && h['condition'].class!=Proc
+        # validation: if 'condition' is a function, it must accept a single argument
+        errors << "'condition' must accept a single argument" if h['condition'].class==Proc && h['condition'].arity!=1
+
+        # validation: 'repeat_notification' cannot be nil
+        errors << "'repeat_notification' cannot be nil" if h['repeat_notification'].nil?
+        # validation: if 'repeat_notification' is not nil, it must be boolean
+        errors << "'repeat_notification' must be boolean" if !h['repeat_notification'].nil? && h['repeat_notification'].class!=TrueClass && h['repeat_notification'].class!=FalseClass
+
+        # validation: 'repeat_notification_units' must be nil or integer
+        errors << "'repeat_notification_units' must be nil or integer" if h['repeat_notification_units'].class!=NilClass && h['repeat_notification_units'].class!=Integer
+        # validation: if 'repeat_notification_units' is integer, it must be greater than 0
+        errors << "'repeat_notification_units' must be greater than 0" if h['repeat_notification_units'].class==Integer && h['repeat_notification_units']<=0
+
+        # validation: 'repeat_notification_period' cannot be nil
+        errors << "'repeat_notification_period' cannot be nil" if h['repeat_notification_period'].nil?
+        # validation: if 'repeat_notification_period' is not nil, it must be a string
+        errors << "'repeat_notification_period' must be a string" if !h['repeat_notification_period'].nil? && h['repeat_notification_period'].class!=String
+        # validation: if 'repeat_notification_period' is a string, it must be one of the following: 'minutes', 'hours', 'days', 'weeks', 'months', 'years'
+        errors << "'repeat_notification_period' must be one of the following: 'minutes', 'hours', 'days', 'weeks', 'months', 'years'" if !h['repeat_notification_period'].nil? && !['minutes', 'hours', 'days', 'weeks', 'months', 'years'].include?(h['repeat_notification_period'])
+
+        # validation: 'repeat_times' cannot be nil
+        errors << "'repeat_times' cannot be nil" if h['repeat_times'].nil?
+        # validation: if 'repeat_times' is not nil, it must be integer
+        errors << "'repeat_times' must be integer" if !h['repeat_times'].nil? && h['repeat_times'].class!=Integer
+        # validation: if 'repeat_times' is integer, it must be greater than -2
+        errors << "'repeat_times' must be greater than -2" if h['repeat_times'].class==Integer && h['repeat_times']<=-2
+
+        # validation: if 'track_opens' exists, it must be boolean
+        errors << "'track_opens' must be boolean" if !h['track_opens'].nil? && h['track_opens'].class!=TrueClass && h['track_opens'].class!=FalseClass
+
+        # validation: if 'track_clicks' exists, it must be boolean
+        errors << "'track_clicks' must be boolean" if !h['track_clicks'].nil? && h['track_clicks'].class!=TrueClass && h['track_clicks'].class!=FalseClass
+
+        # if any error happened, raise exception
+        raise errors.join("\n") if errors.size>0
+
+        # add followup
+        @@followups << h
+      end
+
+      def self.test_followup()
+
     end # module Notifications
 end # module BlackStack

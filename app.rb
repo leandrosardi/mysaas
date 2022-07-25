@@ -469,6 +469,21 @@ post '/api1.0/ping.json', :api_key => true do
   erb :'views/api1.0/ping'
 end
 
+# notifications
+get '/api1.0/notifications/open.json' do
+  erb :'views/api1.0/notifications/open'
+end
+post '/api1.0/notifications/open.json' do
+  erb :'views/api1.0/notifications/open'
+end
+
+get '/api1.0/notifications/click.json' do
+  erb :'views/api1.0/notifications/click'
+end
+post '/api1.0/notifications/click.json' do
+  erb :'views/api1.0/notifications/click'
+end
+
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # Require the app.rb file of each one of the extensions.
 # reference: https://github.com/leandrosardi/mysaas/issues/33
