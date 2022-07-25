@@ -128,7 +128,7 @@ Some features of **MySaaS** include these:
 
 2. invoicing and payments processing;
 
-3. email notifications, with easy setup of automation rules;
+3. [email notifications](./docu/3.email-notifications.md), with easy setup of automation rules;
 
 4. affiliates tracking, for managing resellers and pay commission;
 
