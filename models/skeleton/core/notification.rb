@@ -6,6 +6,7 @@ module BlackStack
         attr_accessor :track_opens, :track_clicks
   
         # replace the merge-tag <CONTENT HERE> for the content of the email
+        PIXEL_MERGE_TAG = '<!-- PIXEL_IMAGE_HERE -->'
         NOTIFICATION_CONTENT_MERGE_TAG = "<CONTENT HERE>"
         NOTIFICATION_BODY_TEMPLATE = "
           <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
@@ -67,7 +68,8 @@ module BlackStack
           </td></tr>
           <tr><td><img src=#{BlackStack::Notifications::signature_picture_url} height=32px /></td></tr> 
           </table>  
-          </section>   
+          </section>
+          #{PIXEL_MERGE_TAG}
           </body>
           </html>
         "
@@ -111,7 +113,45 @@ module BlackStack
           )
         end # def delivery
         
+        # return the url of the pixel for open tracking
+        def pixel_url
+          errors = []
+          # validation: self.id is not nil and it is a valid guid
+          errors << "id is nil" if self.id.nil? || !self.id.guid?
+          # validation: self.id_user is not nil and it is a valid guid
+          errors << "id_user is nil" if self.id_user.nil? || !self.id_user.guid?
+          # if any error happened, raise an exception
+          raise errors.join(", ") if errors.size > 0
+          # return
+          "#{CS_HOME_WEBSITE}/api1.0/notifications/open.json?nid=#{self.id.to_guid}&uid=#{self.id_user.to_guid}"
+        end
+
         def do
+          # map the body_tempalte of the notification
+          body_t = self.body_template
+
+          # replace all links by tracking links
+          if self.track_clicks
+            # number of URL
+            n = 0
+            # iterate all URLs in the body
+            URI.extract(self.body, ['http', 'https']).each do |url|
+              # increment the URL counter
+              n += 1
+              # create and save the object BlackStack::MySaaS::NotificationLink
+              o = BlackStack::MySaaS::NotificationLink.new
+              o.id = guid
+              o.id_notification = self.id
+              o.create_time = now
+              o.link_number = n
+              o.url = url
+              o.save
+              # replace the url by the tracking url
+              # don't use gssub, it will replace all occurrences, and you want to replace one at time, using one different notification_link record.
+              body_t.sub!(url, o.tracking_url)  
+            end # URI.extract
+          end # if self.track_clicks
+
           # save the email to the database
           self.id = guid
           self.create_time = now
@@ -120,10 +160,15 @@ module BlackStack
           self.name_to = self.user.name
           self.email_to = self.user.email
           self.subject = self.subject_template
-          self.body = NOTIFICATION_BODY_TEMPLATE.gsub(/#{NOTIFICATION_CONTENT_MERGE_TAG}/, self.body_template)
+          self.body = NOTIFICATION_BODY_TEMPLATE.gsub(/#{NOTIFICATION_CONTENT_MERGE_TAG}/, body_t)
           self.name_from = BlackStack::Emails::from_name
           self.email_from = BlackStack::Emails::from_email
           self.save
+
+          # apply the pixel for open tracking
+          if self.track_opens
+            self.body = self.body.gsub(/#{PIXEL_MERGE_TAG}/, "<img src=#{self.pixel_url} height=1px width=1px />")
+          end
 
           # delivery the email
           self.delivery
